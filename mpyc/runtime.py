@@ -4261,6 +4261,12 @@ def setup():
     return rt
 
 
+
+print ("++++++++++++++++++++++++++++")
+print ("++++++++++++++++++++++++++++")
+print ("++++++++++++++++++++++++++++")
+print ("++++++++++++++++++++++++++++")
+
 if os.getenv('READTHEDOCS') != 'True':
     try:
         logging.debug('Run MPyC runtime.setup()')
