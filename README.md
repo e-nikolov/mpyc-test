@@ -41,7 +41,7 @@ Use `pip install gmpy2` to run MPyC with the package [gmpy2](https://pypi.org/pr
 
 Setup for multi-arch builds:
 
-```shell
+```bash
 docker buildx create --name mybuilder --driver docker-container --bootstrap
 docker run --privileged --rm tonistiigi/binfmt --install all
 docker buildx use mybuilder
@@ -49,8 +49,8 @@ docker buildx use mybuilder
 
 Building the images:
 
-```shell
-	docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 . --tag <image-tag> --push
+```bash
+docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 . --tag <image-tag> --push
 ```
 
 
