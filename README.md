@@ -35,6 +35,26 @@ Use `pip install numpy` to enable support for secure NumPy arrays in MPyC, along
 Use `pip install gmpy2` to run MPyC with the package [gmpy2](https://pypi.org/project/gmpy2/) for considerably better performance.
 
 ### Some Tips
+## Building the docker images
+
+### Using docker buildx
+
+Setup for multi-arch builds:
+
+```shell
+docker buildx create --name mybuilder --driver docker-container --bootstrap
+docker run --privileged --rm tonistiigi/binfmt --install all
+docker buildx use mybuilder
+```
+
+Building the images:
+
+```shell
+	docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 . --tag <image-tag> --push
+```
+
+
+## Notes:
 
 - Try `run-all.sh` or `run-all.bat` in the `demos` directory to have a quick look at all pure Python demos.
 Demos `bnnmnist.py` and `cnnmnist.py` require [NumPy](https://www.numpy.org/), demo `kmsurvival.py` requires
