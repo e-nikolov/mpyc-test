@@ -7,18 +7,23 @@
     <title>MPyC in PyScript</title>
     <!-- <link rel="icon" href="https://www.win.tue.nl/~berry/mpyc/favicon.ico" /> -->
     <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    <script defer src="https://pyscript.net/latest/pyscript.min.js"></script>
 
 </head>
 
 <body>
 
     <py-config>
-        packages = ['numpy', 'gmpy2', 'mpyc']
+        packages = ['numpy', 'gmpy2', 'ssl']
+        xterm = true
+        # terminal = {xterm = true}
         [[fetch]]
         files = ['sort.py', 'aes.py', 'np_aes.py', 'secretsanta.py']
-    </py-config>
-
+        [[fetch]]
+        from = '../../mpyc'
+        to_folder = 'mpyc'
+        files = ['__main__.py', 'fingroups.py', 'thresha.py', 'mpctools.py', '__pycache__', 'README.md', 'gfpx.py', 'runtime.py', 'asyncoro.py', 'numpy.py', 'seclists.py', 'sectypes.py', 'random.py', 'gmpy.py', 'secgroups.py', 'finfields.py', 'statistics.py', '__init__.py']     
+    </py-config> 
     <h1>MPyC in PyScript</h1>
 
     Python code can be embedded in HTML using the &lt;py-script&gt; tag.<br />
@@ -45,9 +50,9 @@
 
             mpc.options.no_async = False
 
-            asyncio.ensure_future(secretsanta.main())
+            #asyncio.ensure_future(secretsanta.main())
 
-            # mpc.run(secretsanta.main())
+            mpc.run(secretsanta.main())
 
         </py-repl>
         <div id="replOutput2" hidden></div>
@@ -56,7 +61,7 @@
 
     All output to stdout (and stderr) is displayed on this "terminal":
 
-    <py-terminal id="replOutput"></py-terminal>
+    <py-terminal xterm="true" id="replOutput"></py-terminal>
 
 
 </body>
