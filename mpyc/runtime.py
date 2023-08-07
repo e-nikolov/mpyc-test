@@ -108,6 +108,7 @@ class Runtime:
     def __init__(self, pid, parties, options):
         """Initialize runtime."""
         self.pid = pid
+        # self.transport_manager = TCPTransportManager(self)
         self.parties = tuple(parties)
         self.options = options
         self.threshold = options.threshold
