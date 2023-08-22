@@ -64,10 +64,6 @@ export class Controller {
         this.term.writeln('Initializing PeerJS...');
         this.term.writeln('Initializing PyScript runtime...');
 
-        for (let i = 0; i < 100; i++) {
-            this.term.writeln(`${i}:\tlorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`);
-        }
-
         this.updateHostPeerIDInput();
 
         this.setupMPyCEvents(mpyc);
