@@ -45,23 +45,34 @@ $material-icons-font-size: 16px;
 }
 
 #terminal {
-  height: calc(100% - 100px);
+  // height: calc(100% - 100px);
+  // overflow: hidden;
+}
+
+.term {
+  height: 100%;
 }
 
 .terminal {
-  // height: calc(100% - 100px);
-  height: 100%;
-  overflow: hidden;
+  // height: ca  lc(100% - 100px);
+  // height: 100%;
+  // overflow: hidden;
   // overflow: auto;
 }
 
 .xterm-viewport {
   // height: calc(100% - 100px);
-  overflow: auto;
+  // overflow: hidden !important;
 }
 
 .xterm-screen {
-  height: calc(100% - 100px) !important;
+  // height: calc(100vh - 150px) !important;
+  // overflow: hidden !important;
+}
+
+.xterm-rows {
+  // height: calc(100vh - 150px) !important;
+  // overflow: hidden !important;
 }
 
 @media (min-width: 576px) {
@@ -72,17 +83,17 @@ $material-icons-font-size: 16px;
 
 .editor {
   height: 100%;
-  overflow: auto;
+  // overflow: auto;
 }
 
 .cm-scroller {
-  overflow: auto;
-  height: 100%;
+  // overflow: auto;
+  // height: 100%;
 }
 
 .cm-editor {
   height: 100%;
-  height: calc(100%);
+  // height: calc(100%);
   // overflow: auto;
 }
 

@@ -17,10 +17,10 @@ import 'hack-font/build/web/hack.css';
 
 import { MPyCManager } from './mpyc';
 
-import * as ui from './ui';
+import * as app from './app';
 
-ui.ensureStorageSchema(18);
-let peerID = ui.loadPeerID();
+app.ensureStorageSchema(18);
+let peerID = app.loadPeerID();
 
 var mpyc: MPyCManager = new MPyCManager(peerID, "./py/shim.py", "config.toml");
-ui.init(mpyc);
+new app.Controller(mpyc);

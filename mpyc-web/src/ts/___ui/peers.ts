@@ -35,21 +35,3 @@ export function updateKnownPeersDiv(mpyc: MPyCManager) {
         </li>`;
     });
 }
-
-// export function updateKnownPeersDiv(mpyc: MPyCManager) {
-//     knownPeersEl.innerHTML = "";
-//     mpyc.getPeers(true).forEach((p, pid) => {
-//         let icon = `
-//         <span class="position-relative end-0">
-//             <i class='bi ${mpyc.peersReady.get(p) ? 'bi-play-fill' : 'bi-pause-fill'}'></i>
-//         </span>`
-//         knownPeersEl.innerHTML += `
-//         <div class="input-group">
-//             <span class="input-group-text" style="user-select:none">${pid}: </span>
-//             z
-//             <span class="input-group-text " style="vertical-align:top;max-width:200px;">${safe(p)}</span> 
-//         </div>
-//             ${icon}
-//         `;
-//     });
-// }
