@@ -11,7 +11,7 @@
 </head>
 
 <body>
-  <div class="container-fluid h-100">
+  <div class="container-fluid">
     <h2 class="d-flex align-items-center justify-content-center">MPyC Web</h2>
     <div class="row">
       <div class="col-3" style="min-width: 300px;">
@@ -25,9 +25,7 @@
             </div>
 
             <!-- My Party ID - Buttons -->
-            <button id="show-qr" data-bs-toggle="tooltip" data-bs-html="true"
-              data-bs-title="<canvas id='qr'></canvas><br /><span style='font-size: 10px !important;' id='qrURL'></span>"
-              class="btn btn-primary">
+            <button id="show-qr" class="btn btn-primary">
               <!-- <i class="bi bi-qr-code"></i> -->
               <i class="fa fa-qrcode"></i>
             </button>
@@ -112,7 +110,7 @@
         </div>
 
       </div>
-      <div class="col-sm h-100" style="min-width:400px; ">
+      <div class="col-sm" style="min-width:400px; ">
         <!-- Terminal - Buttons -->
         <div class="input-group">
           <button id="startButton" data-bs-toggle="tooltip" data-bs-title="Run MPyC" class="btn btn-primary">
@@ -135,18 +133,14 @@
             <!-- <i class="material-icons mi-cleaning-services"></i> -->
           </button>
         </div>
-        <div class="panel-container-vertical">
-          <div class="panel-top">
+        <div class="split">
+          <div class="split-0">
             <!-- Editor -->
-            <div id="editor" class="editor rezisable"></div>
+            <div id="editor" class="editor"></div>
           </div>
-
-          <div class="splitter-horizontal">
-          </div>
-          <div class="panel-bottom">
+          <div class="split-1">
             <!-- Terminal -->
-            <!-- <div id="terminal" class="h-100"></div> -->
-            <div id="terminal" class=""></div>
+            <div id="terminal" class="term"></div>
           </div>
         </div>
       </div>

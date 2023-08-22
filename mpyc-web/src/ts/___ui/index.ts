@@ -1,12 +1,10 @@
 import { MPyCManager } from '../mpyc';
 import * as ui from '.';
 import { Tooltip } from 'bootstrap';
-import { Terminal } from 'xterm';
 import { EditorView } from '@codemirror/view';
 
 import $ from 'jquery'
 import 'jquery-resizable-dom'
-import { FitAddon } from 'xterm-addon-fit';
 
 export * from './copy-btn';
 export * from './term';
@@ -14,8 +12,8 @@ export * from './elements';
 export * from './chat';
 export * from './qr';
 export * from './peers';
-export * from './codemirror';
-
+export * from './editor';
+import Split from 'split.js'
 
 export function ensureStorageSchema(gen: number) {
     console.log("Storage schema generation:", localStorage.gen)
@@ -31,6 +29,10 @@ export var editor: EditorView;
 
 export function init(mpyc: MPyCManager) {
     ui.term.writeln('Initializing PeerJS...');
+
+    for (let i = 0; i < 100; i++) {
+        ui.term.writeln(`${i}:\tlorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`);
+    }
 
     mpyc.on('peerjs:ready', (peerID: string) => {
         ui.myPeerIDEl.value = ui.safe(peerID);
@@ -82,13 +84,10 @@ export function init(mpyc: MPyCManager) {
         }
     });
 
-    var myDefaultAllowList = Tooltip.Default.allowList;
-    myDefaultAllowList.span = ['style'];
-    myDefaultAllowList.canvas = [];
-
-
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-    tooltipTriggerList.forEach(tooltipTriggerEl => new Tooltip(tooltipTriggerEl,));
+    Tooltip.Default.allowList.span = ['style'];
+    Tooltip.Default.allowList.canvas = [];
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').
+        forEach(tooltipTriggerEl => new Tooltip(tooltipTriggerEl));
 
     ui.demoSelector.selectedIndex = parseInt(localStorage.demoSelectorSelectedIndex) || 1;
 
@@ -116,19 +115,6 @@ export function init(mpyc: MPyCManager) {
     document.run = async () => mpyc.runMPC(await getCodeFromEditor(), false);
     document.runa = async () => mpyc.runMPC(await getCodeFromEditor(), true);
 
-    // debounce resize
-
-    let resizeTimeout: NodeJS.Timeout;
-    let ro = new ResizeObserver(() => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            console.log("resized editor!")
-            document.fitAddon.fit();
-
-        }, 50);
-    });
-
-    ro.observe(document.querySelector(".xterm")!)
 
     resizeDemoSelector();
     window.addEventListener('resize', () => {
@@ -224,9 +210,8 @@ declare global {
         run: any;
         runa: any;
         mpyc: MPyCManager;
-        term: Terminal;
+        term: ui.Term;
         editor: EditorView;
-        fitAddon: FitAddon;
     }
     interface PerformanceEntry {
         type: string;

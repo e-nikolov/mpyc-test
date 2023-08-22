@@ -2,87 +2,107 @@
 
 
 /* vertical panel */
+.gutter {
+    background-color: #eee;
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
 
-.panel-container-vertical {
+.split {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    // border: 1px solid silver;
-    overflow: hidden;
+    height: 70vh;
+    max-height: 70vh;
+    min-height: 70vh;
+    // overflow: hidden;
 }
 
-.panel-top {
-    flex: 0 0 auto;
-    /* only manually resize */
-    // padding: 10px;
-    height: 50%;
-    width: 100%;
-    min-height: 150px;
-    max-height: calc(100% - 300px);
-    white-space: nowrap;
+// .panel-container-vertical {
+//     display: flex;
+//     flex-direction: column;
+//     // height: 100%;
+//     max-height: 80vh;
+//     // border: 1px solid silver;
+//     overflow: hidden;
+// }
+.gutter.gutter-vertical {
+    background: url(./hsizegrip.png) center center no-repeat $form-control-background;
+    // background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+    cursor: row-resize;
+}
+
+
+.split-0 {
+    // flex: 0 0 auto;
+    // /* only manually resize */
+    // // padding: 10px;
+    // // height: 50%;
+    // width: 100%;
+    // min-height: 150px;
+    // max-height: calc(100vh - 300px);
+    // white-space: nowrap;
     // margin-top: 50px;
     // margin-bottom: 36px;
-    // background: #838383;
-    // color: white;
 }
 
-.splitter-horizontal {
-    flex: 0 0 auto;
-    height: 18px;
-    background: url(./hsizegrip.png) center center no-repeat $form-control-background;
-    cursor: row-resize;
-    // z-index: 100000;
-}
-
-.panel-bottom {
+.split-1 {
     flex: 1 1 auto;
+    // overflow: auto;
     /* resizable */
     // padding: 10px;
-    min-height: 100px;
-    // background: #eee;
+    // min-height: 150px;
 }
+
+// .splitter-horizontal {
+//     flex: 0 0 auto;
+//     height: 18px;
+//     background: url(./hsizegrip.png) center center no-repeat $form-control-background;
+//     cursor: row-resize;
+//     // z-index: 100000;
+// }
+
 
 /* horizontal panel*/
 
-.panel-container {
-    display: flex;
-    flex-direction: row;
-    border: 1px solid silver;
-    overflow: hidden;
+// .panel-container {
+//     display: flex;
+//     flex-direction: row;
+//     border: 1px solid silver;
+//     overflow: hidden;
 
-    /* avoid browser level touch actions */
-    xtouch-action: none;
-}
+//     /* avoid browser level touch actions */
+//     xtouch-action: none;
+// }
 
-.panel-left {
-    flex: 0 0 auto;
-    /* only manually resize */
-    padding: 10px;
-    width: 300px;
-    min-height: 200px;
-    min-width: 150px;
-    white-space: nowrap;
-    background: #838383;
-    color: white;
-}
+// .panel-left {
+//     flex: 0 0 auto;
+//     /* only manually resize */
+//     padding: 10px;
+//     width: 300px;
+//     min-height: 200px;
+//     min-width: 150px;
+//     white-space: nowrap;
+//     background: #838383;
+//     color: white;
+// }
 
-.splitter {
-    flex: 0 0 auto;
-    width: 18px;
-    background: url(https://raw.githubusercontent.com/RickStrahl/jquery-resizable/master/assets/vsizegrip.png) center center no-repeat #535353;
-    min-height: 200px;
-    cursor: col-resize;
-}
+// .splitter {
+//     flex: 0 0 auto;
+//     width: 18px;
+//     background: url(https://raw.githubusercontent.com/RickStrahl/jquery-resizable/master/assets/vsizegrip.png) center center no-repeat #535353;
+//     min-height: 200px;
+//     cursor: col-resize;
+// }
 
-.panel-right {
-    flex: 1 1 auto;
-    /* resizable */
-    padding: 10px;
-    width: 100%;
-    min-height: 200px;
-    min-width: 200px;
-    background: #eee;
-}
+// .panel-right {
+//     flex: 1 1 auto;
+//     /* resizable */
+//     padding: 10px;
+//     width: 100%;
+//     min-height: 200px;
+//     min-width: 200px;
+//     background: #eee;
+// }
 
 // html,
 // body {

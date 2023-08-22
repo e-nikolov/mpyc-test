@@ -54,9 +54,11 @@
     "peerjs": "^1.4.7",
     "polyscript": "^0.1.10",
     "qrcode": "^1.5.3",
+    "split.js": "^1.6.5",
     "thememirror": "^2.0.1",
     "xterm": "^5.2.1",
     "xterm-addon-fit": "^0.7.0",
-    "xterm-addon-search": "^0.12.0"
+    "xterm-addon-search": "^0.12.0",
+    "xterm-addon-webgl": "^0.15.0"
   }
 }

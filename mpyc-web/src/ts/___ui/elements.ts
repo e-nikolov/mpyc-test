@@ -18,4 +18,4 @@ export const qrCanvas = document.querySelector<HTMLCanvasElement>('#qrr')!;
 export const qrCanvas2 = document.querySelector<HTMLCanvasElement>('#canvas')!;
 export const testDiv = document.querySelector<HTMLCanvasElement>('div#test')!;
 export const demoSelector = document.querySelector<HTMLSelectElement>('select#select-demo')!;
-export var term = ui.makeTerminal('#terminal');
+export var term = new ui.Term('#terminal');
