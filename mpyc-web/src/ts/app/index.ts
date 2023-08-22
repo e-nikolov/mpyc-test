@@ -92,10 +92,10 @@ export class Controller {
         });
         mpyc.on('peerjs:closed', () => { this.term.writeln('PeerJS closed.'); });
         mpyc.on('peerjs:error', (err: Error) => { this.term.writeln('PeerJS failed: ' + err.message); });
-        mpyc.on('peerjs:conn:ready', app.onPeerConnectedHook);
-        mpyc.on('peerjs:conn:disconnected', app.onPeerDisconnectedHook);
-        mpyc.on('peerjs:conn:error', app.onPeerConnectionErrorHook);
-        mpyc.on('peerjs:conn:data:user:chat', app.processChatMessage);
+        mpyc.on('peerjs:conn:ready', this.onPeerConnectedHook);
+        mpyc.on('peerjs:conn:disconnected', this.onPeerDisconnectedHook);
+        mpyc.on('peerjs:conn:error', this.onPeerConnectionErrorHook);
+        mpyc.on('peerjs:conn:data:user:chat', this.processChatMessage);
         mpyc.on('worker:error', (err: Error) => { this.term.writeln(err.message); });
         mpyc.on('worker:run', (mpyc: MPyCManager) => { this.updatePeersDiv(mpyc); });
         mpyc.on('worker:display', (message: string) => { this.term.writeln(message); });
@@ -127,7 +127,6 @@ export class Controller {
         new app.CopyButton(opts.myPeerIDSelector, opts.copyPeerIDButtonSelector);
     }
 
-    setupDemoSelector = app.setupDemoSelector;
 
     setupGlobals() {
         document.mpyc = this.mpyc;
@@ -139,10 +138,14 @@ export class Controller {
         document.runa = async () => this.mpyc.runMPC(this.editor.getCode(), true);
     }
 
-    updatePeersDiv = app.updatePeersDiv;
-    updateHostPeerIDInput = app.updateHostPeerIDInput;
-    processChatMessage = app.processChatMessage;
-    sendChatMessage = app.sendChatMessage;
+    public setupDemoSelector = app.setupDemoSelector.bind(this);
+    public onPeerConnectedHook = app.onPeerConnectedHook.bind(this);
+    public onPeerDisconnectedHook = app.onPeerDisconnectedHook.bind(this);
+    public onPeerConnectionErrorHook = app.onPeerConnectionErrorHook.bind(this);
+    public processChatMessage = app.processChatMessage.bind(this);
+    public updatePeersDiv = app.updatePeersDiv.bind(this);
+    public updateHostPeerIDInput = app.updateHostPeerIDInput.bind(this);
+    public sendChatMessage = app.sendChatMessage.bind(this);
 }
 
 declare global {
