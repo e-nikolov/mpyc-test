@@ -1,14 +1,13 @@
-import { MPyCManager } from "../mpyc";
-import * as ui from ".";
+import { Controller, safe } from ".";
 
-export function sendChatMessage(this: ui.Controller, mpyc: MPyCManager) {
+export function sendChatMessage(this: Controller) {
     let message = this.chatInput.value;
     this.chatInput.value = "";
-    this.term.writeln(`Me: ${ui.safe(message)}`);
+    this.term.writeln(`Me: ${safe(message)}`);
 
-    mpyc.broadcastMessage('chat', message)
+    this.mpyc.broadcastMessage('chat', message)
 }
 
-export function processChatMessage(this: ui.Controller, peerID: string, message: string) {
-    this.term.writeln(`${ui.safe(peerID)}: ${ui.safe(message)}`);
+export function processChatMessage(this: Controller, peerID: string, message: string) {
+    this.term.writeln(`${safe(peerID)}: ${safe(message)}`);
 }

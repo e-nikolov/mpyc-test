@@ -1,5 +1,5 @@
 import { MPyCManager } from '../mpyc';
-import * as ui from '.';
+import * as app from '.';
 import { Tooltip } from 'bootstrap';
 import { EditorView } from '@codemirror/view';
 
@@ -9,46 +9,86 @@ export * from './chat';
 export * from './qr';
 export * from './peers';
 export * from './editor';
+export * from './tabs';
+
 import Split from 'split.js'
+import { $, $$ } from './utils';
+import { ControllerOptions } from './elements';
 
 export class Controller {
     mpyc: MPyCManager;
-    editor: ui.Editor;
-    term: ui.Term;
 
-    demoSelect = document.querySelector<HTMLSelectElement>('select#select-demo')!;
-    hostPeerIDInput = document.querySelector<HTMLInputElement>('input#hostPeerID')!;
-    chatInput = document.querySelector<HTMLInputElement>('#chatInput')!;
-    myPeerIDEl = document.querySelector<HTMLInputElement>('#myPeerID')!;
-    knownPeersEl = document.querySelector('#knownPeers')!;
-    resetPeerIDButton = document.querySelector<HTMLButtonElement>('button#resetPeerID')!;
-    runMPyCButton = document.querySelector<HTMLButtonElement>('button#startButton')!;
-    runMPyCAsyncButton = document.querySelector<HTMLButtonElement>('button#startAsyncButton')!;
-    stopMPyCButton = document.querySelector<HTMLButtonElement>('button#stopButton')!;
-    connectToPeerButton = document.querySelector<HTMLButtonElement>('button#connect')!;
-    sendMessageButton = document.querySelector<HTMLButtonElement>('#sendMessageButton')!;
-    clearTerminalButton = document.querySelector<HTMLButtonElement>('button#clearTerminal')!;
-    showQRCodeButton = document.querySelector<HTMLButtonElement>('#show-qr')!;
-    scanQRInput = document.querySelector<HTMLInputElement>('#scan-qr')!;
-    qrCanvas = document.querySelector<HTMLCanvasElement>('#qrr')!;
-    qrCanvas2 = document.querySelector<HTMLCanvasElement>('#canvas')!;
-    testDiv = document.querySelector<HTMLCanvasElement>('div#test')!;
+    editor: app.Editor;
+    term: app.Term;
+    demoSelect: HTMLSelectElement;
+    hostPeerIDInput: HTMLInputElement;
+    chatInput: HTMLInputElement;
+    myPeerIDEl: HTMLInputElement;
+    knownPeersEl: HTMLElement;
+    resetPeerIDButton: HTMLButtonElement;
+    runMPyCButton: HTMLButtonElement;
+    runMPyCAsyncButton: HTMLButtonElement;
+    stopMPyCButton: HTMLButtonElement;
+    connectToPeerButton: HTMLButtonElement;
+    sendMessageButton: HTMLButtonElement;
+    clearTerminalButton: HTMLButtonElement;
+    showQRCodeButton: HTMLButtonElement;
+    scanQRInput: HTMLInputElement;
 
-    constructor(mpyc: MPyCManager) {
-        this.term = new ui.Term('#terminal')
+    constructor(mpyc: MPyCManager, opts: ControllerOptions) {
+        this.mpyc = mpyc;
 
+        this.demoSelect = $<HTMLSelectElement>(opts.demoSelectSelector);
+        this.hostPeerIDInput = $<HTMLInputElement>(opts.hostPeerIDInputSelector);
+        this.chatInput = $<HTMLInputElement>(opts.chatInputSelector);
+        this.myPeerIDEl = $<HTMLInputElement>(opts.myPeerIDSelector);
+        this.knownPeersEl = $(opts.peersDivSelector);
+        this.resetPeerIDButton = $<HTMLButtonElement>(opts.resetPeerIDButtonSelector);
+        this.runMPyCButton = $<HTMLButtonElement>(opts.runMPyCButtonSelector);
+        this.runMPyCAsyncButton = $<HTMLButtonElement>(opts.runMPyCAsyncButtonSelector);
+        this.stopMPyCButton = $<HTMLButtonElement>(opts.stopMPyCButtonSelector);
+        this.connectToPeerButton = $<HTMLButtonElement>(opts.connectToPeerButtonSelector);
+        this.sendMessageButton = $<HTMLButtonElement>(opts.sendMessageButtonSelector);
+        this.clearTerminalButton = $<HTMLButtonElement>(opts.clearTerminalButtonSelector);
+        this.showQRCodeButton = $<HTMLButtonElement>(opts.showQRCodeButtonSelector);
+        this.scanQRInput = $<HTMLInputElement>(opts.scanQRInputSelector);
+
+        this.term = new app.Term(opts.terminalSelector);
+        this.editor = new app.Editor(opts.editorSelector, this.demoSelect, mpyc);
+
+        this.init(mpyc, opts);
+    }
+
+    init(mpyc: MPyCManager, opts: ControllerOptions) {
         this.term.writeln('Initializing UI...');
         this.term.writeln('Initializing PeerJS...');
         this.term.writeln('Initializing PyScript runtime...');
-        this.mpyc = mpyc;
 
         for (let i = 0; i < 100; i++) {
             this.term.writeln(`${i}:\tlorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`);
         }
 
+        this.updateHostPeerIDInput();
+
+        this.setupMPyCEvents(mpyc);
+        this.setupButtonEvents(mpyc, opts);
+        this.setupDemoSelector();
+
+        $$('[data-bs-toggle="tooltip"]').forEach(el => new Tooltip(el));
+
+        Split(opts.splitPanelSelectors, {
+            direction: 'vertical',
+            // minSize: 0,
+            // gutterSize: 10,
+        });
+
+        this.setupGlobals();
+    }
+
+    setupMPyCEvents(mpyc: MPyCManager) {
         mpyc.on('peerjs:ready', (peerID: string) => {
-            this.myPeerIDEl.value = ui.safe(peerID);
-            setTabState('myPeerID', peerID);
+            this.myPeerIDEl.value = app.safe(peerID);
+            app.setTabState('myPeerID', peerID);
 
             console.log('My peer ID is: ' + peerID);
             this.term.writeln('PeerJS ready with ID: ' + peerID);
@@ -56,166 +96,70 @@ export class Controller {
         });
         mpyc.on('peerjs:closed', () => { this.term.writeln('PeerJS closed.'); });
         mpyc.on('peerjs:error', (err: Error) => { this.term.writeln('PeerJS failed: ' + err.message); });
-        mpyc.on('peerjs:conn:ready', ui.onPeerConnectedHook);
-        mpyc.on('peerjs:conn:disconnected', ui.onPeerDisconnectedHook);
-        mpyc.on('peerjs:conn:error', ui.onPeerConnectionErrorHook);
-        mpyc.on('peerjs:conn:data:user:chat', ui.processChatMessage);
+        mpyc.on('peerjs:conn:ready', app.onPeerConnectedHook);
+        mpyc.on('peerjs:conn:disconnected', app.onPeerDisconnectedHook);
+        mpyc.on('peerjs:conn:error', app.onPeerConnectionErrorHook);
+        mpyc.on('peerjs:conn:data:user:chat', app.processChatMessage);
         mpyc.on('worker:error', (err: Error) => { this.term.writeln(err.message); });
         mpyc.on('worker:run', (mpyc: MPyCManager) => { this.updatePeersDiv(mpyc); });
         mpyc.on('worker:display', (message: string) => { this.term.writeln(message); });
         mpyc.on('worker:display:raw', (message: string) => { this.term.write(message); });
         mpyc.on('worker:ready', () => { this.term.writeln('PyScript runtime ready.'); });
         mpyc.on('peerjs:conn:data:mpyc:ready', () => { this.updatePeersDiv(mpyc); });
+    }
 
+    setupButtonEvents(mpyc: MPyCManager, opts: ControllerOptions) {
         this.resetPeerIDButton.addEventListener('click', () => { delete sessionStorage.myPeerID; this.term.writeln("Restarting PeerJS..."); mpyc.resetPeer(""); });
         this.stopMPyCButton.addEventListener('click', () => { this.term.writeln("Restarting PyScript runtime..."); mpyc.resetWorker(); });
-        this.runMPyCButton.addEventListener('click', async () => { mpyc.runMPC(await this.editor.getCode(), false); });
-        this.runMPyCAsyncButton.addEventListener('click', async () => mpyc.runMPC(await this.editor.getCode(), true));
+        this.runMPyCButton.addEventListener('click', () => { mpyc.runMPC(this.editor.getCode(), false); });
+        this.runMPyCAsyncButton.addEventListener('click', () => mpyc.runMPC(this.editor.getCode(), true));
         this.connectToPeerButton.addEventListener('click', () => { localStorage.hostPeerID = this.hostPeerIDInput.value; mpyc.connectToPeer(this.hostPeerIDInput.value) });
-        this.sendMessageButton.addEventListener('click', () => { this.sendChatMessage(mpyc); });
+        this.sendMessageButton.addEventListener('click', () => { this.sendChatMessage(); });
         this.clearTerminalButton.addEventListener('click', () => { this.term.clear(); });
-        this.updateHostPeerIDInput();
 
-        new ui.CopyButton('#myPeerID', 'button#copyPeerID');
-
-
+        // CHAT
         this.chatInput.addEventListener('keypress', (e: Event) => {
             let ev = e as KeyboardEvent;
 
             if (ev.key === 'Enter' && !ev.shiftKey) {
                 ev.preventDefault();
-                return this.sendChatMessage(mpyc);
+                return this.sendChatMessage();
             }
         });
 
-        document.querySelectorAll('[data-bs-toggle="tooltip"]').
-            forEach(tooltipTriggerEl => new Tooltip(tooltipTriggerEl));
+        app.makeQRButton(opts.showQRCodeButtonSelector, () => { return this.myPeerIDEl.value });
+        new app.CopyButton(opts.myPeerIDSelector, opts.copyPeerIDButtonSelector);
+    }
 
-        this.demoSelect.selectedIndex = parseInt(localStorage.demoSelectorSelectedIndex) || 1;
+    setupDemoSelector = app.setupDemoSelector;
 
-        this.demoSelect.onchange = async () => {
-            localStorage.demoSelectorSelectedIndex = this.demoSelect.selectedIndex;
-            let demoCode = await this.fetchSelectedDemo();
-            this.editor.updateCode(demoCode);
-            this.editor.focus();
-        }
-        this.editor = new ui.Editor("#editor", this.demoSelect, mpyc)
+    setupGlobals() {
+        document.mpyc = this.mpyc;
         document.editor = this.editor;
-
-        this.fetchSelectedDemo().then((code) => {
-            this.editor.updateCode(code);
-        });
-
-        ui.makeQRButton('#show-qr', () => { return this.myPeerIDEl.value });
-
-        document.mpyc = mpyc;
+        document.term = this.term;
         document.clearTabCount = () => { delete localStorage.tabCount }
-        document.r = () => { mpyc.reset("") };
-        document.run = async () => mpyc.runMPC(await this.editor.getCode(), false);
-        document.runa = async () => mpyc.runMPC(await this.editor.getCode(), true);
-
-        this.resizeDemoSelector();
-        window.addEventListener('resize', () => {
-            this.resizeDemoSelector();
-        })
-
-        Split(['.split-0', '.split-1'], {
-            direction: 'vertical',
-            // minSize: 0,
-            // gutterSize: 10,
-        });
+        document.r = () => { this.mpyc.reset("") };
+        document.run = async () => this.mpyc.runMPC(this.editor.getCode(), false);
+        document.runa = async () => this.mpyc.runMPC(this.editor.getCode(), true);
     }
 
-    resizeDemoSelector() {
-        this.demoSelect.size = window.innerHeight / (4 * 21)
-    }
-
-    async fetchSelectedDemo(): Promise<string> {
-        var demoCode: string;
-        if (this.demoSelect.selectedIndex == 0) {
-            demoCode = localStorage.customCode || "";
-        } else {
-            demoCode = await fetchDemoCode(this.demoSelect.value);
-        }
-        return demoCode;
-    }
-
-    updatePeersDiv = ui.updatePeersDiv;
-    updateHostPeerIDInput = ui.updateHostPeerIDInput;
-    processChatMessage = ui.processChatMessage;
-    sendChatMessage = ui.sendChatMessage;
-}
-
-
-
-
-export async function fetchDemoCode(src = "./py/main.py"): Promise<string> {
-    let contents = await fetch(src)
-    let pyCode = await contents.text()
-    return pyCode;
-}
-
-
-// TODO: not thread safe, breaks if tabs open too quickly
-export function loadPeerID(): string {
-    localStorage.tabCount ||= 0;
-    let tabCount = parseInt(localStorage.tabCount);
-    localStorage.tabCount = tabCount + 1;
-
-    addEventListener('beforeunload', function () {
-        let tabCount = parseInt(localStorage.tabCount);
-        if (tabCount > 0) {
-            localStorage.tabCount = tabCount - 1;
-        }
-    });
-
-    // Duplicated Tabs will have the same tabID and peerID as their parent Tab; we must force reset those values
-    if (!sessionStorage.tabID || window.performance.getEntriesByType("navigation")[0].type == 'back_forward') {
-        sessionStorage.tabID = localStorage.tabCount;
-        sessionStorage.myPeerID = ui.getTabState("myPeerID");
-    }
-
-    console.log("tab id: " + sessionStorage.tabID);
-    return sessionStorage.myPeerID;
-}
-
-
-export function getTabState(key: string) {
-    let tabID = sessionStorage.tabID;
-    return localStorage[`tabState:${tabID}:` + key] || "";
-}
-
-export function setTabState(key: string, value: any) {
-    let tabID = sessionStorage.tabID;
-    sessionStorage[key] = value;
-    localStorage[`tabState:${tabID}:` + key] = value;
+    updatePeersDiv = app.updatePeersDiv;
+    updateHostPeerIDInput = app.updateHostPeerIDInput;
+    processChatMessage = app.processChatMessage;
+    sendChatMessage = app.sendChatMessage;
 }
 
 declare global {
-    interface JQuery {
-        resizableSafe: (obj: any) => void;
-    }
     interface Document {
         clearTabCount: any;
         r: any;
         run: any;
         runa: any;
         mpyc: MPyCManager;
-        term: ui.Term;
+        term: app.Term;
         editor: EditorView;
     }
     interface PerformanceEntry {
         type: string;
-    }
-}
-
-export function ensureStorageSchema(gen: number) {
-    console.log("Storage schema generation:", localStorage.gen)
-    localStorage.gen ||= 0;
-    if (localStorage.gen < gen) {
-        console.log(`Clearing schema, latest generation: ${gen}`)
-        localStorage.clear();
-        sessionStorage.clear();
-        localStorage.gen = gen;
     }
 }

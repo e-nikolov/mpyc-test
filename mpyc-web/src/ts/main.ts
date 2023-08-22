@@ -22,5 +22,25 @@ import * as app from './app';
 app.ensureStorageSchema(18);
 let peerID = app.loadPeerID();
 
-var mpyc: MPyCManager = new MPyCManager(peerID, "./py/shim.py", "config.toml");
-new app.Controller(mpyc);
+let mpyc = new MPyCManager(peerID, "./py/shim.py", "config.toml");
+
+new app.Controller(mpyc, {
+    terminalSelector: '#terminal',
+    editorSelector: '#editor',
+    demoSelectSelector: 'select#select-demo',
+    hostPeerIDInputSelector: 'input#hostPeerID',
+    chatInputSelector: '#chatInput',
+    myPeerIDSelector: '#myPeerID',
+    peersDivSelector: '#knownPeers',
+    copyPeerIDButtonSelector: 'button#copyPeerID',
+    resetPeerIDButtonSelector: 'button#resetPeerID',
+    runMPyCButtonSelector: 'button#startButton',
+    runMPyCAsyncButtonSelector: 'button#startAsyncButton',
+    stopMPyCButtonSelector: 'button#stopButton',
+    connectToPeerButtonSelector: 'button#connect',
+    sendMessageButtonSelector: '#sendMessageButton',
+    clearTerminalButtonSelector: 'button#clearTerminal',
+    showQRCodeButtonSelector: '#show-qr',
+    scanQRInputSelector: '#scan-qr',
+    splitPanelSelectors: ['.split-0', '.split-1'],
+});

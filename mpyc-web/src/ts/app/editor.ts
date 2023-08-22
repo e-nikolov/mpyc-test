@@ -7,6 +7,7 @@ import { copyLineDown, defaultKeymap, deleteLine, moveLineDown, moveLineUp, redo
 import { birdsOfParadise } from 'thememirror';
 import { indentWithTab, } from "@codemirror/commands"
 import { MPyCManager } from '../mpyc';
+import { Controller } from '.';
 
 export class Editor extends EditorView {
     constructor(selector: string, demoSelect: HTMLSelectElement, mpyc: MPyCManager) {
@@ -26,13 +27,13 @@ export class Editor extends EditorView {
                 keymap.of([
                     {
                         key: 'Ctrl-Enter', run: () => {
-                            this.getCode().then((code: string) => { mpyc.runMPC(code, false) });
+                            mpyc.runMPC(this.getCode(), false)
                             return true;
                         }, preventDefault: true
                     },
                     {
                         key: 'Shift-Enter', run: () => {
-                            this.getCode().then((code: string) => { mpyc.runMPC(code, true) });
+                            mpyc.runMPC(this.getCode(), true)
                             return true;
                         }, preventDefault: true
                     },
@@ -62,14 +63,48 @@ export class Editor extends EditorView {
         });
     }
 
-    async getCode(): Promise<string> {
+    getCode(): string {
         return this.state.doc.toString();
     }
 
     updateCode(code: string) {
         this.dispatch({
             changes: { from: 0, to: this.state.doc.length, insert: code },
-            selection: { anchor: 0, head: 0 }
+            selection: { anchor: 0, head: 0 },
+            scrollIntoView: true
         });
+        this.focus();
     }
+}
+
+export function setupDemoSelector(this: Controller) {
+    const resizeDemoSelector = () => {
+        this.demoSelect.size = window.innerHeight / (4 * 21)
+    }
+
+    resizeDemoSelector();
+    window.addEventListener('resize', () => {
+        console.log("resize>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        resizeDemoSelector();
+    })
+
+    this.demoSelect.addEventListener('change', async () => {
+        localStorage.demoSelectorSelectedIndex = this.demoSelect.selectedIndex;
+        let demoCode = await fetchSelectedDemo(this.demoSelect);
+        this.editor.updateCode(demoCode);
+    });
+
+    this.demoSelect.selectedIndex = parseInt(localStorage.demoSelectorSelectedIndex || 1);
+    this.demoSelect.dispatchEvent(new Event('change'));
+}
+
+export async function fetchSelectedDemo(demoSelect: HTMLSelectElement): Promise<string> {
+    var demoCode: string;
+    if (demoSelect.selectedIndex == 0) {
+        demoCode = localStorage.customCode || "";
+    } else {
+        let contents = await fetch(demoSelect.value)
+        demoCode = await contents.text()
+    }
+    return demoCode;
 }
