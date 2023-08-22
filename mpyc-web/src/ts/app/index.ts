@@ -79,7 +79,7 @@ export class Controller {
         Split(opts.splitPanelSelectors, {
             direction: 'vertical',
             // minSize: 0,
-            // gutterSize: 10,
+            gutterSize: 18,
         });
 
         this.setupGlobals();
