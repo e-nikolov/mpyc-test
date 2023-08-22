@@ -73,9 +73,6 @@ export class Term extends Terminal {
         // debounce resize
         let ro = new ResizeObserver(debounce(() => { this.fit(); }, 0));
         ro.observe(document.querySelector(".split-1")!)
-        // ro.observe(document.querySelector(".xterm")!)
-
-        document.term = this;
     }
 
     fit = () => {
