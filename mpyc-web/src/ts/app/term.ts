@@ -4,16 +4,20 @@ import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { WebglAddon } from 'xterm-addon-webgl';
 import { SearchAddon } from 'xterm-addon-search';
+import { SearchBarAddon } from 'xterm-addon-search-bar';
 
-import { debounce } from './utils';
+import { $, debounce } from './utils';
 
 export class Term extends Terminal {
     fitAddon: FitAddon;
     searchAddon: SearchAddon;
     webglAddon: WebglAddon;
+    searchBarAddon: SearchBarAddon;
 
 
     constructor(sel: string) {
+        let el = $(sel);
+
         super({
             screenReaderMode: true,
             cols: 80,
@@ -54,12 +58,15 @@ export class Term extends Terminal {
         this.fitAddon = new FitAddon();
         this.searchAddon = new SearchAddon();
         this.webglAddon = new WebglAddon();
+        this.searchBarAddon = new SearchBarAddon({ searchAddon: this.searchAddon });
         this.loadAddon(this.fitAddon);
         this.loadAddon(this.searchAddon);
+        this.loadAddon(this.searchBarAddon);
         this.loadAddon(this.webglAddon);
 
-        this.open(document.querySelector(sel)!);
+        this.open(el);
         this.attachCustomKeyEventHandler((e: KeyboardEvent) => {
+            // console.log(e.key)
             if (e.ctrlKey && e.key == "c") {
                 if (this.hasSelection()) {
                     navigator.clipboard.writeText(this.getSelection())
@@ -67,7 +74,18 @@ export class Term extends Terminal {
                     return false
                 }
             }
+            if (e.ctrlKey && e.key == "f") {
+                this.searchBarAddon.show();
+                e.preventDefault();
+                return false
+            }
             return true;
+        });
+
+        document.addEventListener('keyup', (e: KeyboardEvent) => {
+            if (e.key == "Escape") {
+                this.searchBarAddon.dispose();
+            }
         });
 
         // debounce resize
