@@ -84,7 +84,7 @@ export class Term extends Terminal {
 
         document.addEventListener('keyup', (e: KeyboardEvent) => {
             if (e.key == "Escape") {
-                this.searchBarAddon.dispose();
+                this.searchBarAddon.hidden();
             }
         });
 
