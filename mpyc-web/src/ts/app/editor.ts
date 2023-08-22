@@ -79,12 +79,15 @@ export class Editor extends EditorView {
 
 export function setupDemoSelector(this: Controller) {
     const resizeDemoSelector = () => {
-        this.demoSelect.size = window.innerHeight / (4 * 21)
+        if (window.innerWidth < 768) {
+            this.demoSelect.size = 1;
+        } else {
+            this.demoSelect.size = window.innerHeight / (4 * 21)
+        }
     }
 
     resizeDemoSelector();
     window.addEventListener('resize', () => {
-        console.log("resize>>>>>>>>>>>>>>>>>>>>>>>>>>")
         resizeDemoSelector();
     })
 
