@@ -65,7 +65,7 @@
     hello
     git --version
 
-    export PYTHONPATH=./:$PYTHONPATH
+    export PYTHONPATH=$PWD:$PYTHONPATH
   '';
 
   # https://devenv.sh/languages/

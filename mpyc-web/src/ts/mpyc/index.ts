@@ -60,12 +60,19 @@ export class MPyCManager extends EventTarget {
 
     on(type: string, handler: (...args: any[]) => void) {
         this.addEventListener(type, (e: Event) => {
-            handler(...((e as Ev).detail.args))
+            let ev = e as Ev;
+            // console.log("on", type, ...ev.detail.args.filter(a => !(a instanceof MPyCManager)));
+            handler(...ev.detail.args)
         });
     }
 
     async emit(type: string, ...args: any[]) {
-        console.log("emit", type, ...[...args].filter(a => !(a instanceof MPyCManager)))
+        if (type != "peerjs:conn:data:mpyc:runtime") {
+            console.debug("emit", type, ...[...args].filter(a => !(a instanceof MPyCManager)))
+        } else {
+            // console.count("peerjs:conn:data:mpyc:runtime")
+        }
+
         this.dispatchEvent(new Ev(type, { detail: { args } }));
     }
 
