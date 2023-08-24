@@ -4,7 +4,7 @@ version = "0.8.8"
 description = "MPyC for Multiparty Computation in Python"
 authors = ["Berry Schoenmakers <berry@win.tue.nl>"]
 readme = "README.md"
-packages = [{ include = "demos" }, { include = "mpyc" }]
+packages = []
 
 [tool.poetry.dependencies]
 python = "^3.10"

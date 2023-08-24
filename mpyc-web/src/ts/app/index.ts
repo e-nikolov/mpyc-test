@@ -60,7 +60,6 @@ export class Controller {
     }
 
     init(mpyc: MPyCManager, opts: ControllerOptions) {
-        this.term.writeln('Initializing UI...');
         this.term.writeln('Initializing PeerJS...');
         this.term.writeln('Initializing PyScript runtime...');
 

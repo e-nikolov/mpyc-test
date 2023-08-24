@@ -6,7 +6,6 @@ Or:  "pip install -e ."
 
 from setuptools import setup
 import mpyc
-import demos
 
 with open("README.md", "r") as f:
     LONG_DESCRIPTION = f.read()
