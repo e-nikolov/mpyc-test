@@ -136,9 +136,7 @@ class Runtime:
         if peer_pid not in self.stats_messages_sent_to:
             self.stats_messages_sent_to[peer_pid] = 0
         self.stats_messages_sent_to[peer_pid] += 1
-        # logging.debug("AAAA")
         self.parties[peer_pid].protocol.send(self._program_counter[0], data)
-        # logging.debug("BBBB")
 
     def _receive_message(self, peer_pid):
         """Receive data from given peer, labeled by current program counter."""
@@ -531,10 +529,6 @@ class Runtime:
         outputs secure floating-point numbers as Python floats.
         The flag raw is ignored for these types.
         """
-        # logging.debug("!!!!!!!OUTPUT!!!!!", x, receivers, threshold, raw)
-
-        # return Future()
-
         x_is_list = isinstance(x, list)
         if x_is_list:
             x = x[:]
@@ -4184,33 +4178,6 @@ def generate_configs(m, addresses):
             config.set(f"Party {i}", "port", port)
         configs[i].set(f"Party {i}", "host", "")  # empty host string for owner
     return configs
-
-
-def sdump(obj):
-    s = ""
-    try:
-        s = pformat(vars(obj), indent=4)
-    except TypeError:
-        pass
-
-    if s == "":
-        try:
-            s = pformat(obj, indent=4)
-        except TypeError:
-            pass
-
-    if s == "":
-        try:
-            s = pformat(dict(obj), indent=4)
-        except TypeError:
-            pass
-
-    return f"{type(obj)}: {s}"
-
-
-def dump(obj):
-    logging.debug(sdump(obj))
-
 
 def setup():
     """Setup a runtime."""
