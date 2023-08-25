@@ -19,7 +19,6 @@ export function safe(text: string) {
 }
 
 export function onPeerConnectedHook(this: Controller, newPeerID: string) {
-    console.log(this)
     this.term.writeln(`Connected to: ${newPeerID}`);
     this.updatePeersDiv(this.mpyc);
 }

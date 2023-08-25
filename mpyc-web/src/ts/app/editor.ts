@@ -89,7 +89,6 @@ export function setupDemoSelector(this: Controller) {
 
     resizeDemoSelector();
     window.addEventListener('resize', debounce(() => {
-        console.log("resize demo selector")
         resizeDemoSelector();
     }, 100))
 

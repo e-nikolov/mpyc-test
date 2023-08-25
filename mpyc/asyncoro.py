@@ -31,7 +31,7 @@ class MessageExchanger(Protocol):
     Dynamically created by asyncio whenever a new connection is established
     """
 
-    __slots__ = 'runtime', 'peer_pid', 'bytes', 'buffers', 'transport', 'nbytes_sent'
+    __slots__ = "runtime", "peer_pid", "bytes", "buffers", "transport", "nbytes_sent"
 
     def __init__(self, rt, peer_pid=None):
         """Initialize protocol for runtime rt between this party and a peer.
@@ -51,18 +51,9 @@ class MessageExchanger(Protocol):
 
     def _key_transport_done(self):
         rt = self.runtime
-        logging.debug(f"......................... 1: {rt.pid} - {self.peer_pid}")
-        logging.debug(f"......................... 2: {rt.pid} - {self.peer_pid}")
         rt.parties[self.peer_pid].protocol = self
-        logging.debug(f"......................... 3: {rt.pid} - {self.peer_pid}")
         if all(p.protocol is not None for p in rt.parties):
-            logging.debug(f"......................... 4: {rt.pid} - {self.peer_pid}")
-            logging.debug(rt.parties[rt.pid])
-            logging.debug(rt.parties[rt.pid].protocol)
             rt.parties[rt.pid].protocol.set_result(None)
-            logging.debug(f"......................... 5: {rt.pid} - {self.peer_pid}")
-
-        logging.debug(f"......................... 6: {rt.pid} - {self.peer_pid}")
 
     def connection_made(self, transport):
         """Called when a connection is made.
@@ -70,7 +61,6 @@ class MessageExchanger(Protocol):
         If this party is a client for this connection, it sends its identity
         to the peer as well as any PRSS keys.
         """
-        logging.debug(f"^^^^^^^^^^^^^^^^^^^^^ Connection made???: {self.peer_pid}, {transport}")
         self.transport = transport
         # This is a client connection to a server peer
         # peer_pid is the PID of the associated server peer
@@ -78,31 +68,15 @@ class MessageExchanger(Protocol):
             rt = self.runtime
             m = len(rt.parties)
             t = rt.threshold
-            logging.debug(f"^^^^^^^^^^^^^^^^^^^^^ Connection made??? 2: {self.peer_pid}")
             pid_keys = [rt.pid.to_bytes(2, "little")]  # send pid
-            logging.debug(f"^^^^^^^^^^^^^^^^^^^^^ Connection made??? 3: {self.peer_pid}")
             if not rt.options.no_prss:
-                logging.debug(f"^^^^^^^^^^^^^^^^^^^^^ Connection made??? 4: {self.peer_pid}")
                 for subset in itertools.combinations(range(m), m - t):
-                    logging.debug(f"^^^^^^^^^^^^^^^^^^^^^ Connection made??? 5: {self.peer_pid}")
                     if subset[0] == rt.pid and self.peer_pid in subset:
-                        logging.debug(f"^^^^^^^^^^^^^^^^^^^^^ Connection made??? 6: {self.peer_pid}")
                         x = rt._prss_keys
-                        logging.debug(f"^^^^^^^^^^^^^^^^^^^^^ Connection made??? 6.0.1: {self.peer_pid}")
-                        logging.debug(x)
-                        logging.debug(f"^^^^^^^^^^^^^^^^^^^^^ Connection made??? 6.0.2: {self.peer_pid}")
-                        logging.debug(subset)
-                        logging.debug(f"^^^^^^^^^^^^^^^^^^^^^ Connection made??? 6.0.3: {self.peer_pid}")
                         x = x[subset]
-                        logging.debug(f"^^^^^^^^^^^^^^^^^^^^^ Connection made??? 6.1: {self.peer_pid}")
-                        logging.debug(pid_keys)
-                        logging.debug(f"^^^^^^^^^^^^^^^^^^^^^ Connection made??? 6.2: {self.peer_pid}")
                         pid_keys.append(x)  # send PRSS keys
-                    logging.debug(f"^^^^^^^^^^^^^^^^^^^^^ Connection made??? 7: {self.peer_pid}")
             transport.writelines(pid_keys)
-            logging.debug(f"^^^^^^^^^^^^^^^^^^^^^ Connection made??? 8: {self.peer_pid}")
             self._key_transport_done()
-            logging.debug(f"^^^^^^^^^^^^^^^^^^^^^ Connection made??? 9: {self.peer_pid}")
 
     def send(self, pc, payload):
         """Send payload labeled with pc to the peer.
@@ -218,7 +192,7 @@ class _AwaitableFuture:
 class _SharesTallier(Future):
     """Tally and gather all futures (shares) recursively for a given object."""
 
-    __slots__ = 'tally', 'obj'
+    __slots__ = "tally", "obj"
 
     def __init__(self, loop, obj):
         super().__init__(loop=loop)
@@ -439,32 +413,23 @@ def mpc_coro(func, pc=True):
 
     @functools.wraps(func)
     def typed_asyncoro(*args, **kwargs):
-        # logging.debug("??????????????? 1")
         runtime._pc_level += 1
-        # logging.debug("??????????????? 2")
         coro = func(*args, **kwargs)
-        # logging.debug("??????????????? 3")
         if rettype:
             decl = returnType(rettype, wrap=False)
-            # logging.debug("??????????????? 4")
         else:
-            # logging.debug("??????????????? 5")
             try:
                 decl = coro.send(None)
             except StopIteration as exc:
-                # logging.debug(f"??????????????? 6 {exc.value}, {exc.__class__}")
                 runtime._pc_level -= 1
                 return exc.value
 
             except Exception:
-                # logging.debug("??????????????? 7")
                 runtime._pc_level -= 1
                 raise
 
         if runtime.options.no_async:
-            # logging.debug("??????????????? 8")
             while True:
-                # logging.debug("??????????????? 9")
                 try:
                     coro.send(None)
                 except StopIteration as exc:
@@ -481,48 +446,10 @@ def mpc_coro(func, pc=True):
             coro = _wrap_in_coro(_ProgramCounterWrapper(runtime, coro))
         task = Task(coro, loop=runtime._loop)
         task.f_back = sys._getframe(1)  # enclosing MPyC coroutine call
-        # logging.debug("cccccccccccccccc")
         task.add_done_callback(lambda t: _reconcile(decl, t))
-        # logging.debug("dddddddddddddddd")
         return _ncopy(decl)
 
-    # logging.debug("??????????????? 999")
     return typed_asyncoro
-
-
-def sdump(obj):
-    s = ""
-    if s == "":
-        try:
-            s = "json: " + pformat(json.dumps(obj), indent=4)
-        except:
-            pass
-    if s == "":
-        try:
-            s = "vars: " + pformat(vars(obj), indent=4)
-        except:
-            pass
-
-    if s == "":
-        try:
-            s = "dict: " + pformat(dict(obj), indent=4)
-        except:
-            pass
-
-    if s == "":
-        try:
-            s = "attrs: "
-
-            for attr in dir(obj):
-                s += f"obj.%s = %r\n" % (attr, getattr(obj, attr))
-        except:
-            pass
-    if s == "":
-        try:
-            s = "pformat: " + pformat(obj, indent=4)
-        except:
-            pass
-    return f"type: {type(obj)}: {s}"
 
 
 def exception_handler(loop, context):
@@ -540,18 +467,11 @@ def exception_handler(loop, context):
             return
 
     elif "task" in context:
-        # logging.debug("iiiiiiiiiiiiiii")
         cb = context["task"]._callbacks[0]
-        # logging.debug("jjjjjjjjjjjjjjj")
         if isinstance(cb, tuple):
-            # logging.debug("kkkkkkkkkkkkkkk")
             cb = cb[0]  # NB: drop context parameter
         if "mpc_coro" in cb.__qualname__:
-            # logging.debug("lllllllllllllll")
             if not loop.get_debug():  # Unless asyncio debug mode is enabled,
-                # logging.debug("mmmmmmmmmmmmmmm")
                 return  # suppress 'Task was destroyed but it is pending!' message.
-    # logging.debug("nnnnnnnnnnnnnnn")
 
     loop.default_exception_handler(context)
-    print(sdump(context["exception"]), file=sys.stderr)
