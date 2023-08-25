@@ -8,6 +8,7 @@ import { birdsOfParadise } from 'thememirror';
 import { indentWithTab, } from "@codemirror/commands"
 import { MPyCManager } from '../mpyc';
 import { Controller } from '.';
+import { debounce } from './utils';
 
 export class Editor extends EditorView {
     constructor(selector: string, demoSelect: HTMLSelectElement, mpyc: MPyCManager) {
@@ -87,9 +88,10 @@ export function setupDemoSelector(this: Controller) {
     }
 
     resizeDemoSelector();
-    window.addEventListener('resize', () => {
+    window.addEventListener('resize', debounce(() => {
+        console.log("resize demo selector")
         resizeDemoSelector();
-    })
+    }, 100))
 
     this.demoSelect.addEventListener('change', async () => {
         localStorage.demoSelectorSelectedIndex = this.demoSelect.selectedIndex;

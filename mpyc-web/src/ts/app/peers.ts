@@ -43,7 +43,7 @@ export function updatePeersDiv(this: Controller, mpyc: MPyCManager) {
         this.knownPeersEl.innerHTML += `
         <li class="list-group-item ${p == mpyc.peer.id ? '' : 'list-group-item-light'}"> 
             <span class="" style="user-select:none">${pid}: </span>
-            <span class="d-inline-block text-truncate" style="vertical-align:top;max-width:200px;">${safe(p)}</span> 
+            <span class="d-inline-block text-truncate" style="vertical-align:top;max-width:80%;">${safe(p)}</span> 
             ${icon}
         </li>`;
     });
