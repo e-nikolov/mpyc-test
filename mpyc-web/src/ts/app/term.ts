@@ -89,7 +89,7 @@ export class Term extends Terminal {
         });
 
         // debounce resize
-        let ro = new ResizeObserver(debounce(() => { this.fit(); }, 0));
+        let ro = new ResizeObserver(debounce(() => { this.fit(); }, 50));
         ro.observe(document.querySelector(".split-1")!)
     }
 

@@ -72,7 +72,6 @@ export class MPyCManager extends EventTarget {
         } else {
             // console.count("peerjs:conn:data:mpyc:runtime")
         }
-
         this.dispatchEvent(new Ev(type, { detail: { args } }));
     }
 
@@ -93,12 +92,11 @@ export class MPyCManager extends EventTarget {
     }
 
     connectToPeer(peerID: string) {
-        // data received does not work here
         let conn = this.peer.connect(peerID, {
             reliable: true
         });
 
-        this.addConnEventHandlers(conn); //?????
+        this.addConnEventHandlers(conn);
     }
 
     runMPC = async (code: string, is_async = false) => {
@@ -122,6 +120,7 @@ export class MPyCManager extends EventTarget {
             parties: peers,
             is_async: is_async,
             no_async: !is_async,
+            // exec: code.replaceAll('mpc.run(', 'await mpc.run('),
             exec: code,
         })
         this.emit('worker:run', this);
@@ -142,6 +141,7 @@ export class MPyCManager extends EventTarget {
     }
 
     newWorker(shimFilePath: string, configFilePath: string) {
+        // let worker = polyscript.XWorker(shimFilePath, { async: true, type: "pyodide", config: configFilePath });
         let worker = polyscript.XWorker(shimFilePath, { async: true, type: "pyodide", config: configFilePath });
 
         // allow the python worker to send PeerJS messages via the main thread
