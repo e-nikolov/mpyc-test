@@ -5,7 +5,7 @@ export function sendChatMessage(this: Controller) {
     this.chatInput.value = "";
     this.term.writeln(`Me: ${safe(message)}`);
 
-    this.mpyc.broadcastMessage('chat', message)
+    this.mpyc.broadcast('chat', message)
 }
 
 export function processChatMessage(this: Controller, peerID: string, message: string) {
