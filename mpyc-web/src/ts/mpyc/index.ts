@@ -4,8 +4,7 @@ import * as polyscript from "polyscript";
 
 type ConnMap = Map<string, DataConnection>;
 
-class Ev extends CustomEvent<{ args: any[] }> {
-}
+class Ev extends CustomEvent<{ args: any[] }> { }
 
 export class MPyCManager extends EventTarget {
     peer: Peer;
@@ -27,8 +26,8 @@ export class MPyCManager extends EventTarget {
         this.configFilePath = configFilePath;
 
         this.on('peerjs:conn:data:peers', this.processNewPeers);
-        this.on('peerjs:conn:data:mpyc:ready', this.processMPyCReadyMessage);
-        this.on('peerjs:conn:data:mpyc:runtime', this.processMPyCRuntimeMessage);
+        this.on('peerjs:conn:data:mpyc:ready', this.processReadyMessage);
+        this.on('peerjs:conn:data:mpyc:runtime', this.processRuntimeMessage);
     }
 
     public reset(peerID: string | null) {
@@ -68,35 +67,11 @@ export class MPyCManager extends EventTarget {
 
     async emit(type: string, ...args: any[]) {
         if (type != "peerjs:conn:data:mpyc:runtime") {
-            console.debug("emit", type, ...[...args].filter(a => !(a instanceof MPyCManager)))
+            // console.debug("emit", type, ...[...args].filter(a => !(a instanceof MPyCManager)))
         } else {
             // console.count("peerjs:conn:data:mpyc:runtime")
         }
         this.dispatchEvent(new Ev(type, { detail: { args } }));
-    }
-
-    getPeers(includeSelf = false) {
-        let peers = Array.from(this.conns, ([_, conn]) => conn.peer);
-
-        if (includeSelf) {
-            peers.push(this.peer.id);
-        }
-
-        return peers.sort();
-    }
-
-    broadcastMessage(type: string, data: any) {
-        this.conns.forEach(conn => {
-            conn.send({ type: `user:${type}`, payload: data });
-        });
-    }
-
-    connectToPeer(peerID: string) {
-        let conn = this.peer.connect(peerID, {
-            reliable: true
-        });
-
-        this.addConnEventHandlers(conn);
     }
 
     runMPC = async (code: string, is_async = false) => {
@@ -115,12 +90,12 @@ export class MPyCManager extends EventTarget {
 
         this.peersReady.set(this.peer.id, true);
 
+
         this.worker.sync.run_mpc({
             pid: pid,
             parties: peers,
             is_async: is_async,
             no_async: !is_async,
-            // exec: code.replaceAll('mpc.run(', 'await mpc.run('),
             exec: code,
         })
         this.emit('worker:run', this);
@@ -128,11 +103,15 @@ export class MPyCManager extends EventTarget {
 
     newPeerJS(peerID: string | null): Peer {
         var peer: Peer;
+        let opts: typeof peer.options = {
+            // debug: 3,
+            pingInterval: 2345,
+        };
 
         if (peerID) {
-            peer = new Peer(peerID);
+            peer = new Peer(peerID, opts);
         } else {
-            peer = new Peer();
+            peer = new Peer(opts);
         }
 
         this.addPeerEventHandlers(peer)
@@ -150,6 +129,8 @@ export class MPyCManager extends EventTarget {
 
         // UI callbacks
         worker.sync.log = console.log;
+        worker.sync.logError = console.error;
+        worker.sync.logWarn = console.warn;
         worker.sync.display = (message: string) => { this.emit('worker:display', message, this); }
         worker.sync.displayRaw = (message: string) => { this.emit('worker:display:raw', message, this); }
         worker.onerror = (err: ErrorEvent) => { console.error(err.error); this.emit('worker:error', err, this) };
@@ -168,7 +149,7 @@ export class MPyCManager extends EventTarget {
     private addConnEventHandlers(conn: DataConnection) {
         console.log("new peer connection from", conn.peer)
         conn.on('open', () => {
-            this.sendKnownPeers(conn);
+            this.sendPeers(conn);
             this.conns.set(conn.peer, conn);
             this.emit("peerjs:conn:ready", conn.peer, this);
         });
@@ -181,19 +162,45 @@ export class MPyCManager extends EventTarget {
         conn.on('data', (data: any) => { this.emit(`peerjs:conn:data:${data.type}`, conn.peer, data.payload) });
     }
 
-    private sendKnownPeers(conn: DataConnection) {
-        conn.send({
-            type: 'peers',
-            payload: this.getPeers()
-        })
+    send(conn: DataConnection, type: string, payload: any) {
+        conn.send({ type, payload });
     }
 
+    broadcast(type: string, payload: any) {
+        this.conns.forEach(conn => {
+            this.send(conn, `user:${type}`, payload);
+        });
+    }
+
+    private sendPeers(conn: DataConnection) {
+        this.send(conn, 'peers', this.getPeers())
+    }
+
+    // TODO formally prove that this always results in a full mesh
     private processNewPeers = (_: string, newPeers: string[]) => {
         newPeers.forEach(peerID => {
             if (!this.conns.get(peerID) && peerID != this.peer.id) {
                 this.connectToPeer(peerID);
             }
         });
+    }
+
+    connectToPeer(peerID: string) {
+        let conn = this.peer.connect(peerID, {
+            reliable: true
+        });
+
+        this.addConnEventHandlers(conn);
+    }
+
+    getPeers(includeSelf = false) {
+        let peers = Array.from(this.conns, ([_, conn]) => conn.peer);
+
+        if (includeSelf) {
+            peers.push(this.peer.id);
+        }
+
+        return peers.sort();
     }
 
     // Called from the Python worker
@@ -206,7 +213,7 @@ export class MPyCManager extends EventTarget {
     };
 
     // Called from the PeerJS connection
-    processMPyCReadyMessage = (peerID: string, message: string) => {
+    processReadyMessage = (peerID: string, message: string) => {
         this.peersReady.set(peerID, true);
 
         if (!this.running) {
@@ -218,7 +225,8 @@ export class MPyCManager extends EventTarget {
     }
 
     // Called from the Python worker
-    sendRuntimeMessage = (pid: number, message: string) => {
+    sendRuntimeMessage = (pid: number, message: any) => {
+        // console.log(`sending data ${message}`)
         let peerID = this.pidToPeerID.get(pid)!;
         this.conns.get(peerID)?.send({
             type: 'mpyc:runtime',
@@ -227,13 +235,15 @@ export class MPyCManager extends EventTarget {
     };
 
     // Called from the PeerJS connection
-    processMPyCRuntimeMessage = (peerID: string, message: string) => {
+    processRuntimeMessage = (peerID: string, message: any) => {
         if (!this.running) {
             // ignore mpc messages if we're not running
             console.log("ignoring mpc runtime message because we are not running")
             return;
         }
+        // console.log(`receiving data ${message}`)
         let pid = this.peerIDToPID.get(peerID)!;
         this.worker.sync.on_runtime_message(pid, message)
     }
 }
+
