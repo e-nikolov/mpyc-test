@@ -62,7 +62,7 @@
   # devenv.debug = true;
   dotenv.enable = true;
   enterShell = ''
-    hello
+    hello 
     git --version
 
     export PYTHONPATH=$PWD:$PYTHONPATH
@@ -72,8 +72,12 @@
   languages.nix.enable = true;
   languages.typescript.enable = true;
   languages.python.enable = true;
-  languages.python.package = pkgs.python311;
+  languages.python.poetry.enable = true;
+  languages.python.venv.enable = true;
+  languages.python.version = "3.11.5";
+
   devenv.flakesIntegration = true;
+
 
   # https://devenv.sh/pre-commit-hooks/
   # pre-commit.hooks.shellcheck.enable = true;

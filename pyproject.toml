@@ -16,6 +16,9 @@ gmpy2 = "^2.1.2"
 packaging = "^23.0.0"
 # uvloop = "^0.17.0"
 # pyodide-pack = "^2.1.2"
+# pyodide-pack = "^0.2.0"
+# pyodide-pack = "^0.2.0"
+pyodide-py = "^0.23.4"
 
 [build-system]
 requires = ["poetry-core"]
