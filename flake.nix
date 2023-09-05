@@ -12,14 +12,14 @@
       inputs.flake-utils.follows = "flake-utils";
     };
     devenv.url = "github:cachix/devenv";
+    nixpkgs-python.url = "github:cachix/nixpkgs-python";
+    # nixpkgs-python.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {
-    extra-trusted-public-keys = [ "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=" "cache.armv7l.xyz-1:kBY/eGnBAYiqYfg0fy0inWhshUo+pGFM3Pj7kIkmlBk=" ];
-    extra-substituters = [ "https://devenv.cachix.org" "https://cache.armv7l.xyz" ];
+    extra-substituters = [ "https://devenv.cachix.org" "https://nixpkgs-python.cachix.org" "https://cache.armv7l.xyz" ];
+    extra-trusted-public-keys = [ "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=" "nixpkgs-python.cachix.org-1:hxjI7pFxTyuTHn2NkvWCrAUcNZLNS3ZAvfYNuYifcEU=" "cache.armv7l.xyz-1:kBY/eGnBAYiqYfg0fy0inWhshUo+pGFM3Pj7kIkmlBk=" ];
   };
-  # nixConfig.extra-substituters = [ "https://cache.armv7l.xyz" ];
-  # nixConfig.substituters = [ "https://cache.nixos.org" "https://cache.armv7l.xyz" ];
 
   outputs = inputs@{ self, nixpkgs, flake-utils, devenv, ... }:
     { colmena = self.packages.x86_64-linux.colmena; }
@@ -29,6 +29,7 @@
         let
           pkgs = import nixpkgs {
             inherit system;
+
             # config = {
             #   allowUnsupportedSystem = true;
             #   allowUnfree = true;
