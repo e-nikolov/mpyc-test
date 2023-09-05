@@ -1,27 +1,31 @@
-pkgs: dir:
-(pkgs.poetry2nix.mkPoetryEnv
+pkgs: dir: (pkgs.poetry2nix.mkPoetryEnv
   {
     python = pkgs.python311;
     projectDir = dir;
 
-    extraPackages = (ps: [
+    extraPackages = ps: [
       (pkgs.python311Packages.buildPythonPackage
         {
           name = "mpyc";
           src = dir;
         })
-    ]);
+    ];
 
     overrides = pkgs.poetry2nix.overrides.withDefaults (
       self: super: {
         didcomm = super.didcomm.overrideAttrs (
           old: {
-            buildInputs = old.buildInputs ++ [ super.setuptools ];
+            buildInputs = old.buildInputs ++ [super.setuptools];
           }
         );
         peerdid = super.peerdid.overrideAttrs (
           old: {
-            buildInputs = old.buildInputs ++ [ super.setuptools ];
+            buildInputs = old.buildInputs ++ [super.setuptools];
+          }
+        );
+        pyodide-py = super.pyodide-py.overrideAttrs (
+          old: {
+            buildInputs = old.buildInputs ++ [super.setuptools];
           }
         );
 
