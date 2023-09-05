@@ -7,7 +7,7 @@
   # https://devenv.sh/packages/
   packages = [
     pkgs.git
-    pkgs.mpyc-demo
+    # pkgs.mpyc-demo
     pkgs.pwnat
     pkgs.poetry
     pkgs.python311Packages.pip
@@ -74,7 +74,7 @@
   languages.python.enable = true;
   languages.python.poetry.enable = true;
   languages.python.venv.enable = true;
-  languages.python.version = "3.11.5";
+  # languages.python.version = "3.11.5";
 
   devenv.flakesIntegration = true;
 
