@@ -4,7 +4,6 @@ version = "0.9.4"
 description = "MPyC for Multiparty Computation in Python"
 authors = ["Berry Schoenmakers <berry@win.tue.nl>"]
 readme = "README.md"
-packages = []
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -19,7 +18,8 @@ packaging = "^23.0.0"
 # pyodide-pack = "^0.2.0"
 # pyodide-pack = "^0.2.0"
 pyodide-py = "^0.23.4"
+mpyc = { path = "./mpyc/", develop = true }
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core", "setuptools", "wheel"]
 build-backend = "poetry.core.masonry.api"
