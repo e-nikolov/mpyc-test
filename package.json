@@ -1,0 +1,13 @@
+{
+  "name": "mpyc-web",
+  "private": true,
+  "version": "0.9.4",
+  "type": "module",
+  "scripts": {
+    "dev": "(cd mpyc-web && yarn dev)",
+    "build": "(cd mpyc-web && yarn build)",
+    "preview": "(cd mpyc-web && yarn preview)",
+    "gh-pages": "(cd mpyc-web && yarn gh-pages)",
+    "postinstall": "(cd mpyc-web && yarn)"
+  }
+}

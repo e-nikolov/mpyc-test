@@ -1,0 +1,3 @@
+[submodule "mpyc"]
+	path = mpyc
+	url = git@github.com:lschoe/mpyc

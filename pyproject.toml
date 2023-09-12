@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "mpyc"
-version = "0.8.8"
+name = "mpyc-web"
+version = "0.9.4"
 description = "MPyC for Multiparty Computation in Python"
 authors = ["Berry Schoenmakers <berry@win.tue.nl>"]
 readme = "README.md"
