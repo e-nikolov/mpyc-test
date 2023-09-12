@@ -1,2 +1,2 @@
-cd demos
+cd mpyc/demos
 ./run-all.sh "$@"
