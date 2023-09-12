@@ -62,6 +62,20 @@ files = [
 ]
 
 [[package]]
+name = "mpyc"
+version = "0.9.4"
+description = "MPyC for Multiparty Computation in Python"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+files = []
+develop = true
+
+[package.source]
+type = "directory"
+url = "mpyc"
+
+[[package]]
 name = "numpy"
 version = "1.25.2"
 description = "Fundamental package for array computing in Python"
@@ -123,4 +137,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "6fb6d3c68c7585a607b57e89ed38176799d93e189160f18e986f5f59826e384b"
+content-hash = "533906775cf1e4ab479e39766661933f6b936b4410907b5fcd3dfaacd36c5a61"

@@ -5,14 +5,13 @@ Or:  "pip install -e ."
 """
 
 from setuptools import setup
-import mpyc.mpyc as mpyc
 
 with open("README.md", "r") as f:
     LONG_DESCRIPTION = f.read()
 
 setup(
     name="mpyc-web",
-    version=mpyc.__version__,
+    version="0.9.4",
     author="Berry Schoenmakers",
     author_email="berry@win.tue.nl",
     url="https://github.com/lschoe/mpyc",
@@ -46,7 +45,7 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: System :: Distributed Computing",
     ],
-    license=mpyc.__license__,
+    license='MIT License',
     packages=["mpyc-web"],
     platforms=["any"],
     python_requires=">=3.9",
