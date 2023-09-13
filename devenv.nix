@@ -69,6 +69,7 @@
 
   languages.typescript.enable = true;
   languages.python.enable = true;
+  languages.python.package = pkgs.python311;
   languages.python.poetry.enable = true;
   # languages.python.venv.enable = false;
   # languages.python.version = "3.11.5";
