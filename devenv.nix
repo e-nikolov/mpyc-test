@@ -66,6 +66,7 @@
 
   # https://devenv.sh/languages/
   languages.nix.enable = true;
+
   languages.typescript.enable = true;
   languages.python.enable = true;
   languages.python.poetry.enable = true;
