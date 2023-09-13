@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   # https://devenv.sh/basics/
   env.GREET = "devenv";
 
@@ -62,10 +60,8 @@
   # devenv.debug = true;
   dotenv.enable = true;
   enterShell = ''
-    hello 
+    hello
     git --version
-
-    export PYTHONPATH=$PWD:$PYTHONPATH
   '';
 
   # https://devenv.sh/languages/
@@ -73,11 +69,10 @@
   languages.typescript.enable = true;
   languages.python.enable = true;
   languages.python.poetry.enable = true;
-  languages.python.venv.enable = true;
+  # languages.python.venv.enable = false;
   # languages.python.version = "3.11.5";
 
   devenv.flakesIntegration = true;
-
 
   # https://devenv.sh/pre-commit-hooks/
   # pre-commit.hooks.shellcheck.enable = true;
