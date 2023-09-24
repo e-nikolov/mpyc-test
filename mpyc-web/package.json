@@ -32,7 +32,6 @@
     "@fontsource/roboto-mono": "^5.0.8",
     "@fortawesome/fontawesome-free": "^6.4.2",
     "@lezer/common": "^1.0.3",
-    "@mui/icons-material": "^5.14.3",
     "@popperjs/core": "^2.11.8",
     "@types/bootstrap": "^5.2.6",
     "@types/codemirror": "^5.60.8",

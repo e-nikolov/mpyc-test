@@ -68,6 +68,8 @@
   # https://devenv.sh/languages/
   languages.nix.enable = true;
 
+  languages.javascript.enable = true;
+  languages.javascript.corepack.enable = true;
   languages.typescript.enable = true;
   languages.python.enable = true;
   languages.python.package = pkgs.python311;
