@@ -12,8 +12,6 @@ from . import worker
 from .transport import PeerJSTransport, AbstractClient
 from pyodide.ffi import JsProxy
 
-print("----------------------------- peerjs")
-
 
 class Client(AbstractClient):
     def __init__(self, worker: Any):
@@ -36,8 +34,6 @@ class Client(AbstractClient):
         t = PeerJSTransport(loop, pid, self, p, listener)
         self.transports[pid] = t
         return t, p
-
-    print("----------------------------- peerjs client")
 
     @stats.acc(lambda self, pid, message: stats.total_calls() | stats.sent_to(pid, message))
     def send_ready_message(self, pid: int, message: str):

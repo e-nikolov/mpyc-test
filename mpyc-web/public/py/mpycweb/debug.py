@@ -172,7 +172,6 @@ class BaseStatsCollector:
         return self.dec(counter_func, lambda: self.stats.set)
 
     def acc(self, counter_func: Callable[P, NestedDict[str, Numeric]]) -> Callable[[Callable[P, R]], Callable[P, R]]:
-        print(f"!! acc enabled: {self.enabled}")
         return self.dec(counter_func, lambda: self.stats.update)
 
     def reset(self):

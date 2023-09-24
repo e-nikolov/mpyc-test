@@ -20,7 +20,6 @@ import js
 from pyodide.ffi import create_once_callable
 from rich import print
 
-print("----------------------------- __patches__ -> . import peerjs 3")
 from . import peerjs
 
 # https://github.com/pyodide/pyodide/issues/4006
@@ -44,8 +43,6 @@ function fastSetTimeout(callback, delay) {
 }
         """)
 webloop.setTimeout = js.fastSetTimeout
-
-print("----------------------------- patches")
 
 
 async def ping():
