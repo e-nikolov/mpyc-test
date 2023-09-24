@@ -129,6 +129,7 @@ export class MPyCManager extends EventTarget {
 
         // UI callbacks
         worker.sync.log = console.log;
+        worker.sync.onWorkerReady = () => { this.emit('worker:ready', this) };
         worker.sync.logError = console.error;
         worker.sync.logWarn = console.warn;
         worker.sync.display = (message: string) => { this.emit('worker:display', message, this); }

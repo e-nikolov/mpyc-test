@@ -12,6 +12,8 @@ from . import worker
 from .transport import PeerJSTransport, AbstractClient
 from pyodide.ffi import JsProxy
 
+print("----------------------------- peerjs")
+
 
 class Client(AbstractClient):
     def __init__(self, worker: Any):
@@ -19,6 +21,11 @@ class Client(AbstractClient):
 
         self.worker.on_ready_message = self.on_ready_message
         self.worker.on_runtime_message = self.on_runtime_message
+
+        self.stats_messages_sent = 0
+        self.stats_messages_received = 0
+        self.stats_messages_sent_to = {}
+        self.stats_messages_received_from = {}
 
         self.transports = {}
 
@@ -30,16 +37,22 @@ class Client(AbstractClient):
         self.transports[pid] = t
         return t, p
 
+    print("----------------------------- peerjs client")
+
+    @stats.acc(lambda self, pid, message: stats.total_calls() | stats.sent_to(pid, message))
     def send_ready_message(self, pid: int, message: str):
         self.worker.sendReadyMessage(pid, message)
 
-    def on_ready_message(self, pid: int, ready_message: str):
-        self.transports[pid].on_ready_message(ready_message)
+    @stats.acc(lambda self, pid, message: stats.total_calls() | stats.received_from(pid, message))
+    def on_ready_message(self, pid: int, message: str):
+        self.transports[pid].on_ready_message(message)
 
+    @stats.acc(lambda self, pid, message: stats.total_calls() | stats.sent_to(pid, message))
     def send_runtime_message(self, pid: int, message: bytes):
         # logging.debug(f"sending {message} to {pid}")
         self.worker.sendRuntimeMessage(pid, message)
 
-    def on_runtime_message(self, pid: int, runtime_message: JsProxy):
+    @stats.acc(lambda self, pid, message: stats.total_calls() | stats.received_from(pid, message.to_py()))
+    def on_runtime_message(self, pid: int, message: JsProxy):
         # logging.debug(f"received {runtime_message} from {pid}")
-        self.transports[pid].on_runtime_message(runtime_message.to_py())
+        self.transports[pid].on_runtime_message(message.to_py())

@@ -6,7 +6,8 @@ packages = [
     "matplotlib",
     "scipy",
     "lifelines",
-    "setuptools"
+    "setuptools",
+    "rich"
 ]
 
 # "https://e-nikolov.github.io/mpyc/py/mpyc-0.8.8-py3-none-any.whl"
@@ -18,7 +19,7 @@ packages = [
 
 # plugins = ["py-terminal.py"]
 # plugins = ["py-term.js"]
-# plugins = ["py-term.py"]
+# plugins = ["py-term.py"] 
 [[fetch]]
 from = "./py/"
 to_folder = "./"

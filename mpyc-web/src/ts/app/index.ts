@@ -10,10 +10,13 @@ export * from './qr';
 export * from './peers';
 export * from './editor';
 export * from './tabs';
+import * as colors from "./colors";
 
 import Split from 'split.js'
 import { $, $$ } from './utils';
 import { ControllerOptions } from './elements';
+
+import chalk from 'chalk';
 
 export class Controller {
     mpyc: MPyCManager;
@@ -60,8 +63,8 @@ export class Controller {
     }
 
     init(mpyc: MPyCManager, opts: ControllerOptions) {
-        this.term.writeln('Initializing PeerJS...');
-        this.term.writeln('Initializing PyScript runtime...');
+        this.term.info(`Initializing ${chalk.green('PeerJS')}...`);
+        this.term.info(`Initializing ${chalk.green('PyScript runtime')}...`);
 
         this.updateHostPeerIDInput();
 
@@ -85,20 +88,20 @@ export class Controller {
             app.setTabState('myPeerID', peerID);
 
             console.log('My peer ID is: ' + peerID);
-            this.term.writeln('PeerJS ready with ID: ' + peerID);
+            this.term.success(`${chalk.green("PeerJS")} ready with ID: ${colors.peerID(peerID)}`);
             this.updatePeersDiv(mpyc);
         });
-        mpyc.on('peerjs:closed', () => { this.term.writeln('PeerJS closed.'); });
-        mpyc.on('peerjs:error', (err: Error) => { this.term.writeln('PeerJS failed: ' + err.message); });
+        mpyc.on('peerjs:closed', () => { this.term.error('PeerJS closed.'); });
+        mpyc.on('peerjs:error', (err: Error) => { this.term.error('PeerJS failed: ' + err.message); });
         mpyc.on('peerjs:conn:ready', this.onPeerConnectedHook);
         mpyc.on('peerjs:conn:disconnected', this.onPeerDisconnectedHook);
         mpyc.on('peerjs:conn:error', this.onPeerConnectionErrorHook);
         mpyc.on('peerjs:conn:data:user:chat', this.processChatMessage);
-        mpyc.on('worker:error', (err: Error) => { this.term.writeln(err.message); });
+        mpyc.on('worker:error', (err: Error) => { this.term.error(err.message); });
         mpyc.on('worker:run', (mpyc: MPyCManager) => { this.updatePeersDiv(mpyc); });
         mpyc.on('worker:display', (message: string) => { this.term.writeln(message); });
         mpyc.on('worker:display:raw', (message: string) => { this.term.write(message); });
-        mpyc.on('worker:ready', () => { this.term.writeln('PyScript runtime ready.'); });
+        mpyc.on('worker:ready', () => { this.term.success(`${chalk.green("PyScript")} runtime ready.`); });
         mpyc.on('peerjs:conn:data:mpyc:ready', () => { this.updatePeersDiv(mpyc); });
     }
 

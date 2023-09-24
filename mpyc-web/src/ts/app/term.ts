@@ -7,6 +7,7 @@ import { SearchAddon } from 'xterm-addon-search';
 import { SearchBarAddon } from 'xterm-addon-search-bar';
 
 import { $, debounce } from './utils';
+import chalk from 'chalk';
 
 export class Term extends Terminal {
     fitAddon: FitAddon;
@@ -91,6 +92,19 @@ export class Term extends Terminal {
         // debounce resize
         let ro = new ResizeObserver(debounce(() => { this.fit(); }, 50));
         ro.observe(document.querySelector(".split-1")!)
+    }
+
+
+    info(message: string) {
+        this.writeln(`  ℹ️  ${message}`);
+    }
+
+    success(message: string) {
+        this.writeln(`  ${chalk.green("✔️")}  ${message}`);
+    }
+
+    error(message: string) {
+        this.writeln(`  ${chalk.red("✖️")}  ${chalk.redBright(message)}`);
     }
 
     fit = () => {

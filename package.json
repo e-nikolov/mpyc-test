@@ -8,6 +8,8 @@
     "build": "(cd mpyc-web && yarn build)",
     "preview": "(cd mpyc-web && yarn preview)",
     "gh-pages": "(cd mpyc-web && yarn gh-pages)",
-    "postinstall": "(cd mpyc-web && yarn)"
+    "postinstall": "(cd mpyc-web && yarn)",
+    "a": "cd mpyc-web && yarn add",
+    "add": "cd mpyc-web && yarn add"
   }
 }

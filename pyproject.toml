@@ -18,6 +18,8 @@ packaging = "^23.0.0"
 # pyodide-pack = "^0.2.0"
 # pyodide-pack = "^0.2.0"
 pyodide-py = "^0.23.4"
+rich = "^13.5.3"
+
 mpyc = { path = "./mpyc/", develop = true }
 
 [build-system]

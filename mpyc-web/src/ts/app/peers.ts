@@ -1,6 +1,9 @@
+import chalk from "chalk";
 import { Controller } from ".";
 import { MPyCManager } from "../mpyc";
 import DOMPurify from "dompurify";
+
+import * as colors from "./colors";
 
 export function updateHostPeerIDInput(this: Controller): string {
     const urlParams = new URLSearchParams(window.location.search);
@@ -19,16 +22,16 @@ export function safe(text: string) {
 }
 
 export function onPeerConnectedHook(this: Controller, newPeerID: string) {
-    this.term.writeln(`Connected to: ${newPeerID}`);
+    this.term.success(`Connected to: ${colors.peerID(newPeerID)}`);
     this.updatePeersDiv(this.mpyc);
 }
 export function onPeerConnectionErrorHook(this: Controller, peerID: string, err: Error, mpyc: MPyCManager) {
-    this.term.writeln(`Failed to connect to: ${peerID}: ${err.message}`);
+    this.term.error(`Failed to connect to: ${colors.peerID(peerID)}: ${err.message}`);
     this.updatePeersDiv(mpyc);
 }
 
 export function onPeerDisconnectedHook(this: Controller, disconnectedPeerID: string, mpyc: MPyCManager) {
-    this.term.writeln(`Disconnected from: ${disconnectedPeerID}`);
+    this.term.error(`${chalk.redBright("Disconnected from:")} ${colors.peerID(disconnectedPeerID)}`);
     this.updatePeersDiv(mpyc);
 }
 

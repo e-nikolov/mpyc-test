@@ -1,13 +1,12 @@
 import asyncio
 from collections.abc import Iterable
-from contextlib import redirect_stdout
 import io
 import sys
 
 from .debug import *
 
 
-class MyWriter(io.StringIO):
+class TermWriter(io.StringIO):
     def write(self, text):
         displayRaw(text)
 
@@ -17,5 +16,5 @@ class MyWriter(io.StringIO):
 
 
 # TODO add error handling?
-sys.stdout = MyWriter()
-# sys.stderr = MyWriter()
+sys.stdout = TermWriter()
+sys.stderr = TermWriter()

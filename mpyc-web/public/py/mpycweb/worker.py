@@ -1,10 +1,7 @@
 import asyncio
-from asyncio import futures
-import json
 import logging
-import traceback
 import types
-from typing import Awaitable
+import ast
 
 from mpyc.runtime import Party, mpc
 
@@ -12,16 +9,12 @@ from mpyc.runtime import Party, mpc
 from polyscript import xworker
 
 from .debug import *
-import ast
-from asyncio import AbstractEventLoop
 
-logging = logging.getLogger(__name__)
-
-import inspect
+logger = logging.getLogger(__name__)
 
 
 async def run_mpc(options):
-    logging.debug("starting mpyc execution...")
+    logger.debug("starting mpyc execution...")
     # TODO automatically set the no_async based on the number of parties
     m = len(options.parties)
     mpc.options.threshold = (m - 1) // 2

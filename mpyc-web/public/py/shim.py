@@ -1,9 +1,13 @@
 # pyright: reportMissingImports=false
-import sys
 import mpycweb.redirect_stdout
-import logging_setup
-from mpyc.runtime import mpc
-import mpycweb
+
+# import logging_setup
 from mpycweb.debug import *
 
-# TODO fix the WebLoop performance with asyncio.sleep(0) https://github.com/pyodide/pyodide/issues/4006
+# from mpyc.runtime import mpc
+import mpycweb
+
+
+# TODO refactor to fire an event instead of printing
+# logging.info("PyScript runtime started.")
+xworker.sync.onWorkerReady()
