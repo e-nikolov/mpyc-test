@@ -292,6 +292,15 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
+"@pyscript/core@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@pyscript/core/-/core-0.2.2.tgz#7433b2eaabe88ec885e70fb37e9435f3785309de"
+  integrity sha512-r21c8FwWsFRK3V8b4iOwxGUQCzp6nPGjJiDB/FxzpzKpXwr4bJlS1l/K8DIr1597z9yJBVgtO+cUk8ALBgC97w==
+  dependencies:
+    "@ungap/with-resolvers" "^0.1.0"
+    basic-devtools "^0.1.6"
+    polyscript "^0.4.2"
+
 "@types/bootstrap@^5.2.6":
   version "5.2.7"
   resolved "https://registry.yarnpkg.com/@types/bootstrap/-/bootstrap-5.2.7.tgz#a920df4ea82d8cc605751007f5c9744336842f30"
@@ -987,7 +996,7 @@ pngjs@^5.0.0:
   resolved "https://registry.yarnpkg.com/pngjs/-/pngjs-5.0.0.tgz#e79dd2b215767fd9c04561c01236df960bce7fbb"
   integrity sha512-40QW5YalBNfQo5yRYmiw7Yz6TKKVr3h6970B2YE+3fQpsWcrbj1PzJgxeJ19DRQjhMbKPIuMY8rFaXc8moolVw==
 
-polyscript@^0.4.1:
+polyscript@^0.4.2:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/polyscript/-/polyscript-0.4.2.tgz#e59b18136aae7d8f3dd314f84b1b34cd40485a2f"
   integrity sha512-3mM5Y/DdpYND8/INAUmgF5VL4InVc04xADB+of129t8RjXi3eZK4xoGRPZdTYzW+wM56WNptnC8fC9Zt7jKLoA==

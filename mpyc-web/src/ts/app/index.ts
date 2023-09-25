@@ -18,6 +18,8 @@ import { ControllerOptions } from './elements';
 
 import chalk from 'chalk';
 
+import * as polyscript from "polyscript";
+
 export class Controller {
     mpyc: MPyCManager;
 
@@ -137,6 +139,8 @@ export class Controller {
         document.r = () => { this.mpyc.reset("") };
         document.run = async () => this.mpyc.runMPC(this.editor.getCode(), false);
         document.runa = async () => this.mpyc.runMPC(this.editor.getCode(), true);
+        document.ps = polyscript.XWorker;
+        document.ps2 = polyscript;
     }
 
     public setupDemoSelector = app.setupDemoSelector.bind(this);
@@ -149,6 +153,7 @@ export class Controller {
     public sendChatMessage = app.sendChatMessage.bind(this);
 }
 
+
 declare global {
     interface Document {
         clearTabCount: any;
@@ -158,6 +163,8 @@ declare global {
         mpyc: MPyCManager;
         term: app.Term;
         editor: EditorView;
+        ps: any;
+        ps2: any;
     }
     interface PerformanceEntry {
         type: string;

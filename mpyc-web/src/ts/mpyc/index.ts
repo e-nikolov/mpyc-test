@@ -1,10 +1,64 @@
 import { Peer, DataConnection } from "peerjs";
-import * as polyscript from "polyscript";
+// import { XWorker } from "polyscript";
+import { XWorker } from "polyscript";
+import { Hook } from 'polyscript/hooks';
+// import * as core from '@pyscript/core'
+
+
+// console.log(core.PyWorker)
+// console.log(Hook)
 
 
 type ConnMap = Map<string, DataConnection>;
 
 class Ev extends CustomEvent<{ args: any[] }> { }
+
+
+const { assign } = Object;
+
+const workerHooks = {
+    onBeforeRun: (...a: any) => { console.log("onBeforeRun", a) },
+    onBeforeRunAsync: (...a: any) => { console.log("onBeforeRunAsync", a) },
+    codeBeforeRunWorker: (...a: any) => { console.log("codeBeforeRunWorker", a) },
+    codeBeforeRunWorkerAsync: (...a: any) => { console.log("codeBeforeRunWorkerAsync", a) },
+    onAfterRun: (...a: any) => { console.log("onAfterRun", a) },
+    afterRun: (...a: any) => { console.log("afterRun", a) },
+    onAfterRunAsync: (...a: any) => { console.log("onAfterRunAsync", a) },
+    afterRunAsync: (...a: any) => { console.log("afterRunAsync", a) },
+    codeAfterRunWorker: (...a: any) => { console.log("codeAfterRunWorker", a) },
+    codeAfterRunWorkerAsync: (...a: any) => { console.log("codeAfterRunWorkerAsync", a) },
+    onInterpreterReady: (...a: any) => { console.log("onInterpreterReady", a) },
+    interpreterReady: (...a: any) => { console.log("interpreterReady", a) },
+    onWorkerReady: (...a: any) => { console.log("onWorkerReady", a) },
+}
+
+/**
+ * A `Worker` facade able to bootstrap on the worker thread only a PyScript module.
+ * @param {string} file the python file to run ina worker.
+ * @param {{config?: string | object, async?: boolean}} [options] optional configuration for the worker.
+ * @returns {Worker & {sync: ProxyHandler<object>}}
+ */
+export function PyWorker(file: string, options: WorkerOptions & { async: boolean, config: string }): Worker & { sync: any; } {
+    // this propagates pyscript worker hooks without needing a pyscript
+    // bootstrap + it passes arguments and enforces `pyodide`
+    // as the interpreter to use in the worker, as all hooks assume that
+    // and as `pyodide` is the only default interpreter that can deal with
+    // all the features we need to deliver pyscript out there.
+    const xworker = XWorker.call(new Hook(null, workerHooks), file, {
+        ...options,
+        type: "pyodide",
+    });
+    assign(xworker.sync, {
+        /**
+         * 'Sleep' for the given number of seconds. Used to implement Python's time.sleep in Worker threads.
+         * @param {number} seconds The number of seconds to sleep.
+         */
+        sleep(seconds: number) {
+            return new Promise(($) => setTimeout($, seconds * 1000));
+        },
+    });
+    return xworker;
+}
 
 export class MPyCManager extends EventTarget {
     peer: Peer;
@@ -121,7 +175,11 @@ export class MPyCManager extends EventTarget {
 
     newWorker(shimFilePath: string, configFilePath: string) {
         // let worker = polyscript.XWorker(shimFilePath, { async: true, type: "pyodide", config: configFilePath });
-        let worker = polyscript.XWorker(shimFilePath, { async: true, type: "pyodide", config: configFilePath });
+
+        // let worker = XWorker.call(new Hook(null, workerHooks), shimFilePath, { async: true, type: "pyodide", config: configFilePath });
+        // let worker = core.PyWorker(shimFilePath, { async: true, config: configFilePath });
+        let worker = PyWorker(shimFilePath, { async: true, config: configFilePath });
+        // let worker = XWorker(shimFilePath, { async: true, type: "pyodide", config: configFilePath });
 
         // allow the python worker to send PeerJS messages via the main thread
         worker.sync.sendReadyMessage = this.sendReadyMessage;

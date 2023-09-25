@@ -2,6 +2,11 @@ import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  resolve: {
+    alias: {
+      'polyscript/hooks': './node_modules/polyscript/esm/worker/hooks.js'
+    }
+  },
   // root: "../",
   base: "/mpyc-web/",
   build: {
