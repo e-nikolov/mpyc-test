@@ -104,7 +104,7 @@ export class Term extends Terminal {
     }
 
     error(message: string) {
-        this.writeln(`  ${chalk.red("✖️")}\n  ${chalk.redBright(message)}`);
+        this.writeln(`  ${chalk.red("✖️")}  ${chalk.redBright(message)}`);
     }
 
     fit = () => {
