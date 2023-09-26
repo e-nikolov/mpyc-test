@@ -2,13 +2,13 @@ import asyncio
 import logging
 import types
 import ast
-
+from typing import Any
 from mpyc.runtime import Party, mpc
 
 # pyright: reportMissingImports=false
 from polyscript import xworker
 
-from .debug import *
+from .stats import stats
 
 logger = logging.getLogger(__name__)
 
@@ -45,3 +45,6 @@ async def exec_async(source: str):
 
 
 xworker.sync.run_mpc = run_mpc
+
+
+xworker.sync.print_stats = stats.print_stats

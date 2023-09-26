@@ -13,7 +13,7 @@ export * from './tabs';
 import * as colors from "./colors";
 
 import Split from 'split.js'
-import { $, $$ } from './utils';
+import { $, $$, withTimeout } from './utils';
 import { ControllerOptions } from './elements';
 
 import chalk from 'chalk';
@@ -58,7 +58,7 @@ export class Controller {
         this.showQRCodeButton = $<HTMLButtonElement>(opts.showQRCodeButtonSelector);
         this.scanQRInput = $<HTMLInputElement>(opts.scanQRInputSelector);
 
-        this.term = new app.Term(opts.terminalSelector);
+        this.term = new app.Term(opts.terminalSelector, mpyc);
         this.editor = new app.Editor(opts.editorSelector, this.demoSelect, mpyc);
 
         this.init(mpyc, opts);
@@ -84,6 +84,15 @@ export class Controller {
         this.setupGlobals();
     }
 
+    pingWorker = async () => {
+        if (!await withTimeout(this.mpyc.worker.sync.ping())) {
+            console.error("PyScript runtime is not responding.");
+            this.term.error("PyScript runtime is not responding.");
+        }
+
+        setTimeout(this.pingWorker, 5000)
+    }
+
     setupMPyCEvents(mpyc: MPyCManager) {
         mpyc.on('peerjs:ready', (peerID: string) => {
             this.myPeerIDEl.value = app.safe(peerID);
@@ -94,16 +103,18 @@ export class Controller {
             this.updatePeersDiv(mpyc);
         });
         mpyc.on('peerjs:closed', () => { this.term.error('PeerJS closed.'); });
-        mpyc.on('peerjs:error', (err: Error) => { this.term.error('PeerJS failed: ' + err.message); });
+        mpyc.on('peerjs:error', (err: Error) => { this.term.error(`PeerJS failed: 1 ${err.message} ${err.stack}`); });
         mpyc.on('peerjs:conn:ready', this.onPeerConnectedHook);
         mpyc.on('peerjs:conn:disconnected', this.onPeerDisconnectedHook);
         mpyc.on('peerjs:conn:error', this.onPeerConnectionErrorHook);
         mpyc.on('peerjs:conn:data:user:chat', this.processChatMessage);
-        mpyc.on('worker:error', (err: Error) => { this.term.error(err.message); });
+        mpyc.on('worker:error', (err: ErrorEvent) => { console.log(err, err.error); this.term.error(err.message); });
         mpyc.on('worker:run', (mpyc: MPyCManager) => { this.updatePeersDiv(mpyc); });
-        mpyc.on('worker:display', (message: string) => { this.term.writeln(message); });
-        mpyc.on('worker:display:raw', (message: string) => { this.term.write(message); });
-        mpyc.on('worker:ready', () => { this.term.success(`${chalk.green("PyScript")} runtime ready.`); });
+        mpyc.on('worker:display', (message: string) => { this.term.write(message); });
+        mpyc.on('worker:ready', () => {
+            this.term.success(`${chalk.green("PyScript")} runtime ready.`);
+            setTimeout(this.pingWorker, 1000);
+        });
         mpyc.on('peerjs:conn:data:mpyc:ready', () => { this.updatePeersDiv(mpyc); });
     }
 
@@ -141,6 +152,7 @@ export class Controller {
         document.runa = async () => this.mpyc.runMPC(this.editor.getCode(), true);
         document.ps = polyscript.XWorker;
         document.ps2 = polyscript;
+        document.app = this;
     }
 
     public setupDemoSelector = app.setupDemoSelector.bind(this);
@@ -158,6 +170,7 @@ declare global {
     interface Document {
         clearTabCount: any;
         r: any;
+        app: Controller
         run: any;
         runa: any;
         mpyc: MPyCManager;

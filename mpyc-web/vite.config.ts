@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   resolve: {
     alias: {
-      'polyscript/hooks': './node_modules/polyscript/esm/worker/hooks.js'
+      // 'polyscript/hooks': './node_modules/polyscript/esm/worker/hooks.js'
     }
   },
   // root: "../",

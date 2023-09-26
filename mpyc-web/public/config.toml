@@ -20,10 +20,10 @@ packages = [
 # plugins = ["py-terminal.py"]
 # plugins = ["py-term.js"]
 # plugins = ["py-term.py"] 
-[[fetch]]
-from = "./py/"
-to_folder = "./"
-files = ["logging_setup.py"]
+# [[fetch]]
+# from = "./py/"
+# to_folder = "./"
+# files = ["logging_setup.py"]
 
 [[fetch]]
 from = "./py/mpycweb"
@@ -35,7 +35,10 @@ files = [
     "peerjs.py",
     "redirect_stdout.py",
     "transport.py",
-    "worker.py"
+    "worker_init.py",
+    "worker.py",
+    "log.py",
+    "stats.py"
 ]
 
 [[fetch]]

@@ -11,6 +11,8 @@ import datetime
 import logging
 
 logger = logging.getLogger(__name__)
+
+# pyright: reportMissingImports=false
 from polyscript import xworker
 from pyodide.code import run_js
 import pyodide.webloop as webloop
@@ -21,6 +23,7 @@ from pyodide.ffi import create_once_callable
 from rich import print
 
 from . import peerjs
+from .stats import stats
 
 # https://github.com/pyodide/pyodide/issues/4006
 # The pyodide Webloop relies onsetTimeout(), which has a minimum delay of 4ms
@@ -45,13 +48,14 @@ function fastSetTimeout(callback, delay) {
 webloop.setTimeout = js.fastSetTimeout
 
 
-async def ping():
+async def stats_printer():
     while True:
         xworker.sync.log(f"Python Worker Stats")
+        xworker.sync.log(f"{stats.stats}")
         await asyncio.sleep(5)
 
 
-asyncio.ensure_future(ping())
+asyncio.ensure_future(stats_printer())
 
 
 def run(self, f):

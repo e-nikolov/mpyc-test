@@ -5,9 +5,9 @@
     // "baseUrl": "./types",
     "baseUrl": ".", // This must be specified if "paths" is specified.
     "paths": {
-      "polyscript/hooks": [
-        "./node_modules/polyscript/esm/worker/hooks.js"
-      ]
+      // "polyscript/hooks": [
+      //   "./node_modules/polyscript/esm/worker/hooks.js"
+      // ]
     },
     "declaration": true,
     "declarationDir": "types",
@@ -21,7 +21,7 @@
       "WebWorker"
     ],
     "jsx": "preserve",
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -30,12 +30,13 @@
     "esModuleInterop": true,
     "noEmit": true,
     /* Linting */
-    "strict": false,
+    "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
   "include": [
+    "src/ts/polyscript.d.ts",
     "./types/polyscript-hooks.d.ts",
     "./types/*.d.ts", // or the path to your declaration file
     "./src/**/*" // and your source files

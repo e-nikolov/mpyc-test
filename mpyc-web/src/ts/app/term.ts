@@ -8,6 +8,7 @@ import { SearchBarAddon } from 'xterm-addon-search-bar';
 
 import { $, debounce } from './utils';
 import chalk from 'chalk';
+import { MPyCManager } from '../mpyc';
 
 export class Term extends Terminal {
     fitAddon: FitAddon;
@@ -16,7 +17,7 @@ export class Term extends Terminal {
     searchBarAddon: SearchBarAddon;
 
 
-    constructor(sel: string) {
+    constructor(sel: string, mpyc: MPyCManager) {
         let el = $(sel);
 
         super({
@@ -90,7 +91,7 @@ export class Term extends Terminal {
         });
 
         // debounce resize
-        let ro = new ResizeObserver(debounce(() => { this.fit(); }, 50));
+        let ro = new ResizeObserver(debounce(() => { this.fit(); mpyc.updateEnv("COLUMNS", this.cols.toString()) }, 50));
         ro.observe(document.querySelector(".split-1")!)
     }
 
