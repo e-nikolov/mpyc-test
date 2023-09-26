@@ -509,11 +509,6 @@ codemirror@^6.0.1:
     "@codemirror/state" "^6.0.0"
     "@codemirror/view" "^6.0.0"
 
-coi-serviceworker@^0.1.7:
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/coi-serviceworker/-/coi-serviceworker-0.1.7.tgz#a105739386bf7101cdbaa32a167c576ca3376200"
-  integrity sha512-bjSUqEngCPOkErY2vbyWsaIGCNRODYzlNycaREVw5s12/C8SM+RnRUUeX6pZbTtov6C52ZLY/+tvHK+BDxuUuA==
-
 coincident@^0.11.6:
   version "0.11.6"
   resolved "https://registry.yarnpkg.com/coincident/-/coincident-0.11.6.tgz#63a5da87879d1af7e816750984fe256b8f35b07d"
