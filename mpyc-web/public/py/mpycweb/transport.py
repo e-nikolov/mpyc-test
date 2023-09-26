@@ -36,7 +36,7 @@ class PeerJSTransport(asyncio.Transport):
         self.pid = pid
         self.client = client
 
-        self.ready_to_start = True
+        self.ready_for_next_run = True
         self.peer_ready_to_start = False
 
         # need to coordinate the start of running the demo with all peers
@@ -67,10 +67,10 @@ class PeerJSTransport(asyncio.Transport):
         match message:
             case "ready?":
                 logging.debug(f"party {self.pid} asks if we are ready to start")
-                if self.ready_to_start:
+                if self.ready_for_next_run:
                     self._protocol.connection_made(self)
                     self.client.send_ready_message(self.pid, "ready_ack")
-                    self.ready_to_start = False
+                    self.ready_for_next_run = False
 
             case "ready_ack":
                 logging.debug(f"party {self.pid} confirmed ready to start")
