@@ -15,7 +15,13 @@ def load_env():
 
 
 def get_env() -> dict[str, str]:
-    return xworker.sync.getEnv().to_py()
+    e = xworker.sync.getEnv().to_py()
+    if "COLUMNS" in e and isinstance(e["COLUMNS"], int):
+        e["COLUMNS"] = str(e["COLUMNS"])
+        print(f"get_env: COLUMNS is int, converting to str")
+        xworker.sync.logWarn(f"get_env: COLUMNS is int, converting to str")
+    return e
+    # return xworker.sync.getEnv().to_py()
 
 
 import rich
