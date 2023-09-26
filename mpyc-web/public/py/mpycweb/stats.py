@@ -92,7 +92,7 @@ class BaseStatsCollector:
         return self.dec(counter_func, lambda: self.stats.update)
 
     def reset(self):
-        self.stats = DeepCounter[str]({"$func": {}})
+        self.stats = DeepCounter[str]()
         self.enabled = logging.root.getEffectiveLevel() <= logging.DEBUG
 
     def print_stats(self):
