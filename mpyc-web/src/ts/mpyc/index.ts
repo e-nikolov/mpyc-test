@@ -138,7 +138,7 @@ export class MPyCManager extends EventTarget {
         this.dispatchEvent(new Ev(type, { detail: { args } }));
     }
 
-    runMPC = async (code: string, is_async = false) => {
+    runMPC = (code: string, is_async = false) => {
         this.running = true;
         let peers = this.getPeers(true)
         let pid = peers.findIndex((p) => p === this.peer.id)

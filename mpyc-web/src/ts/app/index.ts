@@ -13,7 +13,7 @@ export * from './tabs';
 import * as colors from "./colors";
 
 import Split from 'split.js'
-import { $, $$, withTimeout } from './utils';
+import { $, $$, withTimeout2 } from './utils';
 import { ControllerOptions } from './elements';
 
 import chalk from 'chalk';
@@ -84,11 +84,15 @@ export class Controller {
         this.setupGlobals();
     }
 
-    pingWorker = async () => {
-        if (!await withTimeout(this.mpyc.worker.sync.ping())) {
-            console.error("PyScript runtime is not responding.");
-            this.term.error("PyScript runtime is not responding.");
-        }
+    pingWorker = () => {
+        withTimeout2(this.mpyc.worker.sync.ping()).then(
+            res => {
+                if (!res) {
+                    console.error("PyScript runtime is not responding.");
+                    this.term.error("PyScript runtime is not responding.");
+                }
+            }
+        )
 
         setTimeout(this.pingWorker, 5000)
     }

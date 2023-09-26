@@ -4,7 +4,7 @@ import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { WebglAddon } from 'xterm-addon-webgl';
 import { SearchAddon } from 'xterm-addon-search';
-import { SearchBarAddon } from 'xterm-addon-search-bar';
+import { SearchBarAddon } from './xterm-addon-search-bar';
 
 import { $, debounce } from './utils';
 import chalk from 'chalk';
