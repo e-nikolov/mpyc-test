@@ -67,8 +67,10 @@ class PeerJSTransport(asyncio.Transport):
         match message:
             case "ready?":
                 logging.debug(f"party {self.pid} asks if we are ready to start")
-                self._protocol.connection_made(self)
-                self.client.send_ready_message(self.pid, "ready_ack")
+                if self.ready_to_start:
+                    self._protocol.connection_made(self)
+                    self.client.send_ready_message(self.pid, "ready_ack")
+                    self.ready_to_start = False
 
             case "ready_ack":
                 logging.debug(f"party {self.pid} confirmed ready to start")

@@ -79,12 +79,11 @@ def run(self, f):
 mpc.run = types.MethodType(run, mpc)
 
 
-pjs = peerjs.Client(xworker.sync)
-
-
 # The regular start() starts TCP connections, which don't work in the browser.
 # We monkey patch it to use PeerJS instead.
 async def start(runtime: Runtime) -> None:
+    pjs = peerjs.Client(xworker.sync)
+
     # TODO refactor runtime.start() to work with multiple transports
     """Start the MPyC runtime with a PeerJS transport.
 
