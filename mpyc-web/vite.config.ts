@@ -8,7 +8,7 @@ export default defineConfig({
     }
   },
   // root: "../",
-  base: "/mpyc-web/",
+  base: "/mpyc-test/",
   build: {
     assetsInlineLimit: 0,
     rollupOptions: {
