@@ -19,7 +19,7 @@ async def run_mpc(options):
     m = len(options.parties)
     mpc.options.threshold = (m - 1) // 2
     mpc.options.no_async = m == 1 and options.no_async
-
+    stats.reset()
     assert 2 * mpc.options.threshold < m, f"threshold {mpc.options.threshold} too large for {m} parties"
 
     parties = []
