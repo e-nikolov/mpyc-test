@@ -1,76 +1,30 @@
 import { Peer, DataConnection } from "peerjs";
-import * as polyscript from "polyscript";
-// import { Hook } from 'polyscript/hooks';
-// import * as core from '@pyscript/core'
+// import * as polyscript from "polyscript";
 
-
-// console.log(core.PyWorker)
-// console.log(Hook)
+// import { PyWorker } from "https://cdn.jsdelivr.net/npm/@pyscript/core";
+import { PyWorker, hooks } from '@pyscript/core'
+import { EventEmitter } from 'eventemitter3'
+import { MPyCEvents, PeerJSData } from './events.js'
 
 
 type ConnMap = Map<string, DataConnection>;
 
-class Ev extends CustomEvent<{ args: any[] }> { }
+hooks.onInterpreterReady.add((interpreter: any, x: any) => {
+    console.log("interpreter ready", interpreter, x)
+});
 
-
-// const { assign } = Object;
-// 
-// const workerHooks = {
-//     onBeforeRun: (...a: any) => { console.log("onBeforeRun", a) },
-//     onBeforeRunAsync: (...a: any) => { console.log("onBeforeRunAsync", a) },
-//     codeBeforeRunWorker: (...a: any) => { console.log("codeBeforeRunWorker", a) },
-//     codeBeforeRunWorkerAsync: (...a: any) => { console.log("codeBeforeRunWorkerAsync", a) },
-//     onAfterRun: (...a: any) => { console.log("onAfterRun", a) },
-//     afterRun: (...a: any) => { console.log("afterRun", a) },
-//     onAfterRunAsync: (...a: any) => { console.log("onAfterRunAsync", a) },
-//     afterRunAsync: (...a: any) => { console.log("afterRunAsync", a) },
-//     codeAfterRunWorker: (...a: any) => { console.log("codeAfterRunWorker", a) },
-//     codeAfterRunWorkerAsync: (...a: any) => { console.log("codeAfterRunWorkerAsync", a) },
-//     onInterpreterReady: (...a: any) => { console.log("onInterpreterReady", a) },
-//     interpreterReady: (...a: any) => { console.log("interpreterReady", a) },
-//     onWorkerReady: (...a: any) => { console.log("onWorkerReady", a) },
-// }
-
-// /**
-//  * A `Worker` facade able to bootstrap on the worker thread only a PyScript module.
-//  * @param {string} file the python file to run ina worker.
-//  * @param {{config?: string | object, async?: boolean}} [options] optional configuration for the worker.
-//  * @returns {Worker & {sync: ProxyHandler<object>}}
-//  */
-// export function PyWorker(file: string, options: WorkerOptions & { async: boolean, config: string }): Worker & { sync: any; } {
-//     // this propagates pyscript worker hooks without needing a pyscript
-//     // bootstrap + it passes arguments and enforces `pyodide`
-//     // as the interpreter to use in the worker, as all hooks assume that
-//     // and as `pyodide` is the only default interpreter that can deal with
-//     // all the features we need to deliver pyscript out there.
-//     const xworker = XWorker.call(new Hook(null, workerHooks), file, {
-//         ...options,
-//         type: "pyodide",
-//     });
-//     assign(xworker.sync, {
-//         /**
-//          * 'Sleep' for the given number of seconds. Used to implement Python's time.sleep in Worker threads.
-//          * @param {number} seconds The number of seconds to sleep.
-//          */
-//         sleep(seconds: number) {
-//             return new Promise(($) => setTimeout($, seconds * 1000));
-//         },
-//     });
-//     return xworker;
-// }
-
-export class MPyCManager extends EventTarget {
+export class MPyCManager extends EventEmitter<MPyCEvents> {
     peer: Peer;
     conns: ConnMap = new Map<string, DataConnection>();
     peerIDToPID: Map<string, number> = new Map<string, number>();
     pidToPeerID: Map<number, string> = new Map<number, string>();
     peersReady: Map<string, boolean> = new Map<string, boolean>();
-    worker: Worker & { sync: any };
+    worker: ReturnType<typeof PyWorker>;
     shimFilePath: string;
     configFilePath: string;
     workerReady = false;
     running = false;
-    env: any = {}
+    env: { [key: string]: string } = {}
 
 
     constructor(peerID: string | null, shimFilePath: string, configFilePath: string, env: any = {}) {
@@ -120,32 +74,10 @@ export class MPyCManager extends EventTarget {
         this.running = false;
     }
 
-    on(type: string, handler: (...args: any[]) => void) {
-        this.addEventListener(type, (e: Event) => {
-            let ev = e as Ev;
-            // console.log("on", type, ...ev.detail.args.filter(a => !(a instanceof MPyCManager)));
-            handler(...ev.detail.args)
-        });
-    }
-
-    async emit(type: string, ...args: any[]) {
-        if (type != "peerjs:conn:data:mpyc:runtime") {
-            // console.log("emit", type, ...[...args].filter(a => !(a instanceof MPyCManager)))
-        } else {
-            // console.log("emit", type, ...[...args].filter(a => !(a instanceof MPyCManager)))
-            // console.count("peerjs:conn:data:mpyc:runtime")
-        }
-        this.dispatchEvent(new Ev(type, { detail: { args } }));
-    }
-
     runMPC = (code: string, is_async = false) => {
         this.running = true;
         let peers = this.getPeers(true)
         let pid = peers.findIndex((p) => p === this.peer.id)
-
-        console.log("peers:", peers)
-        console.log("my id:", this.peer.id)
-        console.log("my pid:", pid)
 
         for (let i = 0; i < peers.length; i++) {
             this.peerIDToPID.set(peers[i], i)
@@ -184,12 +116,9 @@ export class MPyCManager extends EventTarget {
     }
 
     newWorker(shimFilePath: string, configFilePath: string) {
-        let worker = polyscript.XWorker(shimFilePath, { async: true, type: "pyodide", config: configFilePath });
 
-        // let worker = XWorker.call(new Hook(null, workerHooks), shimFilePath, { async: true, type: "pyodide", config: configFilePath });
-        // let worker = core.PyWorker(shimFilePath, { async: true, config: configFilePath });
-        // let worker = PyWorker(shimFilePath, { async: true, config: configFilePath });
-        // let worker = XWorker(shimFilePath, { async: true, type: "pyodide", config: configFilePath });
+        let worker = PyWorker(shimFilePath, { async: false, config: configFilePath, version: "0.23.1" });
+        // let worker = XWorker(shimFilePath, { async: false, type: "pyodide", config: configFilePath, version: "0.23.1" });
 
         // allow the python worker to send PeerJS messages via the main thread
         worker.sync.sendReadyMessage = this.sendReadyMessage;
@@ -201,9 +130,9 @@ export class MPyCManager extends EventTarget {
         worker.sync.logError = console.error;
         worker.sync.logWarn = console.warn;
         worker.sync.display = (message: string) => { this.emit('worker:display', message, this); }
-        worker.onerror = (err: ErrorEvent) => { console.error(err.error); this.emit('worker:error', err, this) };
-        worker.onmessage = (e: MessageEvent) => { console.info(e); this.emit('worker:message', e, this) };
-        worker.onmessageerror = (err: MessageEvent) => { console.warn(err); this.emit('worker:messageerror', err, this) };
+        // worker.onerror = (err: ErrorEvent) => { console.error(err.error); this.emit('worker:error', err, this) };
+        // worker.onmessage = (e: MessageEvent) => { console.info(e); this.emit('worker:message', e, this) };
+        // worker.onmessageerror = (err: MessageEvent) => { console.warn(err); this.emit('worker:messageerror', err, this) };
         worker.sync.mpcDone = () => { this.running = false; }
 
         return worker;
@@ -221,15 +150,20 @@ export class MPyCManager extends EventTarget {
         conn.on('open', () => {
             this.sendPeers(conn);
             this.conns.set(conn.peer, conn);
-            this.emit("peerjs:conn:ready", conn.peer, this);
+            this.emit('peerjs:conn:ready', conn.peer, this);
         });
-        conn.on('error', (err) => { this.emit("peerjs:conn:error", conn.peer, err, this) });
+        conn.on('error', (err: Error) => { this.emit('peerjs:conn:error', conn.peer, err, this) });
         conn.on('close', () => {
             this.conns.delete(conn.peer);
             this.emit('peerjs:conn:disconnected', conn.peer, this);
         });
 
-        conn.on('data', (data: any) => { this.emit(`peerjs:conn:data:${data.type}`, conn.peer, data.payload) });
+        conn.on('data', (data: PeerJSData | unknown) => {
+            let { type, payload } = data as PeerJSData;
+
+
+            this.emit(`peerjs:conn:data:${type}`, conn.peer, payload)
+        });
     }
 
     send(conn: DataConnection, type: string, payload: any) {
@@ -317,3 +251,42 @@ export class MPyCManager extends EventTarget {
     }
 }
 
+declare module '@pyscript/core' {
+    export class MPyCWorker {
+        // * TypeScript
+        getEnv: () => { [key: string]: string };
+        sendReadyMessage: (pid: number, message: string) => void;
+        sendRuntimeMessage: (pid: number, message: string) => void;
+        onWorkerReady: () => void;
+        log: (...args: any[]) => void;
+        logError: (...args: any[]) => void;
+        logWarn: (...args: any[]) => void;
+        display: (message: string) => void;
+        mpcDone: () => void;
+        onerror: (err: ErrorEvent) => void;
+        onmessage: (e: MessageEvent) => void;
+        onmessageerror: (err: MessageEvent) => void;
+
+        // * Python
+        ping: () => Promise<boolean>;
+        // ping: () => boolean;
+        update_environ: (env: { [key: string]: string }) => void;
+        on_ready_message: (pid: number, message: string) => void;
+        on_runtime_message: (pid: number, message: string) => void;
+        run_mpc: (options: {
+            pid: number,
+            parties: string[],
+            is_async: boolean,
+            no_async: boolean,
+            exec: string,
+        }) => void;
+    }
+
+    export function PyWorker(file: string, options?: {
+        config?: string | object;
+        async?: boolean;
+        version: string;
+    }): Worker & {
+        sync: ProxyHandler<object> & MPyCWorker
+    }
+}

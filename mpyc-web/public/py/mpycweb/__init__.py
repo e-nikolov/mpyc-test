@@ -1,3 +1,17 @@
+import time
+
+old_time_sleep = time.sleep
+
+from polyscript import xworker
+
+
+def my_sleep(secs: float) -> None:
+    xworker.sync.logWarn(f"sleeping for {secs} seconds")
+    old_time_sleep(secs)
+
+
+time.sleep = my_sleep
+
 from os import environ
 from .worker_init import *
 

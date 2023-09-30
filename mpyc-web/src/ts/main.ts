@@ -22,7 +22,7 @@ import * as app from './app';
 app.ensureStorageSchema(18);
 let peerID = app.loadPeerID();
 
-let mpyc = new MPyCManager(peerID, "./py/shim.py", "config.toml", { COLUMNS: 110 });
+let mpyc = new MPyCManager(peerID, "./py/shim.py", "config.toml", { COLUMNS: "110" });
 
 new app.Controller(mpyc, {
     terminalSelector: '#terminal',

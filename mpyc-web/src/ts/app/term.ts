@@ -5,9 +5,14 @@ import { FitAddon } from 'xterm-addon-fit';
 import { WebglAddon } from 'xterm-addon-webgl';
 import { SearchAddon } from 'xterm-addon-search';
 import { SearchBarAddon } from './xterm-addon-search-bar';
+import { WebLinksAddon } from 'xterm-addon-web-links';
+import { LigaturesAddon } from 'xterm-addon-ligatures';
+import { Unicode11Addon } from 'xterm-addon-unicode11';
+// import { UnicodeGraphemesAddon } from 'xterm-addon-unicode-graphemes';
+import { loadWebFont } from './xterm-webfont'
 
 import { $, debounce } from './utils';
-import chalk from 'chalk';
+import { format } from './format';
 import { MPyCManager } from '../mpyc';
 
 export class Term extends Terminal {
@@ -15,6 +20,9 @@ export class Term extends Terminal {
     searchAddon: SearchAddon;
     webglAddon: WebglAddon;
     searchBarAddon: SearchBarAddon;
+    webLinksAddon: WebLinksAddon;
+    mpyc: MPyCManager;
+
 
 
     constructor(sel: string, mpyc: MPyCManager) {
@@ -30,9 +38,10 @@ export class Term extends Terminal {
             // scrollback: 0,
             cursorBlink: false,
             convertEol: true,
-            fontFamily: "MesloLGS NF, Hack, monospace",
+            // fontFamily: "Fira Code, Hack",
+            fontFamily: "Fira Code",
             fontSize: 16,
-            fontWeight: 500,
+            fontWeight: 400,
             // macOptionClickForcesSelection: false,
             theme: {
                 "black": "#000000",
@@ -57,16 +66,32 @@ export class Term extends Terminal {
                 "cursor": "#fc531d"
             }
         });
+        this.mpyc = mpyc;
+
+        this.onResize((_) => {
+            this.updateColumnsEnv();
+        });
         this.fitAddon = new FitAddon();
         this.searchAddon = new SearchAddon();
         this.webglAddon = new WebglAddon();
         this.searchBarAddon = new SearchBarAddon({ searchAddon: this.searchAddon });
+        this.webLinksAddon = new WebLinksAddon()
         this.loadAddon(this.fitAddon);
         this.loadAddon(this.searchAddon);
         this.loadAddon(this.searchBarAddon);
         this.loadAddon(this.webglAddon);
+        this.loadAddon(this.webLinksAddon);
+        // this.loadAddon(new UnicodeGraphemesAddon());
+        this.loadAddon(new Unicode11Addon());
+        this.unicode.activeVersion = '11';
+        let ligaturesAddon = new LigaturesAddon();
 
-        this.open(el);
+        loadWebFont(this).then(() => {
+            this.open(el);
+            this.loadAddon(ligaturesAddon);
+            this.fit();
+        });
+
         this.attachCustomKeyEventHandler((e: KeyboardEvent) => {
             // console.log(e.key)
             if (e.ctrlKey && e.key == "c") {
@@ -91,25 +116,40 @@ export class Term extends Terminal {
         });
 
         // debounce resize
-        let ro = new ResizeObserver(debounce(() => { this.fit(); mpyc.updateEnv("COLUMNS", this.cols.toString()) }, 50));
+        let ro = new ResizeObserver(debounce(() => { this.fit(); }, 50));
         ro.observe(document.querySelector(".split-1")!)
+        // this.fit();
     }
 
 
     info(message: string) {
-        this.writeln(`  ℹ️  ${message}`);
+        this.writeln(`  ${format.yellow(format.symbols.info)}  ${message}`);
     }
 
     success(message: string) {
-        this.writeln(`  ${chalk.green("✔️")}  ${message}`);
+        this.writeln(`  ${format.green(format.symbols.check)}  ${message}`);
     }
 
     error(message: string) {
-        this.writeln(`  ${chalk.red("✖️")}  ${chalk.redBright(message)}`);
+        this.writeln(`  ${format.red(format.symbols.cross)}  ${format.redBright(message)}`);
+        this.writeln(">= <= == <==>")
+        this.writeln(">= <= == <==>")
+        this.writeln(">= <= == <==>")
     }
 
     fit = () => {
         console.log("fitting terminal");
         this.fitAddon.fit();
+        this.updateColumnsEnv();
+    }
+
+    updateColumnsEnv = () => {
+        console.log("updating columns env: " + this.cols);
+        this.mpyc.updateEnv("COLUMNS", this.cols.toString())
     }
 }
+// declare global {
+//     interface Terminal {
+//         loadWebfontAndOpen: any
+//     }
+// }

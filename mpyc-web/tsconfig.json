@@ -1,5 +1,13 @@
 {
   "compilerOptions": {
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types",
+      "./node_modules/@pyscript/core/types"
+    ],
+    "types": [
+      "./globals.d.ts"
+    ],
     "allowJs": true,
     "checkJs": false,
     // "baseUrl": "./types",
@@ -8,14 +16,18 @@
       // "polyscript/hooks": [
       //   "./node_modules/polyscript/esm/worker/hooks.js"
       // ]
+      // "../node_modules/polyscript/esm/worker/hooks.js": [
+      //   "./node_modules/polyscript/esm/worker/hooks.js"
+      // ]
     },
     "declaration": true,
+    "emitDeclarationOnly": true,
     "declarationDir": "types",
-    "target": "ES2022",
+    "target": "ESNext",
     "useDefineForClassFields": true,
-    "module": "ES2022",
+    "module": "ESNext",
     "lib": [
-      "ES2022",
+      "ESNext",
       "DOM",
       "DOM.Iterable",
       "WebWorker"
@@ -28,7 +40,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
-    "noEmit": true,
+    // "noEmit": true,
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
@@ -36,8 +48,8 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "src/ts/polyscript.d.ts",
-    "./types/polyscript-hooks.d.ts",
+    // "src/ts/polyscript.d.ts",
+    // "./types/polyscript-hooks.d.ts",
     "./types/*.d.ts", // or the path to your declaration file
     "./src/**/*" // and your source files
   ]

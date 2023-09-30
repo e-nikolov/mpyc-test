@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Testing xTerm.js</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.4/xterm.css" />
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.4/addons/fullscreen/fullscreen.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.4/xterm.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.4/addons/fullscreen/fullscreen.min.js"></script>
+  <script src="https://unpkg.com/chalkie@latest"></script>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="terminal"></div>
+  <script>
+  const term = new Terminal();
+  term.open(document.getElementById("terminal"));
+  fullscreen.toggleFullScreen(term);
+  term.prompt = () => {
+    term.write("\r\n$ ");
+  };
+  term.write(
+    `${chalk.red("Hello")} from ${chalk.bold.underline.bgCyanBright.black(
+      "xterm.js"
+    )} !`
+  );
+  term.writeln(
+    "This is a local terminal emulation, without a real terminal in the back-end."
+  );
+  term.writeln("Type some keys and commands to play around.");
+  term.writeln("");
+  term.prompt();
+  term.on("key", function(key, ev) {
+    const printable =
+      !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey;
+
+    if (ev.keyCode === 13) {
+      term.prompt();
+    } else if (ev.keyCode === 8) {
+      if (term._core.buffer.x > 2) {
+        term.write("\b \b");
+      }
+    } else if (printable) {
+      term.write(key);
+    }
+  });
+  term.on("paste", function(data) {
+    term.write(data);
+  });
+</script>
+</body>
+
+</html>

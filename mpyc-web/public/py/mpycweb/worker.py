@@ -13,7 +13,7 @@ from .stats import stats
 logger = logging.getLogger(__name__)
 
 
-async def run_mpc(options):
+def run_mpc(options):
     logger.debug("starting mpyc execution...")
     # TODO automatically set the no_async based on the number of parties
     m = len(options.parties)
@@ -30,8 +30,14 @@ async def run_mpc(options):
     # reinitialize the mpyc runtime with the new parties
     mpc.__init__(options.pid, parties, mpc.options)
 
-    f = await exec_async(options.exec)
-    # print("mpc done")
+    exec(options.exec)
+    print("mpc done")
+
+
+def exec(source: str):
+    code = compile(source, "_mpc_run_compiled.py", "exec", ast.PyCF_ALLOW_TOP_LEVEL_AWAIT)
+    func = types.FunctionType(code, globals() | {__name__: "__main__"})
+    return func()
 
 
 async def exec_async(source: str):

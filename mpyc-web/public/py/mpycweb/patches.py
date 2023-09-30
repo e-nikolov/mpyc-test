@@ -45,17 +45,17 @@ function fastSetTimeout(callback, delay) {
     }
 }
         """)
-webloop.setTimeout = js.fastSetTimeout
+# webloop.setTimeout = js.fastSetTimeout
 
 
-async def stats_printer():
-    while True:
-        xworker.sync.log(f"Python Worker Stats")
-        xworker.sync.log(f"{stats.stats}")
-        await asyncio.sleep(5)
+# async def stats_printer():
+#     while True:
+#         xworker.sync.log(f"Python Worker Stats")
+#         xworker.sync.log(f"{stats.stats}")
+#         await asyncio.sleep(5)
 
 
-asyncio.ensure_future(stats_printer())
+# asyncio.ensure_future(stats_printer())
 
 
 def run(self, f):

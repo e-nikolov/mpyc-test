@@ -10,13 +10,11 @@ export * from './qr';
 export * from './peers';
 export * from './editor';
 export * from './tabs';
-import * as colors from "./colors";
+import { format } from "./format";
 
 import Split from 'split.js'
 import { $, $$, withTimeout2 } from './utils';
 import { ControllerOptions } from './elements';
-
-import chalk from 'chalk';
 
 import * as polyscript from "polyscript";
 
@@ -65,8 +63,8 @@ export class Controller {
     }
 
     init(mpyc: MPyCManager, opts: ControllerOptions) {
-        this.term.info(`Initializing ${chalk.green('PeerJS')}...`);
-        this.term.info(`Initializing ${chalk.green('PyScript runtime')}...`);
+        this.term.info(`Initializing ${format.green('PeerJS')}...`);
+        this.term.info(`Initializing ${format.green('PyScript')} runtime...`);
 
         this.updateHostPeerIDInput();
 
@@ -94,7 +92,7 @@ export class Controller {
             }
         )
 
-        setTimeout(this.pingWorker, 5000)
+        setTimeout(this.pingWorker, 3000)
     }
 
     setupMPyCEvents(mpyc: MPyCManager) {
@@ -103,21 +101,23 @@ export class Controller {
             app.setTabState('myPeerID', peerID);
 
             console.log('My peer ID is: ' + peerID);
-            this.term.success(`${chalk.green("PeerJS")} ready with ID: ${colors.peerID(peerID)}`);
+            this.term.success(`${format.green("PeerJS")} ready with ID: ${format.peerID(peerID)}`);
             this.updatePeersDiv(mpyc);
         });
         mpyc.on('peerjs:closed', () => { this.term.error('PeerJS closed.'); });
-        mpyc.on('peerjs:error', (err: Error) => { this.term.error(`PeerJS failed: 1 ${err.message} ${err.stack}`); });
+        mpyc.on('peerjs:error', (err: Error) => { this.term.error(`PeerJS failed: ${err.message}\n${err.stack}`); });
         mpyc.on('peerjs:conn:ready', this.onPeerConnectedHook);
         mpyc.on('peerjs:conn:disconnected', this.onPeerDisconnectedHook);
         mpyc.on('peerjs:conn:error', this.onPeerConnectionErrorHook);
         mpyc.on('peerjs:conn:data:user:chat', this.processChatMessage);
         mpyc.on('worker:error', (err: ErrorEvent) => { console.log(err, err.error); this.term.error(err.message); });
+        mpyc.on('worker:message', (e: MessageEvent) => { this.term.writeln(e.data); });
+        mpyc.on('worker:messageerror', (err: MessageEvent) => { this.term.error(err.data); });
         mpyc.on('worker:run', (mpyc: MPyCManager) => { this.updatePeersDiv(mpyc); });
         mpyc.on('worker:display', (message: string) => { this.term.write(message); });
         mpyc.on('worker:ready', () => {
-            this.term.success(`${chalk.green("PyScript")} runtime ready.`);
-            setTimeout(this.pingWorker, 1000);
+            this.term.success(`${format.green("PyScript")} runtime ready.`);
+            setTimeout(this.pingWorker, 3000);
         });
         mpyc.on('peerjs:conn:data:mpyc:ready', () => { this.updatePeersDiv(mpyc); });
     }

@@ -68,6 +68,9 @@ class Handler(RichHandler):
         level = self.get_level_text(record)
         time_format = None if self.formatter is None else self.formatter.datefmt
         log_time = datetime.datetime.fromtimestamp(record.created)
+        path = f"{path}:{record.lineno}"
+        if record.funcName not in ["<module>", "<lambda>"]:
+            path = f"{path}:{record.funcName}"
 
         log_renderable = self._log_render(
             self.console,
@@ -75,7 +78,7 @@ class Handler(RichHandler):
             log_time=log_time,
             time_format=time_format,
             level=level,
-            path=f"{path}:{record.lineno}:{record.funcName}",
+            path=path,
             link_path=f"{record.pathname}#{record.lineno}" if self.enable_link_path else None,
         )
         return log_renderable
