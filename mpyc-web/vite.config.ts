@@ -36,15 +36,15 @@ export default defineConfig({
   base: "/mpyc-test/",
   build: {
     target: 'esnext',
-    assetsInlineLimit: 0,
-    rollupOptions: {
-      plugins: plugins.concat(
-        process.env.NO_MIN ? [nodeResolve()] : [nodeResolve(), terser()],
-      ),
-    }
+    // assetsInlineLimit: 0,
+    // rollupOptions: {
+    //   plugins: plugins.concat(
+    //     process.env.NO_MIN ? [nodeResolve()] : [nodeResolve(), terser()],
+    //   ),
+    // }
   },
   plugins: [
-    tsconfigPaths(),
+    // tsconfigPaths(),
   ],
   server: {
     headers: {
@@ -52,8 +52,5 @@ export default defineConfig({
       "Cross-Origin-Opener-Policy": "same-origin",
       "Accept-Ranges": "bytes"
     },
-    fs: {
-      allow: ["../../"]
-    }
   }
 })

@@ -45,7 +45,7 @@ function fastSetTimeout(callback, delay) {
     }
 }
         """)
-# webloop.setTimeout = js.fastSetTimeout
+webloop.setTimeout = js.fastSetTimeout
 
 
 # async def stats_printer():

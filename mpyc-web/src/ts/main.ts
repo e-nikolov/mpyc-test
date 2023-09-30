@@ -10,10 +10,6 @@
 
 import '../scss/style.scss';
 import '@fontsource/fira-code';
-// import '@fontsource/inter';
-// import '@fontsource/roboto';
-// import '@fontsource/roboto-mono';
-import 'hack-font/build/web/hack.css';
 
 import { MPyCManager } from './mpyc';
 
