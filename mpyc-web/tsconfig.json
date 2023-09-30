@@ -11,15 +11,6 @@
     "allowJs": true,
     "checkJs": false,
     // "baseUrl": "./types",
-    "baseUrl": ".", // This must be specified if "paths" is specified.
-    "paths": {
-      // "polyscript/hooks": [
-      //   "./node_modules/polyscript/esm/worker/hooks.js"
-      // ]
-      // "../node_modules/polyscript/esm/worker/hooks.js": [
-      //   "./node_modules/polyscript/esm/worker/hooks.js"
-      // ]
-    },
     "declaration": true,
     "emitDeclarationOnly": true,
     "declarationDir": "types",
@@ -48,8 +39,6 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
-    // "src/ts/polyscript.d.ts",
-    // "./types/polyscript-hooks.d.ts",
     "./types/*.d.ts", // or the path to your declaration file
     "./src/**/*" // and your source files
   ]

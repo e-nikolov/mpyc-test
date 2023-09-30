@@ -6,7 +6,7 @@ import { WebglAddon } from 'xterm-addon-webgl';
 import { SearchAddon } from 'xterm-addon-search';
 import { SearchBarAddon } from './xterm-addon-search-bar';
 import { WebLinksAddon } from 'xterm-addon-web-links';
-import { LigaturesAddon } from 'xterm-addon-ligatures';
+// import { LigaturesAddon } from 'xterm-addon-ligatures';
 import { Unicode11Addon } from 'xterm-addon-unicode11';
 // import { UnicodeGraphemesAddon } from 'xterm-addon-unicode-graphemes';
 import { loadWebFont } from './xterm-webfont'
@@ -84,11 +84,11 @@ export class Term extends Terminal {
         // this.loadAddon(new UnicodeGraphemesAddon());
         this.loadAddon(new Unicode11Addon());
         this.unicode.activeVersion = '11';
-        let ligaturesAddon = new LigaturesAddon();
+        // let ligaturesAddon = new LigaturesAddon();
 
         loadWebFont(this).then(() => {
             this.open(el);
-            this.loadAddon(ligaturesAddon);
+            // this.loadAddon(ligaturesAddon);
             this.fit();
         });
 
@@ -132,9 +132,6 @@ export class Term extends Terminal {
 
     error(message: string) {
         this.writeln(`  ${format.red(format.symbols.cross)}  ${format.redBright(message)}`);
-        this.writeln(">= <= == <==>")
-        this.writeln(">= <= == <==>")
-        this.writeln(">= <= == <==>")
     }
 
     fit = () => {
@@ -148,8 +145,3 @@ export class Term extends Terminal {
         this.mpyc.updateEnv("COLUMNS", this.cols.toString())
     }
 }
-// declare global {
-//     interface Terminal {
-//         loadWebfontAndOpen: any
-//     }
-// }

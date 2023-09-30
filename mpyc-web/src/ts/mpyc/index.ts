@@ -10,7 +10,20 @@ import { MPyCEvents, PeerJSData } from './events.js'
 type ConnMap = Map<string, DataConnection>;
 
 hooks.onInterpreterReady.add((interpreter: any, x: any) => {
-    console.log("interpreter ready", interpreter, x)
+    console.log("onInterpreterReady", interpreter, x)
+});
+
+hooks.onBeforeRun.add((interpreter: any, x: any) => {
+    console.log("onBeforeRun", interpreter, x)
+});
+hooks.onBeforeRunAsync.add((interpreter: any, x: any) => {
+    console.log("onBeforeRunAsync", interpreter, x)
+});
+hooks.onAfterRun.add((interpreter: any, x: any) => {
+    console.log("onAfterRun", interpreter, x)
+});
+hooks.onAfterRunAsync.add((interpreter: any, x: any) => {
+    console.log("onAfterRunAsync", interpreter, x)
 });
 
 export class MPyCManager extends EventEmitter<MPyCEvents> {
