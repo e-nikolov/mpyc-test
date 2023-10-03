@@ -1,0 +1,34 @@
+diff --git a/src/core.js b/src/core.js
+index a1d5f5031829d3951397a1a824f97d7e56d9aa6a..0fe5a32070ab4956717542e59ef812fc214b0b62 100644
+--- a/src/core.js
++++ b/src/core.js
+@@ -7,14 +7,14 @@ import {
+     INVALID_CONTENT,
+     define,
+     XWorker,
+-} from "../node_modules/polyscript/esm/index.js";
+-import { queryTarget } from "../node_modules/polyscript/esm/script-handler.js";
++} from "polyscript/esm/index.js";
++import { queryTarget } from "polyscript/esm/script-handler.js";
+ import {
+     dedent,
+     dispatch,
+     unescape,
+-} from "../node_modules/polyscript/esm/utils.js";
+-import { Hook } from "../node_modules/polyscript/esm/worker/hooks.js";
++} from "polyscript/esm/utils.js";
++import { Hook } from "polyscript/esm/worker/hooks.js";
+ 
+ import "./all-done.js";
+ import TYPES from "./types.js";
+diff --git a/src/fetch.js b/src/fetch.js
+index a1d6a12c50150be397dfc1e776ff155a4e807ea3..9390fad4ac60a19ffbc559006dbf8c81bfed8141 100644
+--- a/src/fetch.js
++++ b/src/fetch.js
+@@ -1,5 +1,5 @@
+ import { FetchError, ErrorCode } from "./exceptions.js";
+-import { getText } from "../node_modules/polyscript/esm/fetch-utils.js";
++import { getText } from "polyscript/esm/fetch-utils.js";
+ 
+ export { getText };
+ 

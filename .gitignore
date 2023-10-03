@@ -471,3 +471,45 @@ bin/
 .vite
 
 .tmp
+
+# ------- yarn -------
+# see excellent notes at: https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+# Also: `yarn.lock` and `.yarnrc.yml` (or it's older counterpart .yarnrc) "should always be stored in your repo"
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+## --> ADD if using zero-install, otherwise do NOT:
+# !.yarn/cache
+
+## --> ELSE ADD if NOT using yarn's zero-install:
+.pnp.*
+
+# ------- end yarn -------
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

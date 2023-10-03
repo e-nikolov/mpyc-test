@@ -169,24 +169,24 @@ plugins = ["importlib-metadata"]
 
 [[package]]
 name = "pyodide-py"
-version = "0.23.4"
+version = "0.24.1"
 description = "\"A Python package providing core interpreter functionality for Pyodide.\""
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pyodide-py-0.23.4.tar.gz", hash = "sha256:8bc34c81a01aaecf812145901b7847fce4c385faa6bed4d1ce821a1bdab3af2f"},
-    {file = "pyodide_py-0.23.4-py3-none-any.whl", hash = "sha256:caf08f33e3f2269ac652e7d6df6f1c16e32500cdd0de804e1bf79e83e4c89b84"},
+    {file = "pyodide-py-0.24.1.tar.gz", hash = "sha256:39eb6479721b93549f35b3b83854adb1c15d4d5d57ff227576f12b2c860f2de6"},
+    {file = "pyodide_py-0.24.1-py3-none-any.whl", hash = "sha256:f57f95a79ed59f588112953664200c2f9386acdd4b1c2357fddfc28fa8fdbc6e"},
 ]
 
 [[package]]
 name = "rich"
-version = "13.5.3"
+version = "13.6.0"
 description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal"
 optional = false
 python-versions = ">=3.7.0"
 files = [
-    {file = "rich-13.5.3-py3-none-any.whl", hash = "sha256:9257b468badc3d347e146a4faa268ff229039d4c2d176ab0cffb4c4fbc73d5d9"},
-    {file = "rich-13.5.3.tar.gz", hash = "sha256:87b43e0543149efa1253f485cd845bb7ee54df16c9617b8a893650ab84b4acb6"},
+    {file = "rich-13.6.0-py3-none-any.whl", hash = "sha256:2b38e2fe9ca72c9a00170a1a2d20c63c790d0e10ef1fe35eba76e1e7b1d7d245"},
+    {file = "rich-13.6.0.tar.gz", hash = "sha256:5c14d22737e6d5084ef4771b62d5d4363165b403455a30a1c8ca39dc7b644bef"},
 ]
 
 [package.dependencies]
@@ -199,4 +199,4 @@ jupyter = ["ipywidgets (>=7.5.1,<9)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "95f27f4d58aa07b7d5f7d1b1169580e4e98a00a18740b094699fd5778f8ca6bb"
+content-hash = "0f75224453948b6bbc9288620ddd468c257e0062b93255c3e235af70afdea556"

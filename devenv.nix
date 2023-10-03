@@ -70,6 +70,7 @@
 
   languages.javascript.enable = true;
   languages.javascript.corepack.enable = true;
+  # languages.javascript.npm.install.enable = true;
   languages.typescript.enable = true;
   languages.python.enable = true;
   languages.python.package = pkgs.python311;

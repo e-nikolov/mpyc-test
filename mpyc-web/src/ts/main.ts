@@ -9,7 +9,6 @@
 'use strict';
 
 import '../scss/style.scss';
-import '@fontsource/fira-code';
 
 import { MPyCManager } from './mpyc';
 

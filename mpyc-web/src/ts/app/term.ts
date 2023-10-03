@@ -3,6 +3,7 @@ import { Terminal } from 'xterm';
 
 import { FitAddon } from 'xterm-addon-fit';
 import { WebglAddon } from 'xterm-addon-webgl';
+import { Readline } from 'xterm-readline';
 import { SearchAddon } from 'xterm-addon-search';
 import { SearchBarAddon } from './xterm-addon-search-bar';
 import { WebLinksAddon } from 'xterm-addon-web-links';
@@ -11,7 +12,7 @@ import { Unicode11Addon } from 'xterm-addon-unicode11';
 // import { UnicodeGraphemesAddon } from 'xterm-addon-unicode-graphemes';
 import { loadWebFont } from './xterm-webfont'
 
-import { $, debounce } from './utils';
+import { $, debounce } from '../utils';
 import { format } from './format';
 import { MPyCManager } from '../mpyc';
 
@@ -21,6 +22,7 @@ export class Term extends Terminal {
     webglAddon: WebglAddon;
     searchBarAddon: SearchBarAddon;
     webLinksAddon: WebLinksAddon;
+    readlineAddon: Readline;
     mpyc: MPyCManager;
 
 
@@ -42,6 +44,8 @@ export class Term extends Terminal {
             fontFamily: "Fira Code",
             fontSize: 16,
             fontWeight: 400,
+            allowTransparency: true,
+            disableStdin: false,
             // macOptionClickForcesSelection: false,
             theme: {
                 "black": "#000000",
@@ -76,11 +80,15 @@ export class Term extends Terminal {
         this.webglAddon = new WebglAddon();
         this.searchBarAddon = new SearchBarAddon({ searchAddon: this.searchAddon });
         this.webLinksAddon = new WebLinksAddon()
+        this.readlineAddon = new Readline()
+        this.readlineAddon.setCheckHandler(text => !text.trimEnd().endsWith("&&"));
+
         this.loadAddon(this.fitAddon);
         this.loadAddon(this.searchAddon);
         this.loadAddon(this.searchBarAddon);
         this.loadAddon(this.webglAddon);
         this.loadAddon(this.webLinksAddon);
+        this.loadAddon(this.readlineAddon);
         // this.loadAddon(new UnicodeGraphemesAddon());
         this.loadAddon(new Unicode11Addon());
         this.unicode.activeVersion = '11';
@@ -91,6 +99,16 @@ export class Term extends Terminal {
             // this.loadAddon(ligaturesAddon);
             this.fit();
         });
+        this.mpyc.worker.sync.readline = (prompt: string): Promise<string> => {
+            return new Promise((resolve, reject) => {
+                this.readlineAddon.read(prompt).then((input: string) => {
+                    this.writeln("readline: " + input);
+                    resolve(input);
+                }).catch((e: Error) => {
+                    reject(e)
+                });
+            })
+        }
 
         this.attachCustomKeyEventHandler((e: KeyboardEvent) => {
             // console.log(e.key)

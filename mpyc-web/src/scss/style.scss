@@ -9,6 +9,14 @@ $grid-breakpoints: (
   xl: 1200px,
   xxl: 1400px
 );
+
+
+@import "@fortawesome/fontawesome-free/css/all.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+@import 'material-icons/iconfont/material-icons.css';
+@import 'material-icons/css/material-icons.css';
+@import '@fontsource/fira-code/latin-400.css';
+
 @import "xterm/css/xterm.css";
 @import "./theme-superhero-before.scss";
 @import "bootstrap/scss/bootstrap";

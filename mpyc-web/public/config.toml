@@ -33,7 +33,6 @@ files = [
     "debug.py",
     "patches.py",
     "peerjs.py",
-    "redirect_stdout.py",
     "transport.py",
     "worker_init.py",
     "worker.py",

@@ -1,18 +1,21 @@
 import time
+import asyncio
 
 old_time_sleep = time.sleep
 
 from polyscript import xworker
 
 
-def my_sleep(secs: float) -> None:
-    xworker.sync.logWarn(f"sleeping for {secs} seconds")
+loop = asyncio.get_event_loop()
+
+
+def sleep_logger(secs: float) -> None:
+    loop.call_soon(xworker.sync.logWarn, f"sleeping for {secs} seconds")
     old_time_sleep(secs)
 
 
-time.sleep = my_sleep
+time.sleep = sleep_logger
 
-from os import environ
 from .worker_init import *
 
 worker_init.load_env()

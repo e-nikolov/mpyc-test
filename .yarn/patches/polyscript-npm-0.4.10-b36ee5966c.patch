@@ -1,0 +1,12 @@
+diff --git a/package.json b/package.json
+index 6ab0707a552ae7dc0588978d98bc014b6b11351c..37b49aaebac786c88d68a771b01bb44d7257f5dc 100644
+--- a/package.json
++++ b/package.json
+@@ -60,6 +60,7 @@
+             "import": "./esm/index.js",
+             "default": "./cjs/index.js"
+         },
++        "./esm/": "./esm/",
+         "./package.json": "./package.json"
+     },
+     "dependencies": {

@@ -1,4 +1,6 @@
 
+import pool from 'generic-pool'
+
 export const debounce = (fn: Function, ms = 100) => {
     let timeoutId: ReturnType<typeof setTimeout>;
     return function (this: any, ...args: any[]) {
@@ -30,6 +32,51 @@ export function withTimeout2<T>(promise: Promise<T>, ms: number = 20000, rejectV
         }).catch(reject);
 
     });
+}
+
+// export function callSoon() {
+
+// }
+// export const channelPool = pool.createPool<MessageChannel>();
+export const channelPool = pool.createPool(
+    {
+        create: async () => {
+            return new MessageChannel();
+        },
+        destroy: async (channel) => {
+            channel.port1.close();
+            channel.port2.close();
+        }
+    },
+    {
+        max: 100,
+        min: 30,
+        //         // maxWaitingClients: 1000,
+        //         // testOnBorrow: true,
+        //         // testOnReturn: true,
+        //         // acquireTimeoutMillis: 1000,
+        //         // fifo: true,
+        //         // priorityRange: 10,
+        //         // autostart: true,
+        //         // evictionRunIntervalMillis: 1000,
+        //         // numTestsPerEvictionRun: 100,
+        //         // softIdleTimeoutMillis: 1000,
+        //         // idleTimeoutMillis: 1000,
+    }
+)
+
+export function callSoon(callback: () => void, delay: number = 0) {
+    if (delay == undefined || isNaN(delay) || delay < 0) {
+        delay = 0;
+    }
+    if (delay < 1) {
+        channelPool.acquire().then(channel => {
+            channel.port1.onmessage = () => { channelPool.release(channel); callback() };
+            channel.port2.postMessage('');
+        });
+    } else {
+        setTimeout(callback, delay);
+    }
 }
 
 export function withTimeout3<T>(promise: Promise<T>, ms: number = 20000, rejectValue: T | undefined = undefined): Promise<T | undefined> {

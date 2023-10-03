@@ -13,7 +13,7 @@ export * from './tabs';
 import { format } from "./format";
 
 import Split from 'split.js'
-import { $, $$, withTimeout2 } from './utils';
+import { $, $$, withTimeout2, channelPool } from '../utils';
 import { ControllerOptions } from './elements';
 
 import * as polyscript from "polyscript";
@@ -85,6 +85,11 @@ export class Controller {
     pingWorker = () => {
         withTimeout2(this.mpyc.worker.sync.ping()).then(
             res => {
+                // console.log("pool.pending: " + channelPool.pending)
+                // console.log("pool.borrowed: " + channelPool.borrowed)
+                // console.log("pool.size: " + channelPool.size)
+                // console.log("pool.spareResourceCapacity: " + channelPool.spareResourceCapacity)
+
                 if (!res) {
                     console.error("PyScript runtime is not responding.");
                     this.term.error("PyScript runtime is not responding.");
@@ -147,16 +152,17 @@ export class Controller {
 
 
     setupGlobals() {
-        document.mpyc = this.mpyc;
-        document.editor = this.editor;
-        document.term = this.term;
-        document.clearTabCount = () => { delete localStorage.tabCount }
-        document.r = () => { this.mpyc.reset("") };
-        document.run = async () => this.mpyc.runMPC(this.editor.getCode(), false);
-        document.runa = async () => this.mpyc.runMPC(this.editor.getCode(), true);
-        document.ps = polyscript.XWorker;
-        document.ps2 = polyscript;
-        document.app = this;
+        window.mpyc = this.mpyc;
+        window.editor = this.editor;
+        window.term = this.term;
+        window.clearTabCount = () => { delete localStorage.tabCount }
+        window.r = () => { this.mpyc.reset("") };
+        window.run = async () => this.mpyc.runMPC(this.editor.getCode(), false);
+        window.runa = async () => this.mpyc.runMPC(this.editor.getCode(), true);
+        window.ps = polyscript.XWorker;
+        window.ps2 = polyscript;
+        window.app = this;
+        window.channelPool = channelPool;
     }
 
     public setupDemoSelector = app.setupDemoSelector.bind(this);
@@ -171,17 +177,18 @@ export class Controller {
 
 
 declare global {
-    interface Document {
+    interface Window {
+        mpyc: MPyCManager;
         clearTabCount: any;
         r: any;
         app: Controller
         run: any;
         runa: any;
-        mpyc: MPyCManager;
         term: app.Term;
         editor: EditorView;
         ps: any;
         ps2: any;
+        channelPool: typeof channelPool;
     }
     interface PerformanceEntry {
         type: string;

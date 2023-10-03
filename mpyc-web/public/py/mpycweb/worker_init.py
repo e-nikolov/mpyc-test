@@ -3,11 +3,17 @@ import os
 
 # pyright: reportMissingImports=false
 from polyscript import xworker
+import asyncio
+import rich
+import pyodide
+
+
+def print_tasks():
+    print(asyncio.current_task())
+    print(asyncio.all_tasks())
 
 
 def ping():
-    # xworker.sync.log("pong")
-    # xworker.sync.log("pong2")
     return True
 
 
@@ -22,8 +28,7 @@ def get_env() -> dict[str, str]:
 import rich
 
 
-def __update_environ(envProxy):
-    env = envProxy.to_py()
+def __update_environ(env):
     assert isinstance(env, dict)
     environ.update(env)
     cols = os.environ.get("COLUMNS")
@@ -32,4 +37,8 @@ def __update_environ(envProxy):
 
 
 xworker.sync.ping = ping
-xworker.sync.update_environ = __update_environ
+
+import asyncio
+
+loop = asyncio.get_event_loop()
+xworker.sync.update_environ = lambda envProxy: loop.call_soon(__update_environ, envProxy.to_py())

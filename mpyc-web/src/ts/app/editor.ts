@@ -8,7 +8,7 @@ import { birdsOfParadise } from 'thememirror';
 import { indentWithTab, } from "@codemirror/commands"
 import { MPyCManager } from '../mpyc';
 import { Controller } from '.';
-import { debounce } from './utils';
+import { debounce } from '../utils';
 
 export class Editor extends EditorView {
     constructor(selector: string, demoSelect: HTMLSelectElement, mpyc: MPyCManager) {

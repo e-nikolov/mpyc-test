@@ -30,6 +30,10 @@ from .stats import stats
 # this slows down code that uses await asyncio.sleep(0)
 # This monkey patch replaces setTimeout() with a faster version that uses MessageChannel
 run_js("""
+//import genericPool from 'https://cdn.jsdelivr.net/npm/generic-pool@3.9.0/+esm'
+
+console.log(globalThis.pyodide)
+
 const oldSetTimeout = setTimeout;
 
 function fastSetTimeout(callback, delay) {
@@ -44,6 +48,43 @@ function fastSetTimeout(callback, delay) {
         oldSetTimeout(callback, delay);
     }
 }
+
+
+// import pool from 'generic-pool'
+
+// const channelPool = pool.createPool(
+//     {
+//         create: async () => {
+//             return new MessageChannel();
+//         },
+//         destroy: async (channel) => {
+//             channel.port1.close();
+//             channel.port2.close();
+//         }
+//     },
+//     {
+//         max: 100,
+//         min: 30,
+//     }
+// )
+
+// export function callSoon(callback: () => void, delay: number = 0) {
+//     if (delay == undefined || isNaN(delay) || delay < 0) {
+//         delay = 0;
+//     }
+//     if (delay < 1) {
+//         channelPool.acquire().then(channel => {
+//             channel.port1.onmessage = () => { channelPool.release(channel); callback() };
+//             channel.port2.postMessage('');
+//         });
+//     } else {
+//         setTimeout(callback, delay);
+//     }
+// }
+
+
+
+console.warn("test pyodide worker")
         """)
 webloop.setTimeout = js.fastSetTimeout
 
@@ -82,7 +123,9 @@ mpc.run = types.MethodType(run, mpc)
 # The regular start() starts TCP connections, which don't work in the browser.
 # We monkey patch it to use PeerJS instead.
 async def start(runtime: Runtime) -> None:
-    pjs = peerjs.Client(xworker.sync)
+    loop = runtime._loop
+
+    pjs = peerjs.Client(xworker.sync, loop)
 
     # TODO refactor runtime.start() to work with multiple transports
     """Start the MPyC runtime with a PeerJS transport.
@@ -99,7 +142,6 @@ async def start(runtime: Runtime) -> None:
         return
 
     # m > 1
-    loop = runtime._loop
     for peer in runtime.parties:
         peer.protocol = asyncio.Future(loop=loop) if peer.pid == runtime.pid else None
 
