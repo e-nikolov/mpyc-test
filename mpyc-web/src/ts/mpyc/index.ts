@@ -108,15 +108,16 @@ export class MPyCManager extends EventEmitter<MPyCEvents> {
 
         this.peersReady.set(this.peer.id, true);
 
-        callSoon(async () => {
-            await this.worker.sync.run_mpc({
-                pid: pid,
-                parties: peers,
-                is_async: is_async,
-                no_async: !is_async,
-                exec: code,
-            })
+        // callSoon(async () => {
+        // await this.worker.sync.run_mpc({
+        this.worker.sync.run_mpc({
+            pid: pid,
+            parties: peers,
+            is_async: is_async,
+            no_async: !is_async,
+            exec: code,
         })
+        // })
         this.emit('worker:run', this);
     }
 
@@ -143,7 +144,7 @@ export class MPyCManager extends EventEmitter<MPyCEvents> {
     newWorker(shimFilePath: string, configFilePath: string) {
 
         // let worker = XWorker(shimFilePath, { async: true, type: "pyodide", config: configFilePath, version: "0.23.1" });
-        let worker = PyWorker(shimFilePath, { async: false, config: configFilePath, version: "0.23.1" });
+        let worker = PyWorker(shimFilePath, { async: true, config: configFilePath, version: "0.23.1" });
         // let worker = XWorker(shimFilePath, { async: true, type: "pyodide", config: configFilePath, version: "0.23.1" });
 
         // allow the python worker to send PeerJS messages via the main thread
@@ -154,16 +155,22 @@ export class MPyCManager extends EventEmitter<MPyCEvents> {
         // UI callbacks
         worker.sync.onWorkerReady = () => { this.workerReady = true; this.emit('worker:ready', this) };
         worker.sync.log = (...args: any) => {
-            callSoon(() => { console.log(...args) });
+            // callSoon(() => { console.log(...args) });
+            console.log(...args);
         };
         worker.sync.logError = (...args: any) => {
-            callSoon(() => { console.error(...args) });
+            // callSoon(() => { console.error(...args) });
+            console.error(...args);
         };
 
         worker.sync.logWarn = (...args: any) => {
-            callSoon(() => { console.warn(...args) });
+            // callSoon(() => { console.warn(...args) });
+            console.warn(...args);
         }
-        worker.sync.display = (message: string) => { callSoon(() => { this.emit('worker:display', message, this); }) };
+        worker.sync.display = (message: string) => {
+            // callSoon(() => { this.emit('worker:display', message, this); })
+            this.emit('worker:display', message, this);
+        };
         // worker.onerror = (err: ErrorEvent) => { console.error(err.error); this.emit('worker:error', err, this) };
         // worker.onmessage = (e: MessageEvent) => { console.info(e); this.emit('worker:message', e, this) };
         // worker.onmessageerror = (err: MessageEvent) => { console.warn(err); this.emit('worker:messageerror', err, this) };
@@ -243,13 +250,13 @@ export class MPyCManager extends EventEmitter<MPyCEvents> {
 
     // Called from the Python worker
     sendReadyMessage = (pid: number, message: string) => {
-        callSoon(() => {
-            let peerID = this.pidToPeerID.get(pid);
-            this.conns.get(peerID!)?.send({
-                type: 'mpyc:ready',
-                payload: message,
-            })
+        // callSoon(() => {
+        let peerID = this.pidToPeerID.get(pid);
+        this.conns.get(peerID!)?.send({
+            type: 'mpyc:ready',
+            payload: message,
         })
+        // })
     };
 
     // Called from the PeerJS connection
@@ -261,32 +268,32 @@ export class MPyCManager extends EventEmitter<MPyCEvents> {
             return;
         }
         let pid = this.peerIDToPID.get(peerID)!;
-        callSoon(() => {
-            this.worker.sync.on_ready_message(pid, message)
-        })
+        // callSoon(() => {
+        this.worker.sync.on_ready_message(pid, message)
+        // })
     }
     // i = 0;
     // Called from the Python worker
     sendRuntimeMessage = async (pid: number, message: any) => {
-        callSoon(() => {
-            // this.i++
-            // let i = this.i
-            // console.warn(`sendRuntimeMessage ${i} 1`)
+        // callSoon(() => {
+        // this.i++
+        // let i = this.i
+        // console.warn(`sendRuntimeMessage ${i} 1`)
 
-            // if (this.i > 5) {
-            //     throw new Error("test")
-            // }
-            // console.warn(`sendRuntimeMessage ${i} 2`)
-            // console.log(`sending data ${message}`)
-            let peerID = this.pidToPeerID.get(pid)!;
-            // console.warn(`sendRuntimeMessage ${i} 3`)
+        // if (this.i > 5) {
+        //     throw new Error("test")
+        // }
+        // console.warn(`sendRuntimeMessage ${i} 2`)
+        // console.log(`sending data ${message}`)
+        let peerID = this.pidToPeerID.get(pid)!;
+        // console.warn(`sendRuntimeMessage ${i} 3`)
 
-            this.conns.get(peerID)?.send({
-                type: 'mpyc:runtime',
-                payload: message,
-            })
-            // console.warn(`sendRuntimeMessage ${i} 99`)
+        this.conns.get(peerID)?.send({
+            type: 'mpyc:runtime',
+            payload: message,
         })
+        // console.warn(`sendRuntimeMessage ${i} 99`)
+        // })
     };
 
     // Called from the PeerJS connection
@@ -298,9 +305,9 @@ export class MPyCManager extends EventEmitter<MPyCEvents> {
         }
         // console.log(`receiving data ${message}`)
         let pid = this.peerIDToPID.get(peerID)!;
-        callSoon(() => {
-            this.worker.sync.on_runtime_message(pid, message)
-        })
+        // callSoon(() => {
+        this.worker.sync.on_runtime_message(pid, message)
+        // })
     }
 }
 

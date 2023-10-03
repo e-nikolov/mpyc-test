@@ -90,7 +90,8 @@ loop = asyncio.get_event_loop()
 
 
 def display(msg):
-    loop.call_soon(xworker.sync.display, msg)
+    # loop.call_soon(xworker.sync.display, msg)
+    xworker.sync.display(msg)
 
 
 def print_tree(path, prefix="", str=""):

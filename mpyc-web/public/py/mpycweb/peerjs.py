@@ -35,8 +35,8 @@ class Client(AbstractClient):
 
     @stats.acc(lambda self, pid, message: stats.total_calls() | stats.sent_to(pid, message))
     def send_ready_message(self, pid: int, message: str):
-        self.loop.call_soon(self.worker.sendReadyMessage, pid, message)
-        # self.worker.sendReadyMessage(pid, message)
+        # self.loop.call_soon(self.worker.sendReadyMessage, pid, message)
+        self.worker.sendReadyMessage(pid, message)
 
     @stats.acc(lambda self, pid, message: stats.total_calls() | stats.received_from(pid, message))
     def on_ready_message(self, pid: int, message: str):
@@ -51,8 +51,8 @@ class Client(AbstractClient):
         # self.i += 1
         # i = self.i
         # self.worker.logWarn(f"send_runtime_message 1 {i}")
-        self.loop.call_soon(self.worker.sendRuntimeMessage, pid, message)
-        # self.worker.sendRuntimeMessage(pid, message)
+        # self.loop.call_soon(self.worker.sendRuntimeMessage, pid, message)
+        self.worker.sendRuntimeMessage(pid, message)
 
         # self.worker.logWarn(f"send_runtime_message 99 {i}")
 
