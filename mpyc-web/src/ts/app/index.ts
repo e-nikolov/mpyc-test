@@ -111,7 +111,17 @@ export class Controller {
             this.updatePeersDiv(mpyc);
         });
         mpyc.on('peerjs:closed', () => { this.term.error('PeerJS closed.'); });
-        mpyc.on('peerjs:error', (err: Error) => { this.term.error(`PeerJS failed: ${err.message}\n${err.stack}`); });
+        mpyc.on('peerjs:error', (err: Error) => {
+            this.term.warn(`PeerJS failed: ${err.message}`);
+            console.warn(`PeerJS failed: ${err.message}\n${err.stack}`);
+
+            if (err.message === "Lost connection to server.") {
+                setTimeout(() => {
+                    this.term.writeln("Reconnecting...");
+                    this.mpyc.peer.reconnect();
+                }, 1000);
+            };
+        });
         mpyc.on('peerjs:conn:ready', this.onPeerConnectedHook);
         mpyc.on('peerjs:conn:disconnected', this.onPeerDisconnectedHook);
         mpyc.on('peerjs:conn:error', this.onPeerConnectionErrorHook);

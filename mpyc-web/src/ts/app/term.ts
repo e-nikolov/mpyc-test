@@ -144,12 +144,21 @@ export class Term extends Terminal {
         return format.cyan.dim(`[${new Date().toLocaleTimeString()}]`);
     }
 
+    debug(message: string) {
+        this.writeln(`${this.time()}  ${format.gray("🛠")}  ${message}`);
+    }
+
     info(message: string) {
         this.writeln(`${this.time()}  ${format.yellow(format.symbols.info)}  ${message}`);
     }
 
     success(message: string) {
         this.writeln(`${this.time()}  ${format.green(format.symbols.check)}  ${message}`);
+    }
+
+
+    warn(message: string) {
+        this.writeln(`${this.time()}  ${format.yellow(format.symbols.warning)}  ${message}`);
     }
 
     error(message: string) {
