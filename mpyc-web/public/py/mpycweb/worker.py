@@ -36,13 +36,13 @@ async def run_mpc(options):
 
 def exec(source: str):
     code = compile(source, "_mpc_run_compiled.py", "exec", ast.PyCF_ALLOW_TOP_LEVEL_AWAIT)
-    func = types.FunctionType(code, globals() | {__name__: "__main__"})
+    func = types.FunctionType(code, globals() | {"__name__": "__main__"})
     return func()
 
 
 async def exec_async(source: str):
     code = compile(source, "_mpc_run_compiled.py", "exec", ast.PyCF_ALLOW_TOP_LEVEL_AWAIT)
-    func = types.FunctionType(code, globals() | {__name__: "__main__"})
+    func = types.FunctionType(code, globals() | {"__name__": "__main__"})
     if asyncio.iscoroutinefunction(func):
         return await func()
     else:
