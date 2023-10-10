@@ -140,16 +140,20 @@ export class Term extends Terminal {
     }
 
 
+    time() {
+        return format.cyan.dim(`[${new Date().toLocaleTimeString()}]`);
+    }
+
     info(message: string) {
-        this.writeln(`  ${format.yellow(format.symbols.info)}  ${message}`);
+        this.writeln(`${this.time()}  ${format.yellow(format.symbols.info)}  ${message}`);
     }
 
     success(message: string) {
-        this.writeln(`  ${format.green(format.symbols.check)}  ${message}`);
+        this.writeln(`${this.time()}  ${format.green(format.symbols.check)}  ${message}`);
     }
 
     error(message: string) {
-        this.writeln(`  ${format.red(format.symbols.cross)}  ${format.redBright(message)}`);
+        this.writeln(`${this.time()}  ${format.red(format.symbols.cross)}  ${format.redBright(message)}`);
     }
 
     fit = () => {

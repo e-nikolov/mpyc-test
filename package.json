@@ -15,7 +15,8 @@
     "gh-pages": "^6.0.0",
     "sass": "^1.68.0",
     "typescript": "^5.2.2",
-    "vite": "^4.4.9"
+    "vite": "^4.4.9",
+    "vite-plugin-externalize-dependencies": "^0.10.0"
   },
   "dependencies": {
     "@codemirror/commands": "^6.3.0",
@@ -29,7 +30,7 @@
     "@lezer/common": "^1.1.0",
     "@lezer/highlight": "^1.1.6",
     "@popperjs/core": "^2.11.8",
-    "@pyscript/core": "^0.2.5",
+    "@pyscript/core": "^0.2.8",
     "@types/bootstrap": "^5.2.7",
     "@types/codemirror": "^5.60.10",
     "@types/dompurify": "^3.0.3",
@@ -48,7 +49,7 @@
     "generic-pool": "^3.9.0",
     "material-icons": "^1.13.9",
     "peerjs": "=1.4.7",
-    "polyscript": "^0.4.11",
+    "polyscript": "^0.4.13",
     "qrcode": "^1.5.3",
     "rollup": "^3.29.4",
     "split.js": "^1.6.5",
@@ -63,7 +64,7 @@
     "xterm-readline": "^1.1.1"
   },
   "resolutions": {
-    "@pyscript/core@^0.2.5": "patch:@pyscript/core@npm%3A0.2.7#./.yarn/patches/@pyscript-core-npm-0.2.7-e8a7b39569.patch",
-    "polyscript@^0.4.11": "patch:polyscript@npm%3A0.4.11#./.yarn/patches/polyscript-npm-0.4.11-6e2f0cb81f.patch"
+    "@pyscript/core@^0.2.8": "patch:@pyscript/core@npm%3A0.2.8#./.yarn/patches/@pyscript-core-npm-0.2.8-337be83cb5.patch",
+    "polyscript@^0.4.13": "patch:polyscript@npm%3A0.4.13#./.yarn/patches/polyscript-npm-0.4.13-a491bf3cff.patch"
   }
 }

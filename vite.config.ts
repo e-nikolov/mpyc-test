@@ -5,6 +5,7 @@ import { defineConfig, PluginOption } from 'vite'
 // import tsconfigPaths from 'vite-tsconfig-paths'
 import topLevelAwait from "vite-plugin-top-level-await";
 // import dynamicImport from 'vite-plugin-dynamic-import'
+import externalize from "vite-plugin-externalize-dependencies";
 
 import path from 'path'
 
@@ -30,6 +31,8 @@ const plugins: PluginOption = [];
 export default defineConfig({
   resolve: {
     alias: {
+      // "@pyscript/core": "https://cdn.jsdelivr.net/npm/@pyscript/core@0.2.8/index.js",
+
       // '@pyscript/core': './node_modules/@pyscript/core/index.js',
     }
   },
@@ -42,16 +45,19 @@ export default defineConfig({
     chunkSizeWarningLimit: 1500,
     target: 'esnext',
     // assetsInlineLimit: 0,
-    // rollupOptions: {
-    //   plugins: plugins.concat(
-    //     process.env.NO_MIN ? [nodeResolve()] : [nodeResolve(), terser()],
-    //   ),
-    // }
+    rollupOptions: {
+      // plugins: plugins.concat(
+      //   process.env.NO_MIN ? [nodeResolve()] : [nodeResolve(), terser()],
+      // ),
+
+      // external: ['@pyscript/core'],
+    }
   },
   cacheDir: "../.vite",
   // cacheDir: ".vite",
   plugins: [
     // tsconfigPaths(),
+    // externalize({ externals: ["@pyscript/core", "polyscript"] }),
 
     topLevelAwait({
       // The export name of top-level await promise for each chunk module

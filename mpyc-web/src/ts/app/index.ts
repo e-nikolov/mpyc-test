@@ -16,7 +16,8 @@ import Split from 'split.js'
 import { $, $$, withTimeout2, channelPool } from '../utils';
 import { ControllerOptions } from './elements';
 
-import * as polyscript from "polyscript";
+// import * as polyscript from "polyscript";
+import { PyWorker, hooks } from "@pyscript/core";
 
 export class Controller {
     mpyc: MPyCManager;
@@ -159,8 +160,8 @@ export class Controller {
         window.r = () => { this.mpyc.reset("") };
         window.run = async () => this.mpyc.runMPC(this.editor.getCode(), false);
         window.runa = async () => this.mpyc.runMPC(this.editor.getCode(), true);
-        window.ps = polyscript.XWorker;
-        window.ps2 = polyscript;
+        window.ps = typeof PyWorker;
+        // window.ps2 = polyscript;
         window.app = this;
         window.channelPool = channelPool;
     }

@@ -62,10 +62,33 @@ def set_log_level(level):
     stats.reset()
 
 
+from rich.text import Text
+from rich.style import Style
+from logging import LogRecord
+
+
 class Handler(RichHandler):
+    def get_level_emoji(self, record: LogRecord):
+        match record.levelname:
+            case "CRITICAL":
+                level = Text.styled(" 🔥".ljust(3))
+            case "ERROR":
+                level = Text.styled(" ❌".ljust(3))
+            case "WARNING":
+                level = Text.styled(" ⚠️".ljust(3))
+            case "INFO":
+                level = Text.styled(" ℹ️".ljust(3))
+            case "DEBUG":
+                # level = Text.styled("🐞 🪲 ⬤ ℹ️ ⚙️ 🔧 🛠 🛠️ ".ljust(3))
+                level = Text.styled(" 🛠".ljust(3), style=Style(color="grey50"))
+            case _:
+                level = Text.styled(record.levelname.ljust(3))
+
+        return level
+
     def render(self, *, record, traceback, message_renderable):
         path = Path(record.pathname).name
-        level = self.get_level_text(record)
+        level = self.get_level_emoji(record)
         time_format = None if self.formatter is None else self.formatter.datefmt
         log_time = datetime.datetime.fromtimestamp(record.created)
         path = f"{path}:{record.lineno}"

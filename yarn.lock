@@ -351,27 +351,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pyscript/core@npm:0.2.7":
-  version: 0.2.7
-  resolution: "@pyscript/core@npm:0.2.7"
+"@pyscript/core@npm:0.2.8":
+  version: 0.2.8
+  resolution: "@pyscript/core@npm:0.2.8"
   dependencies:
     "@ungap/with-resolvers": ^0.1.0
     basic-devtools: ^0.1.6
-    polyscript: ^0.4.11
+    polyscript: ^0.4.13
     type-checked-collections: ^0.1.7
-  checksum: 0bd47259fad410a2fe5a884a1330863c01a8bfc86c79026fe5c6ccb8d3e46ca1e87a007f8508579c9a431baafc232af5b8cc6eb3551047d95e992c7bf9aafe4d
+  checksum: fd3cee3d8e63d94035cbb4364c6343498ef5c118a8f3cf17d443620ef3dfbed16275169b9389a4f84f1fb30d4873ce6b8145b95c48a7db5a53f1e1736bf16e30
   languageName: node
   linkType: hard
 
-"@pyscript/core@patch:@pyscript/core@npm%3A0.2.7#./.yarn/patches/@pyscript-core-npm-0.2.7-e8a7b39569.patch::locator=mpyc-web%40workspace%3A.":
-  version: 0.2.7
-  resolution: "@pyscript/core@patch:@pyscript/core@npm%3A0.2.7#./.yarn/patches/@pyscript-core-npm-0.2.7-e8a7b39569.patch::version=0.2.7&hash=7ed834&locator=mpyc-web%40workspace%3A."
+"@pyscript/core@patch:@pyscript/core@npm%3A0.2.8#./.yarn/patches/@pyscript-core-npm-0.2.8-337be83cb5.patch::locator=mpyc-web%40workspace%3A.":
+  version: 0.2.8
+  resolution: "@pyscript/core@patch:@pyscript/core@npm%3A0.2.8#./.yarn/patches/@pyscript-core-npm-0.2.8-337be83cb5.patch::version=0.2.8&hash=b4aaa4&locator=mpyc-web%40workspace%3A."
   dependencies:
     "@ungap/with-resolvers": ^0.1.0
     basic-devtools: ^0.1.6
-    polyscript: ^0.4.11
+    polyscript: ^0.4.13
     type-checked-collections: ^0.1.7
-  checksum: 02afd51a7500b1e095d27ba46addab9b9bcaaebcf10e83023bd53a1aee80c90d4994c860f240a6bde17ccd288c75f28eacc1673c7a9eed61f71c57771d95ecf3
+  checksum: bedcd8df28bf8ba48830224d4c1714605e34f2f6e1fc89f74592bd70e926ba4553652a35dec3a61a2a5401b39f291b0789595c31c86ed8b5133dc8f7af26a95a
   languageName: node
   linkType: hard
 
@@ -909,9 +909,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"coincident@npm:^0.13.3":
-  version: 0.13.3
-  resolution: "coincident@npm:0.13.3"
+"coincident@npm:^0.13.5":
+  version: 0.13.5
+  resolution: "coincident@npm:0.13.5"
   dependencies:
     "@ungap/structured-clone": ^1.2.0
     "@ungap/with-resolvers": ^0.1.0
@@ -919,7 +919,7 @@ __metadata:
   dependenciesMeta:
     ws:
       optional: true
-  checksum: 96b426106ca77dc67888c0ee70af5b186f4820b037b2f257080588866f73254d0e86ff79f17c344ff65d8ff1e00393432f2df20804bad3bed62e8c0a3f9e44bc
+  checksum: 3619b1f69b66d8525f09cc50651f215c49ff64345d6ff505911cb1dd6af3a0151f6c0519380543b641634260389ac9b70d565402d120b46783aa44b00e1f8f72
   languageName: node
   linkType: hard
 
@@ -1823,7 +1823,7 @@ __metadata:
     "@lezer/common": ^1.1.0
     "@lezer/highlight": ^1.1.6
     "@popperjs/core": ^2.11.8
-    "@pyscript/core": ^0.2.5
+    "@pyscript/core": ^0.2.8
     "@types/bootstrap": ^5.2.7
     "@types/codemirror": ^5.60.10
     "@types/dompurify": ^3.0.3
@@ -1844,7 +1844,7 @@ __metadata:
     gh-pages: ^6.0.0
     material-icons: ^1.13.9
     peerjs: =1.4.7
-    polyscript: ^0.4.11
+    polyscript: ^0.4.13
     qrcode: ^1.5.3
     rollup: ^3.29.4
     sass: ^1.68.0
@@ -1852,6 +1852,7 @@ __metadata:
     thememirror: ^2.0.1
     typescript: ^5.2.2
     vite: ^4.4.9
+    vite-plugin-externalize-dependencies: ^0.10.0
     vite-plugin-top-level-await: ^1.3.1
     xterm: ^5.3.0
     xterm-addon-fit: ^0.8.0
@@ -2104,31 +2105,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"polyscript@npm:0.4.11":
-  version: 0.4.11
-  resolution: "polyscript@npm:0.4.11"
+"polyscript@npm:0.4.13":
+  version: 0.4.13
+  resolution: "polyscript@npm:0.4.13"
   dependencies:
     "@ungap/structured-clone": ^1.2.0
     "@ungap/with-resolvers": ^0.1.0
     basic-devtools: ^0.1.6
     codedent: ^0.1.2
-    coincident: ^0.13.3
+    coincident: ^0.13.5
     html-escaper: ^3.0.3
-  checksum: 63a4da8d1a19de9508f9f266bebfc3328fbf4b67de85371214459caa8dff160e9c0c5f8ee1c3fa26a93cec29b50fc939da30a1ddd3999a2661cba26f89f53cb7
+  checksum: 9fbbb3d0bb1feea25f051a4456e589174ad5499600ea7e9cccb6f767eac97b570115c7df49fc77c083b7f330036cd3ee534d404e770def881787a5b5b65f0e4e
   languageName: node
   linkType: hard
 
-"polyscript@patch:polyscript@npm%3A0.4.11#./.yarn/patches/polyscript-npm-0.4.11-6e2f0cb81f.patch::locator=mpyc-web%40workspace%3A.":
-  version: 0.4.11
-  resolution: "polyscript@patch:polyscript@npm%3A0.4.11#./.yarn/patches/polyscript-npm-0.4.11-6e2f0cb81f.patch::version=0.4.11&hash=49a7d2&locator=mpyc-web%40workspace%3A."
+"polyscript@patch:polyscript@npm%3A0.4.13#./.yarn/patches/polyscript-npm-0.4.13-a491bf3cff.patch::locator=mpyc-web%40workspace%3A.":
+  version: 0.4.13
+  resolution: "polyscript@patch:polyscript@npm%3A0.4.13#./.yarn/patches/polyscript-npm-0.4.13-a491bf3cff.patch::version=0.4.13&hash=52a836&locator=mpyc-web%40workspace%3A."
   dependencies:
     "@ungap/structured-clone": ^1.2.0
     "@ungap/with-resolvers": ^0.1.0
     basic-devtools: ^0.1.6
     codedent: ^0.1.2
-    coincident: ^0.13.3
+    coincident: ^0.13.5
     html-escaper: ^3.0.3
-  checksum: d94f98fb84ebebff46a9ce7cf9e18c7c444b4c542bd74ea6d784ff223783a1e824b7613a21368b08a02807b6ad971d0b37433d77fa4516c5fa1f07b0fa69e8e9
+  checksum: ca91d0a20e4f19a49afbc274ad6a1ba090f5dd63390bc4514e1a69ead8b1aaa669018b396c1e5ca1e569c67a49df7841efadceea2b56b9f6f7fa97f7c65b14c2
   languageName: node
   linkType: hard
 
@@ -2564,6 +2565,13 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 39931f6da74e307f51c0fb463dc2462807531dc80760a9bff1e35af4316131b4fc3203d16da60ae33f07fdca5b56f3f1dd662da0c99fea9aaeab2004780cc5f4
+  languageName: node
+  linkType: hard
+
+"vite-plugin-externalize-dependencies@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "vite-plugin-externalize-dependencies@npm:0.10.0"
+  checksum: 2058275d894f6570e852d276d8973a97445276f6fe641ac43832bdd4e238b04b6e48d55bf2d4fc9fb507bf935191d100f47726d2fd7d2bdbd7e830b0117a5327
   languageName: node
   linkType: hard
 

@@ -3,7 +3,7 @@ import { Peer, DataConnection } from "peerjs";
 
 // import { PyWorker } from "https://cdn.jsdelivr.net/npm/@pyscript/core";
 import { PyWorker, hooks } from '@pyscript/core'
-import { XWorker } from "polyscript";
+// import { XWorker } from "polyscript";
 import { EventEmitter } from 'eventemitter3'
 import { MPyCEvents, PeerJSData } from './events.js'
 import { callSoon, channelPool } from '../utils/index.js'
@@ -40,8 +40,8 @@ export class MPyCManager extends EventEmitter<MPyCEvents> {
     peerIDToPID: Map<string, number> = new Map<string, number>();
     pidToPeerID: Map<number, string> = new Map<number, string>();
     peersReady: Map<string, boolean> = new Map<string, boolean>();
-    // worker: ReturnType<typeof PyWorker>;
-    worker: ReturnType<typeof XWorker>;
+    worker: ReturnType<typeof PyWorker>;
+    // worker: ReturnType<typeof XWorker>;
     shimFilePath: string;
     configFilePath: string;
     workerReady = false;
@@ -144,7 +144,8 @@ export class MPyCManager extends EventEmitter<MPyCEvents> {
     newWorker(shimFilePath: string, configFilePath: string) {
 
         // let worker = XWorker(shimFilePath, { async: true, type: "pyodide", config: configFilePath, version: "0.23.1" });
-        let worker = PyWorker(shimFilePath, { async: true, config: configFilePath, version: "0.23.1" });
+        let worker = PyWorker(shimFilePath, { async: true, config: configFilePath });
+        // let worker = PyWorker(shimFilePath, { async: true, config: configFilePath, version: "0.23.1" });
         // let worker = XWorker(shimFilePath, { async: true, type: "pyodide", config: configFilePath, version: "0.23.1" });
 
         // allow the python worker to send PeerJS messages via the main thread

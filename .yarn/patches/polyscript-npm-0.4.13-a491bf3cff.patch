@@ -1,0 +1,14 @@
+diff --git a/package.json b/package.json
+index 609b17131a4fa9c8831abd9ea681598e3225b5ad..d198abb1dc85a55a23f85bb852a4371206ef11af 100644
+--- a/package.json
++++ b/package.json
+@@ -60,7 +60,8 @@
+             "import": "./esm/index.js",
+             "default": "./cjs/index.js"
+         },
+-        "./package.json": "./package.json"
++        "./package.json": "./package.json",
++	"./esm/": "./esm/"
+     },
+     "dependencies": {
+         "@ungap/structured-clone": "^1.2.0",
