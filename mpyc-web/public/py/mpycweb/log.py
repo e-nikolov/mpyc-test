@@ -10,6 +10,12 @@ from rich.logging import RichHandler
 
 import logging
 
+import rich
+from rich.text import Text
+from rich.style import Style
+
+from logging import LogRecord
+
 # pyright: reportMissingImports=false
 from polyscript import xworker
 
@@ -62,11 +68,6 @@ def set_log_level(level):
     stats.reset()
 
 
-from rich.text import Text
-from rich.style import Style
-from logging import LogRecord
-
-
 class Handler(RichHandler):
     def get_level_emoji(self, record: LogRecord):
         match record.levelname:
@@ -94,7 +95,7 @@ class Handler(RichHandler):
         path = f"{path}:{record.lineno}"
         if record.funcName not in ["<module>", "<lambda>"]:
             path = f"{path}:{record.funcName}"
-
+        message_renderable.style = Style(color="grey50")
         log_renderable = self._log_render(
             self.console,
             [message_renderable] if not traceback else [message_renderable, traceback],

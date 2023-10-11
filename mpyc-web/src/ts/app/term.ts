@@ -145,24 +145,27 @@ export class Term extends Terminal {
     }
 
     debug(message: string) {
-        this.writeln(`${this.time()}  ${format.gray("🛠")}  ${message}`);
+        this.log(format.italic.grey(message), format.gray("🛠"));
     }
 
     info(message: string) {
-        this.writeln(`${this.time()}  ${format.yellow(format.symbols.info)}  ${message}`);
+        this.log(message, format.yellow(format.symbols.info));
     }
 
     success(message: string) {
-        this.writeln(`${this.time()}  ${format.green(format.symbols.check)}  ${message}`);
+        this.log(message, format.green(format.symbols.check));
     }
 
+    log(message: string, icon: string = " ") {
+        this.writeln(`${this.time()}  ${icon} ${message}`);
+    }
 
     warn(message: string) {
-        this.writeln(`${this.time()}  ${format.yellow(format.symbols.warning)}  ${message}`);
+        this.log(format.italic(message), format.yellow(format.symbols.warning));
     }
 
     error(message: string) {
-        this.writeln(`${this.time()}  ${format.red(format.symbols.cross)}  ${format.redBright(message)}`);
+        this.log(format.redBright(message), format.red(format.symbols.cross));
     }
 
     fit = () => {

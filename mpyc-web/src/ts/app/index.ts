@@ -117,7 +117,6 @@ export class Controller {
 
             if (err.message === "Lost connection to server.") {
                 setTimeout(() => {
-                    this.term.writeln("Reconnecting...");
                     this.mpyc.peer.reconnect();
                 }, 1000);
             };
