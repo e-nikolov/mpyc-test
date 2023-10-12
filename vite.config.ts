@@ -38,7 +38,7 @@ export default defineConfig({
   },
   root: "./mpyc-web/",
   publicDir: "./public",
-  base: "/mpyc-test/",
+  base: "./",
   build: {
     outDir: "../dist",
     emptyOutDir: true,
