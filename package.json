@@ -7,7 +7,9 @@
     "dev": "vite --debug",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "gh-pages": "gh-pages -d dist -t true"
+    "gh-pages": "gh-pages -d dist -t true",
+    "gh-pages-test": "gh-pages -d dist -t true --remote test",
+    "gh-pages-mpyc": "gh-pages -d dist -t true --remote mpyc"
   },
   "devDependencies": {
     "coi-serviceworker": "^0.1.7",
