@@ -145,12 +145,14 @@ export class Term extends Terminal {
     }
 
     debug(message: string) {
-        this.log(format.italic.grey(message), format.gray("🛠"));
+        // this.log(format.italic.grey(message), format.gray("🛠"));
+        this.log(format.italic.grey(message), format.gray("⚒"));
     }
 
     info(message: string) {
         // this.log(message, format.yellow(format.symbols.info));
-        this.log(message, format.yellow(" "));
+        // this.log(message, format.yellow("ℹ"));
+        this.log(message, format.yellow("🛈"));
     }
 
     success(message: string) {

@@ -2,7 +2,7 @@ DEFAULT_SHELL = $(shell getent passwd ${USER} | awk -F: '{print $$NF}' )
 
 TIMESTAMP := $(shell date +"%Y%m%d%H%M%S")
 
-PSSH=pssh --user root --hosts=hosts-dns.pssh --timeout 0 --print --inline --verbose --outdir ./logs/${TIMESTAMP}
+PSSH=pssh --user root --hosts=./deployments/hosts-dns.pssh --timeout 0 --print --inline --verbose --outdir ./logs/${TIMESTAMP}
 
 dev:
 	nix develop --command "${DEFAULT_SHELL}"
@@ -32,12 +32,12 @@ provision:
 	@echo Provisioning with terraform
 	@echo ===================================================
 	terraform -chdir=./deployments/terraform apply
-	terraform -chdir=./deployments/terraform output -json hosts-colmena > hosts.json
-	terraform -chdir=./deployments/terraform output -json hosts-colmena-dns > hosts-dns.json
-	terraform -chdir=./deployments/terraform output -json hosts-headscale > hosts-headscale.json
-	terraform -chdir=./deployments/terraform output -json hosts-headscale-dns > hosts-headscale-dns.json
-	terraform -chdir=./deployments/terraform output -raw hosts-pssh > hosts.pssh
-	terraform -chdir=./deployments/terraform output -raw hosts-pssh-dns > hosts-dns.pssh
+	terraform -chdir=./deployments/terraform output -json hosts-colmena > ./deployments/hosts.json
+	terraform -chdir=./deployments/terraform output -json hosts-colmena-dns > ./deployments/hosts-dns.json
+	terraform -chdir=./deployments/terraform output -json hosts-headscale > ./deployments/hosts-headscale.json
+	terraform -chdir=./deployments/terraform output -json hosts-headscale-dns > ./deployments/hosts-headscale-dns.json
+	terraform -chdir=./deployments/terraform output -raw hosts-pssh > ./deployments/hosts.pssh
+	terraform -chdir=./deployments/terraform output -raw hosts-pssh-dns > ./deployments/hosts-dns.pssh
 
 deploy:
 	@echo ===================================================
@@ -47,22 +47,22 @@ deploy:
 
 destroy:
 	TF_VAR_DESTROY_NODES=1 terraform -chdir=./deployments/terraform apply
-	terraform -chdir=./deployments/terraform output -json hosts-colmena > hosts.json
-	terraform -chdir=./deployments/terraform output -json hosts-colmena-dns > hosts-dns.json
-	terraform -chdir=./deployments/terraform output -raw hosts-pssh > hosts.pssh
-	terraform -chdir=./deployments/terraform output -raw hosts-pssh-dns > hosts-dns.pssh
+	terraform -chdir=./deployments/terraform output -json hosts-colmena > ./deployments/hosts.json
+	terraform -chdir=./deployments/terraform output -json hosts-colmena-dns > ./deployments/hosts-dns.json
+	terraform -chdir=./deployments/terraform output -raw hosts-pssh > ./deployments/hosts.pssh
+	terraform -chdir=./deployments/terraform output -raw hosts-pssh-dns > ./deployments/hosts-dns.pssh
 	# ./scripts/destroy-tailscale.sh
 
 
 destroy-all:
 	terraform -chdir=./deployments/terraform destroy
-	terraform -chdir=./deployments/terraform output -json hosts-colmena > hosts.json
-	terraform -chdir=./deployments/terraform output -json hosts-colmena-dns > hosts-dns.json
-	terraform -chdir=./deployments/terraform output -raw hosts-pssh > hosts.pssh
-	terraform -chdir=./deployments/terraform output -raw hosts-pssh-dns > hosts-dns.pssh
+	terraform -chdir=./deployments/terraform output -json hosts-colmena > ./deployments/hosts.json
+	terraform -chdir=./deployments/terraform output -json hosts-colmena-dns > ./deployments/hosts-dns.json
+	terraform -chdir=./deployments/terraform output -raw hosts-pssh > ./deployments/hosts.pssh
+	terraform -chdir=./deployments/terraform output -raw hosts-pssh-dns > ./deployments/hosts-dns.pssh
  
 sync:
-	prsync --par 4 --user root --hosts hosts-dns.pssh --compress --archive --recursive --verbose --inline ./ /root/mpyc
+	prsync --par 4 --user root --hosts ./deployments/hosts-dns.pssh --compress --archive --recursive --verbose --inline ./ /root/mpyc
 
 reboot-nodes:
 	$(PSSH) "reboot --force"
@@ -76,16 +76,16 @@ logdir:
 	ln -rs ./logs/${TIMESTAMP} ./logs/latest 
 
 run: logdir
-	$(PSSH) "cd /root/mpyc && ./prun.sh ${cmd}"
+	$(PSSH) "cd /root/mpyc && ./scripts/prun.sh ${cmd}"
 
 rund: logdir
-	$(PSSH) "cd /root/mpyc && ./prund.sh ${cmd}"
+	$(PSSH) "cd /root/mpyc && ./scripts/prund.sh ${cmd}"
 
 rundns: logdir
-	$(PSSH) "cd /root/mpyc && ./prundns.sh ${cmd}"
+	$(PSSH) "cd /root/mpyc && ./scripts/prundns.sh ${cmd}"
 
 shuffle:
-	shuf hosts-dns.pssh -o hosts-dns.pssh
+	shuf ./deployments/hosts-dns.pssh -o ./deployments/hosts-dns.pssh
 
 do-image:
 	nix build .#digitalOceanImage -o bin/image

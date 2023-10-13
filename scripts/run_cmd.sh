@@ -1,4 +1,4 @@
-HOSTS_FILE=${HOSTS_FILE:-"./hosts-dns.pssh"}
+HOSTS_FILE=${HOSTS_FILE:-"./deployments/hosts-dns.pssh"}
 MAX_PARTIES=${MAX_PARTIES:-600}
 PORT=${PORT:-11595}
 

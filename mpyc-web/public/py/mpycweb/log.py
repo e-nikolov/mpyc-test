@@ -85,28 +85,25 @@ class Handler(RichHandler):
     """
 
     def _get_level_message(self, record: LogRecord, message_renderable):
+        text = message_renderable
+
         match record.levelname:
             case "CRITICAL":
                 level = Text.styled(" 🔥".ljust(3))
-                text = message_renderable
             case "ERROR":
+                text.style = Style(color="red")
                 level = Text.styled(" ❌".ljust(3))
-                text = message_renderable
             case "WARNING":
                 level = Text.styled(" ⚠️".ljust(3))
-                text = message_renderable
             case "INFO":
                 # level = Text.styled(" ℹ".ljust(3))
-                level = Text.styled("  ".ljust(3))
-                text = message_renderable
+                level = Text.styled(" 🛈".ljust(3))
             case "DEBUG":
-                # level = Text.styled("🐞 🪲 ⬤ ℹ️ ⚙️ 🔧 🛠 🛠️ ".ljust(3))
-                level = Text.styled(" 🛠".ljust(3), style=Style(color="grey50"))
-                text = message_renderable
+                # level = Text.styled("🐞 🪲 ⬤ ℹ️ ⚙️ 🔧 🛠 ⚒ 🛠️ ".ljust(3))
+                level = Text.styled(" ⚒".ljust(3), style=Style(color="grey50"))
                 text.style = Style(color="grey50")
             case _:
                 level = Text.styled(record.levelname.ljust(3))
-                text = message_renderable
 
         return (level, text)
 

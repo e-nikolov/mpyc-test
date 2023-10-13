@@ -6,7 +6,6 @@ __pycache__/
 # C extensions
 *.so
 .idea
-.vscode
 .tool-versions
 # Distribution / packaging
 .Python
@@ -146,8 +145,6 @@ override.tf.json
 terraform.rc
 
 deployments/terraform/show.json
-# hosts.json
-# hosts.pssh
 show.json
 logs/
 
@@ -498,15 +495,11 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
 dist
 dist-ssr
 *.local
 
 # Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
 .DS_Store
 *.suo
 *.ntvs*

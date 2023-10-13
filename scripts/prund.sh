@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source ./run_cmd.sh
+. ./scripts/run_cmd.sh
 
 # docker compose down --remove-orphans
 

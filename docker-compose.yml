@@ -12,7 +12,7 @@ services:
       - net_admin
       - sys_module
     restart: unless-stopped
-    command: [ "/bin/sh", "-c", "/root/mpyc/entrypoint.sh" ]
+    command: [ "/bin/sh", "-c", "/root/mpyc/scripts/entrypoint.sh" ]
     environment:
       - TS_AUTH_KEY=file:/var/keys/headscale
       - TS_ACCEPT_DNS=true
