@@ -14,10 +14,23 @@ It uses:
 
 ## Development
 
+### Dependencies
+
 1. Install nix
-   1. MacOS or Linux with Systemd - https://github.com/DeterminateSystems/nix-installer/
+   1. Linux with Systemd or MacOS - https://github.com/DeterminateSystems/nix-installer/
    2. Linux without Systemd - https://nixos.org/download.html
 2. Start a development shell with all necessary tools - `nix develop --impure`
 3. Install the JavaScript dependencies - `yarn install`
-4. Build the project as a static website - `yarn build`
-5. Start a development server - `yarn dev`
+
+### Start a development server
+
+`yarn dev`
+
+### Build as a static site
+
+`yarn build`
+
+### Run the static site
+
+`python -m http.server -d dist`
+
