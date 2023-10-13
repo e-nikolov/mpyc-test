@@ -1,23 +1,29 @@
+"""
+This module defines logging functionality for the mpyc-web project.
+
+It defines a custom logging handler that uses the rich library to format log messages with emojis and colors.
+It also defines a function to set the log level and a custom function to print a directory tree.
+"""
+
 import io
 import datetime
-from os import environ
 from pathlib import Path
 from collections.abc import Iterable
 import sys
+from logging import LogRecord
+import logging
+import asyncio
 
 from rich.console import Console
 from rich.logging import RichHandler
 
-import logging
 
-import rich
 from rich.text import Text
 from rich.style import Style
 
-from logging import LogRecord
 
-# pyright: reportMissingImports=false
-from polyscript import xworker
+from polyscript import xworker  # pyright: ignore[reportMissingImports] pylint: disable=import-error
+from .stats import stats
 
 
 CRITICAL = logging.CRITICAL
@@ -41,10 +47,13 @@ console = Console(
 )
 
 
-from .stats import stats
-
-
 def set_log_level(level):
+    """
+    Set the log level for the application.
+
+    Args:
+        level (int): The log level to set. Must be one of the constants defined in the logging module.
+    """
     opts: dict = dict(
         force=True,
         format="%(message)s",
@@ -69,7 +78,13 @@ def set_log_level(level):
 
 
 class Handler(RichHandler):
-    def get_level_emoji(self, record: LogRecord):
+    """
+    Custom logging handler that extends RichHandler to provide additional functionality.
+
+    Overrides the get_level_emoji and render methods to customize the log output.
+    """
+
+    def _get_level_emoji(self, record: LogRecord):
         match record.levelname:
             case "CRITICAL":
                 level = Text.styled(" 🔥".ljust(3))
@@ -78,7 +93,7 @@ class Handler(RichHandler):
             case "WARNING":
                 level = Text.styled(" ⚠️".ljust(3))
             case "INFO":
-                level = Text.styled(" ℹ️".ljust(3))
+                level = Text.styled(" ℹ".ljust(3))
             case "DEBUG":
                 # level = Text.styled("🐞 🪲 ⬤ ℹ️ ⚙️ 🔧 🛠 🛠️ ".ljust(3))
                 level = Text.styled(" 🛠".ljust(3), style=Style(color="grey50"))
@@ -89,13 +104,13 @@ class Handler(RichHandler):
 
     def render(self, *, record, traceback, message_renderable):
         path = Path(record.pathname).name
-        level = self.get_level_emoji(record)
+        level = self._get_level_emoji(record)
         time_format = None if self.formatter is None else self.formatter.datefmt
         log_time = datetime.datetime.fromtimestamp(record.created)
         path = f"{path}:{record.lineno}"
         if record.funcName not in ["<module>", "<lambda>"]:
             path = f"{path}:{record.funcName}"
-        message_renderable.style = Style(color="grey50")
+
         log_renderable = self._log_render(
             self.console,
             [message_renderable] if not traceback else [message_renderable, traceback],
@@ -108,30 +123,42 @@ class Handler(RichHandler):
         return log_renderable
 
 
-import asyncio
-
 loop = asyncio.get_event_loop()
 
 
 def display(msg):
-    # loop.call_soon(xworker.sync.display, msg)
+    """
+    Displays a message.
+
+    Args:
+        msg (str): The message to display.
+    """
     xworker.sync.display(msg)
 
 
-def print_tree(path, prefix="", str=""):
-    try:
-        for item in path.iterdir():
-            display(f"{prefix}├── {item.name}\n")
-            if item.is_dir():
-                print_tree(item, prefix + "│   ", str)
-    except:
-        pass
-
-
 class TermWriter(io.StringIO):
+    """
+    A custom class that extends io.StringIO and overrides the write and writelines methods to display text in the notebook.
+    """
+
     def write(self, text):
         display(text)
 
     def writelines(self, __lines: Iterable[str]) -> None:
         for line in __lines:
             display(f"{line}\n")
+
+
+def print_tree(path, prefix="", text=""):
+    """
+    Print a directory tree.
+
+    Args:
+        path (Path): The path to the directory to print.
+        prefix (str): The prefix to use for each line of the tree.
+        str (str): The string to append to each line of the tree.
+    """
+    for item in path.iterdir():
+        display(f"{prefix}├── {item.name}\n")
+        if item.is_dir():
+            print_tree(item, prefix + "│   ", text)

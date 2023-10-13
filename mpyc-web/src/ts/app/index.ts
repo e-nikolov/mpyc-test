@@ -12,7 +12,7 @@ export * from './editor';
 export * from './tabs';
 import { format } from "./format";
 
-import { $, $$, withTimeout2, channelPool } from '../utils';
+import { $, $$, withTimeout, channelPool } from '../utils';
 import { ControllerOptions } from './elements';
 
 // import * as polyscript from "polyscript";
@@ -79,21 +79,16 @@ export class Controller {
     }
 
     pingWorker = () => {
-        withTimeout2(this.mpyc.worker.sync.ping()).then(
+        withTimeout(this.mpyc.worker.sync.ping()).then(
             res => {
-                // console.log("pool.pending: " + channelPool.pending)
-                // console.log("pool.borrowed: " + channelPool.borrowed)
-                // console.log("pool.size: " + channelPool.size)
-                // console.log("pool.spareResourceCapacity: " + channelPool.spareResourceCapacity)
-
                 if (!res) {
-                    console.error("PyScript runtime is not responding.");
-                    this.term.error("PyScript runtime is not responding.");
+                    console.warn("PyScript runtime is not responding.");
+                    // this.term.error("PyScript runtime is not responding.");
                 }
             }
         )
 
-        setTimeout(this.pingWorker, 3000)
+        setTimeout(this.pingWorker, 5000)
     }
 
     setupMPyCEvents(mpyc: MPyCManager) {

@@ -141,7 +141,7 @@ export class Term extends Terminal {
 
 
     time() {
-        return format.cyan.dim(`[${new Date().toLocaleTimeString()}]`);
+        return format.cyan.dim(`[${new Date().toLocaleTimeString("en-IE", { hour12: false })}]`);
     }
 
     debug(message: string) {
@@ -157,7 +157,7 @@ export class Term extends Terminal {
     }
 
     log(message: string, icon: string = " ") {
-        this.writeln(`${this.time()}  ${icon} ${message}`);
+        this.writeln(`${this.time()}  ${icon}  ${message}`);
     }
 
     warn(message: string) {

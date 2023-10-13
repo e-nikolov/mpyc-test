@@ -28,6 +28,7 @@ type ConnMap = Map<string, DataConnection>;
 // });
 
 function MPyWorker(shimFilePath: string, configFilePath: string) {
+    console.log("creating new worker")
     // return PyWorker(shimFilePath, { async: true, config: configFilePath });
     return XWorker(shimFilePath, { async: true, type: "pyodide", config: configFilePath })
 }

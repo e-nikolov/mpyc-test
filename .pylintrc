@@ -1,5 +1,5 @@
 [MESSAGES CONTROL]
-disable=logging-fstring-interpolation,single-string-used-for-slots,unnecessary-lambda-assignment
+disable=logging-fstring-interpolation,single-string-used-for-slots,unnecessary-lambda-assignment,line-too-long
 
 [BASIC]
 argument-naming-style=any
