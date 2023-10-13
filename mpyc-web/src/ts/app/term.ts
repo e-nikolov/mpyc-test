@@ -149,7 +149,8 @@ export class Term extends Terminal {
     }
 
     info(message: string) {
-        this.log(message, format.yellow(format.symbols.info));
+        // this.log(message, format.yellow(format.symbols.info));
+        this.log(message, format.yellow(" "));
     }
 
     success(message: string) {

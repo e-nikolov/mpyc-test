@@ -84,36 +84,43 @@ class Handler(RichHandler):
     Overrides the get_level_emoji and render methods to customize the log output.
     """
 
-    def _get_level_emoji(self, record: LogRecord):
+    def _get_level_message(self, record: LogRecord, message_renderable):
         match record.levelname:
             case "CRITICAL":
                 level = Text.styled(" 🔥".ljust(3))
+                text = message_renderable
             case "ERROR":
                 level = Text.styled(" ❌".ljust(3))
+                text = message_renderable
             case "WARNING":
                 level = Text.styled(" ⚠️".ljust(3))
+                text = message_renderable
             case "INFO":
-                level = Text.styled(" ℹ".ljust(3))
+                # level = Text.styled(" ℹ".ljust(3))
+                level = Text.styled("  ".ljust(3))
+                text = message_renderable
             case "DEBUG":
                 # level = Text.styled("🐞 🪲 ⬤ ℹ️ ⚙️ 🔧 🛠 🛠️ ".ljust(3))
                 level = Text.styled(" 🛠".ljust(3), style=Style(color="grey50"))
+                text = message_renderable
+                text.style = Style(color="grey50")
             case _:
                 level = Text.styled(record.levelname.ljust(3))
+                text = message_renderable
 
-        return level
+        return (level, text)
 
     def render(self, *, record, traceback, message_renderable):
         path = Path(record.pathname).name
-        level = self._get_level_emoji(record)
+        (level, message) = self._get_level_message(record, message_renderable)
         time_format = None if self.formatter is None else self.formatter.datefmt
         log_time = datetime.datetime.fromtimestamp(record.created)
         path = f"{path}:{record.lineno}"
         if record.funcName not in ["<module>", "<lambda>"]:
             path = f"{path}:{record.funcName}"
-
         log_renderable = self._log_render(
             self.console,
-            [message_renderable] if not traceback else [message_renderable, traceback],
+            [message] if not traceback else [message, traceback],
             log_time=log_time,
             time_format=time_format,
             level=level,
