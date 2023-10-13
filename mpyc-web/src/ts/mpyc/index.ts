@@ -1,9 +1,8 @@
 import { Peer, DataConnection } from "peerjs";
-// import * as polyscript from "polyscript";
 
 // import { PyWorker } from "https://cdn.jsdelivr.net/npm/@pyscript/core";
-import { PyWorker, hooks } from '@pyscript/core'
-// import { XWorker } from "polyscript";
+// import { PyWorker, hooks } from '@pyscript/core'
+import { XWorker, Hook } from "polyscript";
 import { EventEmitter } from 'eventemitter3'
 import { MPyCEvents, PeerJSData } from './events.js'
 import { callSoon, channelPool } from '../utils/index.js'
@@ -28,6 +27,11 @@ type ConnMap = Map<string, DataConnection>;
 //     console.log("onAfterRunAsync", interpreter, x)
 // });
 
+function MPyWorker(shimFilePath: string, configFilePath: string) {
+    // return PyWorker(shimFilePath, { async: true, config: configFilePath });
+    return XWorker(shimFilePath, { async: true, type: "pyodide", config: configFilePath })
+}
+
 type options = {
     peerID?: string
     shimFilePath: string
@@ -40,8 +44,7 @@ export class MPyCManager extends EventEmitter<MPyCEvents> {
     peerIDToPID: Map<string, number> = new Map<string, number>();
     pidToPeerID: Map<number, string> = new Map<number, string>();
     peersReady: Map<string, boolean> = new Map<string, boolean>();
-    worker: ReturnType<typeof PyWorker>;
-    // worker: ReturnType<typeof XWorker>;
+    worker: ReturnType<typeof MPyWorker>;
     shimFilePath: string;
     configFilePath: string;
     workerReady = false;
@@ -142,11 +145,7 @@ export class MPyCManager extends EventEmitter<MPyCEvents> {
     }
 
     newWorker(shimFilePath: string, configFilePath: string) {
-
-        // let worker = XWorker(shimFilePath, { async: true, type: "pyodide", config: configFilePath, version: "0.23.1" });
-        let worker = PyWorker(shimFilePath, { async: true, config: configFilePath });
-        // let worker = PyWorker(shimFilePath, { async: true, config: configFilePath, version: "0.23.1" });
-        // let worker = XWorker(shimFilePath, { async: true, type: "pyodide", config: configFilePath, version: "0.23.1" });
+        let worker = MPyWorker(shimFilePath, configFilePath);
 
         // allow the python worker to send PeerJS messages via the main thread
 
@@ -318,42 +317,42 @@ declare global {
     }
 }
 
-declare module '@pyscript/core' {
-    export class MPyCWorker {
-        // * TypeScript
-        getEnv: () => { [key: string]: string };
-        sendReadyMessage: (pid: number, message: string) => void;
-        sendRuntimeMessage: (pid: number, message: string) => void;
-        onWorkerReady: () => void;
-        log: (...args: any[]) => void;
-        logError: (...args: any[]) => void;
-        logWarn: (...args: any[]) => void;
-        display: (message: string) => void;
-        mpcDone: () => void;
-        onerror: (err: ErrorEvent) => void;
-        onmessage: (e: MessageEvent) => void;
-        onmessageerror: (err: MessageEvent) => void;
+// declare module '@pyscript/core' {
+//     export class MPyCSync {
+//         // * TypeScript
+//         getEnv: () => { [key: string]: string };
+//         sendReadyMessage: (pid: number, message: string) => void;
+//         sendRuntimeMessage: (pid: number, message: string) => void;
+//         onWorkerReady: () => void;
+//         log: (...args: any[]) => void;
+//         logError: (...args: any[]) => void;
+//         logWarn: (...args: any[]) => void;
+//         display: (message: string) => void;
+//         mpcDone: () => void;
+//         onerror: (err: ErrorEvent) => void;
+//         onmessage: (e: MessageEvent) => void;
+//         onmessageerror: (err: MessageEvent) => void;
 
-        // * Python
-        ping: () => Promise<boolean>;
-        // ping: () => boolean;
-        update_environ: (env: { [key: string]: string }) => void;
-        on_ready_message: (pid: number, message: string) => void;
-        on_runtime_message: (pid: number, message: string) => void;
-        run_mpc: (options: {
-            pid: number,
-            parties: string[],
-            is_async: boolean,
-            no_async: boolean,
-            exec: string,
-        }) => void;
-    }
+//         // * Python
+//         ping: () => Promise<boolean>;
+//         // ping: () => boolean;
+//         update_environ: (env: { [key: string]: string }) => void;
+//         on_ready_message: (pid: number, message: string) => void;
+//         on_runtime_message: (pid: number, message: string) => void;
+//         run_mpc: (options: {
+//             pid: number,
+//             parties: string[],
+//             is_async: boolean,
+//             no_async: boolean,
+//             exec: string,
+//         }) => void;
+//     }
 
-    export function PyWorker(file: string, options?: {
-        config?: string | object;
-        async?: boolean;
-        version: string;
-    }): Worker & {
-        sync: ProxyHandler<object> & MPyCWorker
-    }
-}
+//     export function PyWorker(file: string, options?: {
+//         config?: string | object;
+//         async?: boolean;
+//         version: string;
+//     }): Worker & {
+//         sync: ProxyHandler<object> & MPyCSync
+//     }
+// }

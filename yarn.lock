@@ -351,27 +351,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pyscript/core@npm:0.2.8":
+"@pyscript/core@https://gitpkg.vercel.app/api/pkg.tgz?url=WebReflection/pyscript/pyscript.core&commit=issue-1799":
   version: 0.2.8
-  resolution: "@pyscript/core@npm:0.2.8"
+  resolution: "@pyscript/core@https://gitpkg.vercel.app/api/pkg.tgz?url=WebReflection/pyscript/pyscript.core&commit=issue-1799"
   dependencies:
     "@ungap/with-resolvers": ^0.1.0
     basic-devtools: ^0.1.6
-    polyscript: ^0.4.13
+    polyscript: ^0.4.16
+    sticky-module: ^0.1.0
     type-checked-collections: ^0.1.7
-  checksum: fd3cee3d8e63d94035cbb4364c6343498ef5c118a8f3cf17d443620ef3dfbed16275169b9389a4f84f1fb30d4873ce6b8145b95c48a7db5a53f1e1736bf16e30
-  languageName: node
-  linkType: hard
-
-"@pyscript/core@patch:@pyscript/core@npm%3A0.2.8#./.yarn/patches/@pyscript-core-npm-0.2.8-337be83cb5.patch::locator=mpyc-web%40workspace%3A.":
-  version: 0.2.8
-  resolution: "@pyscript/core@patch:@pyscript/core@npm%3A0.2.8#./.yarn/patches/@pyscript-core-npm-0.2.8-337be83cb5.patch::version=0.2.8&hash=b4aaa4&locator=mpyc-web%40workspace%3A."
-  dependencies:
-    "@ungap/with-resolvers": ^0.1.0
-    basic-devtools: ^0.1.6
-    polyscript: ^0.4.13
-    type-checked-collections: ^0.1.7
-  checksum: bedcd8df28bf8ba48830224d4c1714605e34f2f6e1fc89f74592bd70e926ba4553652a35dec3a61a2a5401b39f291b0789595c31c86ed8b5133dc8f7af26a95a
+  checksum: dc127f64f9db65fa5e91e49eb91c36539e57286cdf5a6eb08bce9ef03a2fbf581b4536e76d713a01eb6777cc28efe4dbd9db8893eaa5975078d18817b0c649a3
   languageName: node
   linkType: hard
 
@@ -1844,7 +1833,7 @@ __metadata:
     gh-pages: ^6.0.0
     material-icons: ^1.13.9
     peerjs: =1.4.7
-    polyscript: ^0.4.13
+    polyscript: ^0.4.16
     qrcode: ^1.5.3
     rollup: ^3.29.4
     sass: ^1.68.0
@@ -2105,9 +2094,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"polyscript@npm:0.4.13":
-  version: 0.4.13
-  resolution: "polyscript@npm:0.4.13"
+"polyscript@npm:^0.4.16":
+  version: 0.4.16
+  resolution: "polyscript@npm:0.4.16"
   dependencies:
     "@ungap/structured-clone": ^1.2.0
     "@ungap/with-resolvers": ^0.1.0
@@ -2115,21 +2104,8 @@ __metadata:
     codedent: ^0.1.2
     coincident: ^0.13.5
     html-escaper: ^3.0.3
-  checksum: 9fbbb3d0bb1feea25f051a4456e589174ad5499600ea7e9cccb6f767eac97b570115c7df49fc77c083b7f330036cd3ee534d404e770def881787a5b5b65f0e4e
-  languageName: node
-  linkType: hard
-
-"polyscript@patch:polyscript@npm%3A0.4.13#./.yarn/patches/polyscript-npm-0.4.13-a491bf3cff.patch::locator=mpyc-web%40workspace%3A.":
-  version: 0.4.13
-  resolution: "polyscript@patch:polyscript@npm%3A0.4.13#./.yarn/patches/polyscript-npm-0.4.13-a491bf3cff.patch::version=0.4.13&hash=52a836&locator=mpyc-web%40workspace%3A."
-  dependencies:
-    "@ungap/structured-clone": ^1.2.0
-    "@ungap/with-resolvers": ^0.1.0
-    basic-devtools: ^0.1.6
-    codedent: ^0.1.2
-    coincident: ^0.13.5
-    html-escaper: ^3.0.3
-  checksum: ca91d0a20e4f19a49afbc274ad6a1ba090f5dd63390bc4514e1a69ead8b1aaa669018b396c1e5ca1e569c67a49df7841efadceea2b56b9f6f7fa97f7c65b14c2
+    sticky-module: ^0.1.0
+  checksum: 656f30bcb62a18295aee83826b81b7a821920b7690030e42529f9f2f73a9b4f2d264bc0e057ba055519fff1576a847727155bb8300c3e75064a69252f3db5ad1
   languageName: node
   linkType: hard
 
@@ -2382,6 +2358,13 @@ __metadata:
   dependencies:
     minipass: ^7.0.3
   checksum: 0a31b65f21872dea1ed3f7c200d7bc1c1b91c15e419deca14f282508ba917cbb342c08a6814c7f68ca4ca4116dd1a85da2bbf39227480e50125a1ceffeecb750
+  languageName: node
+  linkType: hard
+
+"sticky-module@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "sticky-module@npm:0.1.0"
+  checksum: 64b6172f8780827cf1c122d326af80e8f4f987717ddf9f5a62a0d8cb27948c67caa02b7ea94907225392a19e2b5ebe6243b2316598ff6ae96e709c7eb69b13c3
   languageName: node
   linkType: hard
 
