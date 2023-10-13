@@ -12,12 +12,12 @@ export * from './editor';
 export * from './tabs';
 import { format } from "./format";
 
-import Split from 'split.js'
 import { $, $$, withTimeout2, channelPool } from '../utils';
 import { ControllerOptions } from './elements';
 
 // import * as polyscript from "polyscript";
 import { PyWorker, hooks } from "@pyscript/core";
+import { makeSplitJS } from './split';
 
 export class Controller {
     mpyc: MPyCManager;
@@ -74,11 +74,7 @@ export class Controller {
         this.setupDemoSelector();
 
         $$('[data-bs-toggle="tooltip"]').forEach(el => new Tooltip(el));
-
-        Split(opts.splitPanelSelectors, {
-            direction: 'vertical',
-            gutterSize: 18,
-        });
+        makeSplitJS(opts.splitPanelSelectors)
 
         this.setupGlobals();
     }
