@@ -23,6 +23,8 @@ def sleep_logger(secs: float) -> None:
         secs (float): The number of seconds to sleep for.
     """
     loop.call_soon(xworker.sync.logWarn, f"sleeping for {secs} seconds")
+    # xworker.sync.logWarn(f"sleeping for {secs} seconds")
+
     old_time_sleep(secs)
 
 
@@ -57,6 +59,23 @@ pprint.pprint = rich.pretty.pprint
 
 set_log_level(DEBUG)
 
+import pyodide
+
+# import pyscript
+
+
+# logging.debug(f"PyScript {pyscript.version =}")
+# logging.debug(f"Polyscript {polyscript.version =}")
+
+logging.debug(f"Python version={sys.version}")
+logging.debug(f"Pyodide version={pyodide.__version__}")
+
+import mpyc
+
+logging.debug(
+    f"MPyC version={mpyc.__version__}"  # pyright: ignore[reportGeneralTypeIssues] pylint: disable=no-member,c-extension-no-member
+)
+
 from .transport import *
 from .worker import *
 from .patches import *
@@ -75,3 +94,5 @@ __all__ = [
     "ERROR",
     "CRITICAL",
 ]
+
+asyncio.get_event_loop().call_soon(xworker.sync.onWorkerReady)

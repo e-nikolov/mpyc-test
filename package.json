@@ -1,22 +1,24 @@
 {
   "name": "mpyc-web",
-  "version": "0.9.4",
+  "version": "0.0.1",
   "type": "module",
   "packageManager": "yarn@3.6.3",
   "scripts": {
-    "dev": "vite --debug",
+    "dev": "APP_DEPLOYMENT=Dev vite --debug",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "static": "python -m http.server -d dist",
-    "gh-pages2": "scripts/gh-pages.js",
-    "gh-pages": "gh-pages -d dist -t true",
-    "gh-pages-test": "gh-pages -d dist -t true --remote test",
-    "gh-pages-mpyc": "gh-pages -d dist -t true --remote mpyc"
+    "gh-pages": "APP_DEPLOYMENT='' yarn build && gh-pages -d dist -t true",
+    "gh-pages-test": "APP_DEPLOYMENT='test' yarn build && gh-pages -d dist -t true --remote test",
+    "gh-pages-mpyc": "APP_DEPLOYMENT='' yarn build && gh-pages -d dist -t true --remote mpyc"
   },
   "devDependencies": {
+    "@types/gh-pages": "^3.2.2",
+    "@types/git-rev-sync": "^2.0.0",
     "coi-serviceworker": "^0.1.7",
     "cross-env": "^7.0.3",
     "gh-pages": "^6.0.0",
+    "git-rev-sync": "^3.0.2",
     "sass": "^1.68.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.9",

@@ -38,4 +38,5 @@ new app.Controller(mpyc, {
     showQRCodeButtonSelector: '#show-qr',
     scanQRInputSelector: '#scan-qr',
     splitPanelSelectors: ['.split-0', '.split-1'],
+    versionSelector: "#version",
 });

@@ -37,6 +37,7 @@ export class Controller {
     clearTerminalButton: HTMLButtonElement;
     showQRCodeButton: HTMLButtonElement;
     scanQRInput: HTMLInputElement;
+    versionDiv: HTMLDivElement;
 
     constructor(mpyc: MPyCManager, opts: ControllerOptions) {
         this.mpyc = mpyc;
@@ -55,6 +56,7 @@ export class Controller {
         this.clearTerminalButton = $<HTMLButtonElement>(opts.clearTerminalButtonSelector);
         this.showQRCodeButton = $<HTMLButtonElement>(opts.showQRCodeButtonSelector);
         this.scanQRInput = $<HTMLInputElement>(opts.scanQRInputSelector);
+        this.versionDiv = $<HTMLDivElement>(opts.versionSelector);
 
         this.term = new app.Term(opts.terminalSelector, mpyc);
         this.editor = new app.Editor(opts.editorSelector, this.demoSelect, mpyc);
@@ -65,6 +67,7 @@ export class Controller {
     init(mpyc: MPyCManager, opts: ControllerOptions) {
         this.term.info(`Initializing ${format.green('PeerJS')}...`);
         this.term.info(`Initializing ${format.green('PyScript')} runtime...`);
+        this.makeVersion();
 
         this.updateHostPeerIDInput();
 
@@ -76,6 +79,23 @@ export class Controller {
         makeSplitJS(opts.splitPanelSelectors)
 
         this.setupGlobals();
+    }
+    makeVersion() {
+        let info = __BUILD_INFO__;
+
+        if (info.deployment) {
+            document.title = `MPyC Web - ${info.deployment}`;
+        }
+
+        console.log("buildInfo", info);
+
+        this.versionDiv.innerText = `v${info.version}-${info.revision}`
+
+        if (info.dirty) {
+            this.versionDiv.innerText += "-dirty"
+        }
+
+        this.versionDiv.innerText += ` (${info.time})`
     }
 
     pingWorker = () => {

@@ -18,4 +18,5 @@ export interface ControllerOptions {
     clearTerminalButtonSelector: string,
     showQRCodeButtonSelector: string,
     scanQRInputSelector: string,
+    versionSelector: string,
 }

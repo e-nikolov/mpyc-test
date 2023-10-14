@@ -1,5 +1,11 @@
 """
-    worker_init.py
+This module contains functions for initializing the worker process.
+
+Functions:
+- print_tasks: Prints the current asyncio task and all running tasks.
+- ping: Returns True to indicate that the worker process is running and responsive.
+- load_env: Loads environment variables from a .env file and updates the current environment.
+- get_env: Returns a dictionary containing the environment variables of the worker process.
 """
 
 from os import environ
