@@ -73,3 +73,12 @@ export function callSoon(callback: () => void, delay: number = 0) {
         setTimeout(callback, delay);
     }
 }
+
+export function toTitleCase(str: string) {
+    return str.replace(
+        /\w\S*/g,
+        function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase();
+        }
+    );
+}

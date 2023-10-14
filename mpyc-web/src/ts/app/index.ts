@@ -12,7 +12,7 @@ export * from './editor';
 export * from './tabs';
 import { format } from "./format";
 
-import { $, $$, withTimeout, channelPool } from '../utils';
+import { $, $$, withTimeout, channelPool, toTitleCase } from '../utils';
 import { ControllerOptions } from './elements';
 
 // import * as polyscript from "polyscript";
@@ -84,7 +84,7 @@ export class Controller {
         let info = __BUILD_INFO__;
 
         if (info.deployment) {
-            document.title = `MPyC Web - ${info.deployment}`;
+            document.title = `MPyC Web - ${toTitleCase(info.deployment)}`;
         }
 
         console.log("buildInfo", info);
