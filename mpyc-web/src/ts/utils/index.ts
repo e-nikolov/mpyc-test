@@ -12,7 +12,7 @@ export const debounce = (fn: Function, ms = 100) => {
 export const $ = <T extends HTMLElement>(selector: string, root = document): T => root.querySelector<T>(selector)!;
 export const $$ = <T extends HTMLElement>(selector: string, root = document): T[] => [...root.querySelectorAll<T>(selector)];
 
-export function withTimeout<T>(promise: Promise<T>, ms: number = 5000, rejectValue: T | undefined = undefined): Promise<T | undefined> {
+export function withTimeout<T>(promise: Promise<T>, ms: number = 10000, rejectValue: T | undefined = undefined): Promise<T | undefined> {
     return new Promise((resolve, reject) => {
         let t = setTimeout(() => {
             resolve(rejectValue)

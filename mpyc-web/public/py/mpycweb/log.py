@@ -153,7 +153,7 @@ class TermWriter(io.StringIO):
             display(f"{line}\n")
 
 
-def print_tree(path, prefix="", text=""):
+def print_tree(path_str=".", prefix="", text=""):
     """
     Print a directory tree.
 
@@ -162,7 +162,9 @@ def print_tree(path, prefix="", text=""):
         prefix (str): The prefix to use for each line of the tree.
         str (str): The string to append to each line of the tree.
     """
+    path = Path(path_str)
+
     for item in path.iterdir():
-        display(f"{prefix}├── {item.name}\n")
+        print(f"{prefix}├── {item.name}\n")
         if item.is_dir():
             print_tree(item, prefix + "│   ", text)

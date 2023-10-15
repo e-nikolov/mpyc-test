@@ -23,6 +23,8 @@
     pkgs.pion-stun
     pkgs.just
     pkgs.yarn
+    pkgs.python311Packages.gmpy2
+    pkgs.python311Packages.numpy
     # pkgs.tailwindcss
 
     (pkgs.terraform.withPlugins (tp: [

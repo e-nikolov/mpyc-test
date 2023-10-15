@@ -141,6 +141,7 @@ export class Controller {
         mpyc.on('worker:run', (mpyc: MPyCManager) => { this.updatePeersDiv(mpyc); });
         mpyc.on('worker:display', (message: string) => { this.term.write(message); });
         mpyc.on('worker:ready', () => {
+            console.log("PyScript runtime ready.")
             this.term.success(`${format.green("PyScript")} runtime ready.`);
             setTimeout(this.pingWorker, 3000);
         });

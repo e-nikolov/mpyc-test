@@ -6,12 +6,12 @@ authors = ["Berry Schoenmakers <berry@win.tue.nl>"]
 readme = "README.md"
 
     [tool.poetry.dependencies]
-    python = "^3.10"
+    python = "^3.11,<3.13"
     # didcomm = "0.3.0"
     # peerdid = "0.4.0"
     # qrcode = "^7.3.1"
-    numpy = "^1.23.4"
-    gmpy2 = "^2.1.2"
+    # numpy = "^1.23.4"
+    # gmpy2 = "^2.1.2"
     packaging = "^23.0.0"
     # uvloop = "^0.17.0"
     # pyodide-pack = "^2.1.2"
@@ -21,6 +21,10 @@ readme = "README.md"
     rich = "^13.5.3"
 
     mpyc = { path = "./mpyc/", develop = true }
+    matplotlib = "^3.8.0"
+    pandas = "1.5.3"
+    scipy = "1.11.2"
+    lifelines = "^0.27.8"
 
 [build-system]
 requires = ["poetry-core", "setuptools", "wheel"]

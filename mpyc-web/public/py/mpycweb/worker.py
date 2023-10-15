@@ -7,13 +7,16 @@ import asyncio
 import logging
 import types
 import ast
+from pathlib import Path
+import importlib
+import os
 
 from polyscript import xworker  # pyright: ignore[reportMissingImports] pylint: disable=import-error
-
+import pyodide.code
+import micropip  # pyright: ignore[reportMissingImports] pylint: disable=import-error
 
 from mpyc.runtime import Party, mpc  # pyright: ignore[reportMissingImports] pylint: disable=import-error,disable=no-name-in-module
-
-
+import sys
 from .stats import stats
 
 logger = logging.getLogger(__name__)
@@ -29,7 +32,10 @@ async def run_mpc(options):
     Returns:
         None
     """
+    await load_missing_packages(options.code)
+
     logger.debug("starting mpyc execution...")
+
     m = len(options.parties)
     mpc.options.threshold = (m - 1) // 2
     mpc.options.no_async = m == 1 and options.no_async
@@ -44,8 +50,30 @@ async def run_mpc(options):
     # reinitialize the mpyc runtime with the new parties
     mpc.__init__(options.pid, parties, mpc.options)  # pylint: disable=unnecessary-dunder-call
 
-    await run_code_async(options.exec)
+    await pyodide.code.eval_code_async(options.code, globals() | {"__name__": "__main__"})
+    # await run_code_async(options.code)
     print("mpc done")
+
+
+async def load_missing_packages(code: str):
+    """
+    Installs packages required by the given code.
+
+    Args:
+        code (str): The code to check for required packages.
+
+    Returns:
+        None
+    """
+    imports = pyodide.code.find_imports(code)
+    imports = [item for item in imports if importlib.util.find_spec(item) is None]
+
+    if len(imports) > 0:
+        try:
+            logging.info(f"Loading packages: {imports}")
+            await micropip.install(imports, keep_going=True)
+        except Exception as e:
+            print(e)
 
 
 def run_code(source: str):

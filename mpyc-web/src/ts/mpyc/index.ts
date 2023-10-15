@@ -119,7 +119,7 @@ export class MPyCManager extends EventEmitter<MPyCEvents> {
             parties: peers,
             is_async: is_async,
             no_async: !is_async,
-            exec: code,
+            code: code,
         })
         // })
         this.emit('worker:run', this);
@@ -345,7 +345,7 @@ declare global {
 //             parties: string[],
 //             is_async: boolean,
 //             no_async: boolean,
-//             exec: string,
+//             code: string,
 //         }) => void;
 //     }
 

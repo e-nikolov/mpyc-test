@@ -95,4 +95,6 @@ __all__ = [
     "CRITICAL",
 ]
 
+xworker.sync.log("pyscript ready")
+
 asyncio.get_event_loop().call_soon(xworker.sync.onWorkerReady)

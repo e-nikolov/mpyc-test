@@ -3,5 +3,6 @@
 """
 
 # pyright: reportMissingImports=false
+print("shim.py...")
 
 from mpycweb import *
