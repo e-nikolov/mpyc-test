@@ -23,6 +23,7 @@
     pkgs.pion-stun
     pkgs.just
     pkgs.yarn
+    pkgs.yarn2nix
     pkgs.python311Packages.gmpy2
     pkgs.python311Packages.numpy
     # pkgs.tailwindcss

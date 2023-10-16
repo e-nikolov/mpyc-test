@@ -13,6 +13,7 @@
     };
     devenv.url = "github:cachix/devenv";
     nixpkgs-python.url = "github:cachix/nixpkgs-python";
+
     # nixpkgs-python.inputs.nixpkgs.follows = "nixpkgs";
   };
 
@@ -48,7 +49,7 @@
               mpyc-demo = import ./nix/mpyc-demo.nix super ./.;
               pwnat = import ./nix/pwnat.nix super;
               tailscale = import ./nix/tailscale.nix super;
-              headscale = import ./nix/headscale.nix super;
+              # headscale = import ./nix/headscale.nix super;
               natpunch = import ./nix/natpunch.nix super;
               gole = import ./nix/gole.nix super;
               go-stun = import ./nix/go-stun.nix super;
@@ -89,6 +90,8 @@
           inherit inputs pkgs;
           modules = [ (import ./devenv.nix) ];
         };
+        packages.mpyc-demo = pkgs.mpyc-demo;
+
         packages.colmena = {
           meta = { nixpkgs = pkgs; };
 
