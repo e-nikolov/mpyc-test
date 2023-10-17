@@ -1,35 +1,34 @@
-pkgs: dir: (pkgs.poetry2nix.mkPoetryEnv
-  {
-    python = pkgs.python311;
-    projectDir = dir;
+pkgs: dir:
+(pkgs.poetry2nix.mkPoetryEnv {
+  python = pkgs.python311;
+  projectDir = ../.;
+  preferWheels = true;
 
-    extraPackages = ps: [
-      (pkgs.python311Packages.buildPythonPackage
-        {
-          name = "mpyc";
-          src = dir;
-        })
-    ];
+  # editablePackageSources = { mpyc = ../mpyc; };
 
-    overrides = pkgs.poetry2nix.overrides.withDefaults (
-      self: super: {
-        didcomm = super.didcomm.overrideAttrs (
-          old: {
-            buildInputs = old.buildInputs ++ [super.setuptools];
-          }
-        );
-        peerdid = super.peerdid.overrideAttrs (
-          old: {
-            buildInputs = old.buildInputs ++ [super.setuptools];
-          }
-        );
-        pyodide-py = super.pyodide-py.overrideAttrs (
-          old: {
-            buildInputs = old.buildInputs ++ [super.setuptools];
-          }
-        );
+  # extraPackages = ps:
+  #   [
+  #     (pkgs.python311Packages.buildPythonPackage {
+  #       name = "mpyc";
+  #       src = ../mpyc;
+  #     })
+  #   ];
 
-        gmpy2 = pkgs.python311Packages.gmpy2;
-      }
-    );
-  })
+  # overrides = pkgs.poetry2nix.overrides.withDefaults (self: super: {
+  #   didcomm = super.didcomm.overrideAttrs
+  #     (old: { buildInputs = old.buildInputs ++ [ super.setuptools ]; });
+  #   peerdid = super.peerdid.overrideAttrs
+  #     (old: { buildInputs = old.buildInputs ++ [ super.setuptools ]; });
+  #   pyodide-py = super.pyodide-py.overrideAttrs
+  #     (old: { buildInputs = old.buildInputs ++ [ super.setuptools ]; });
+
+  #   pandas = super.pandas.overrideAttrs (old: {
+  #     buildInputs = old.buildInputs ++ [ super.setuptools super.asdqwrsdfsdf ];
+  #   });
+  #   matplotlib = super.matplotlib.overrideAttrs (old: {
+  #     buildInputs = old.buildInputs ++ [ super.setuptools super.asdqwrsdfsdf ];
+  #   });
+
+  #   gmpy2 = pkgs.python311Packages.gmpy2;
+  # });
+})

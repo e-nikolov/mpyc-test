@@ -16,7 +16,7 @@ pkgs.lib.recursiveMerge [
       pkgs.fzf
       pkgs.htop
       # FIXME: pkgs.mpyc-demo is having issues with ./mpyc being a git submodule
-      pkgs.mpyc-demo
+      # pkgs.mpyc-demo
       pkgs.eza
       pkgs.zsh-fzf-tab
       pkgs.zsh-z
