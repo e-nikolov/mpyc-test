@@ -98,7 +98,7 @@ class Handler(RichHandler):
                 level = Text.styled(" ⚠️".ljust(3))
             case "INFO":
                 # level = Text.styled(" ℹ".ljust(3))
-                level = Text.styled(" 🛈".ljust(3))
+                level = Text.styled(" 🛈".ljust(3), style=Style(color="yellow"))
             case "DEBUG":
                 # level = Text.styled("🐞 🪲 ⬤ ℹ️ ⚙️ 🔧 🛠 ⚒ 🛠️ ".ljust(3))
                 level = Text.styled(" ⚒".ljust(3), style=Style(color="grey50"))
