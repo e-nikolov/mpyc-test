@@ -6,7 +6,7 @@ pkgs: {
   virtualisation.oci-containers.containers = {
     peerjs-server = {
       image = "peerjs/peerjs-server";
-      cmd = [ "--alive_timeout" "90000" ];
+      cmd = [ "--alive_timeout" "90000" "--proxied" ];
       ports = [ "9000:9000" ];
       # ... other Docker options like environment variables, etc.
     };
@@ -33,6 +33,7 @@ pkgs: {
       virtualHosts."mpyc-demo--headscale-ams3-c99f82e5.demo.mpyc.tech" = {
         # root = "./";
         enableACME = true;
+        http2 = true;
         forceSSL = true;
         locations."/" = {
           proxyPass = "http://127.0.0.1:9000";
@@ -41,6 +42,7 @@ pkgs: {
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection "upgrade";
+            proxy_read_timeout  36000s;
           '';
         };
         # locations."/".tryFiles = "$uri @grafana";
