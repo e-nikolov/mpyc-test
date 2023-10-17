@@ -21,7 +21,10 @@ import logging
 
 from typing import TypeVar, Callable, ParamSpec
 from functools import wraps
-
+import yaml
+import re
+import json
+import rich
 
 # pyright: reportMissingImports=false
 logger = logging.getLogger(__name__)
@@ -178,7 +181,12 @@ class BaseStatsCollector:
         Prints the collected statistics.
         """
         if self.enabled:
-            print(self.stats)
+            stats_yaml = yaml.safe_load(json.dumps(self.stats))
+            rich.print(yaml.safe_dump(stats_yaml))
+
+
+pattern = re.compile(r".*")
+yaml.add_implicit_resolver("!python/object/new:mpycweb.stats.DeepCounter", pattern)
 
 
 class StatsCollector(BaseStatsCollector):

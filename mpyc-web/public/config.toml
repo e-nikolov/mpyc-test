@@ -1,4 +1,4 @@
-packages = ["numpy", "gmpy2", "rich"]
+packages = ["numpy", "gmpy2", "rich", "pyyaml"]
 [[fetch]]
 from = "./py/mpycweb"
 to_folder = "./mpycweb"
