@@ -130,9 +130,9 @@ export class MPyCManager extends EventEmitter<MPyCEvents> {
         let opts: typeof peer.options = {
             // debug: 3,
             // secure: true,
-            secure: false,
+            secure: true,
             host: "mpyc-demo--headscale-ams3-c99f82e5.demo.mpyc.tech",
-            port: 9000,
+            port: 443,
 
             // pingInterval: 2345,
         };
