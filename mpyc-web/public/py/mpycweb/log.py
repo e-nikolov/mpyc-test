@@ -92,7 +92,8 @@ class Handler(RichHandler):
                 level = Text.styled(" 🔥".ljust(3))
             case "ERROR":
                 text.style = Style(color="red")
-                level = Text.styled(" ❌".ljust(3))
+                # level = Text.styled(" ❌".ljust(3))
+                level = Text.styled(" ✖".ljust(3), style=Style(color="red"))
             case "WARNING":
                 level = Text.styled(" ⚠️".ljust(3))
             case "INFO":

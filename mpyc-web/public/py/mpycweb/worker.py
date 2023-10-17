@@ -7,16 +7,13 @@ import asyncio
 import logging
 import types
 import ast
-from pathlib import Path
 import importlib
-import os
 
 from polyscript import xworker  # pyright: ignore[reportMissingImports] pylint: disable=import-error
 import pyodide.code
 import micropip  # pyright: ignore[reportMissingImports] pylint: disable=import-error
 
 from mpyc.runtime import Party, mpc  # pyright: ignore[reportMissingImports] pylint: disable=import-error,disable=no-name-in-module
-import sys
 from .stats import stats
 
 logger = logging.getLogger(__name__)
@@ -50,9 +47,12 @@ async def run_mpc(options):
     # reinitialize the mpyc runtime with the new parties
     mpc.__init__(options.pid, parties, mpc.options)  # pylint: disable=unnecessary-dunder-call
 
-    await pyodide.code.eval_code_async(options.code, globals() | {"__name__": "__main__"})
+    try:
+        await pyodide.code.eval_code_async(options.code, globals() | {"__name__": "__main__"})
+    except Exception as e:
+        logger.error(e)
+
     # await run_code_async(options.code)
-    print("mpc done")
 
 
 async def load_missing_packages(code: str):

@@ -175,9 +175,9 @@ export class MPyCManager extends EventEmitter<MPyCEvents> {
             // callSoon(() => { this.emit('worker:display', message, this); })
             this.emit('worker:display', message, this);
         };
-        // worker.onerror = (err: ErrorEvent) => { console.error(err.error); this.emit('worker:error', err, this) };
-        // worker.onmessage = (e: MessageEvent) => { console.info(e); this.emit('worker:message', e, this) };
-        // worker.onmessageerror = (err: MessageEvent) => { console.warn(err); this.emit('worker:messageerror', err, this) };
+        worker.onerror = (err: ErrorEvent) => { console.error(err.error); this.emit('worker:error', err, this) };
+        worker.onmessage = (e: MessageEvent) => { console.info(e); this.emit('worker:message', e, this) };
+        worker.onmessageerror = (err: MessageEvent) => { console.warn(err); this.emit('worker:messageerror', err, this) };
         worker.sync.mpcDone = () => { this.running = false; }
 
         return worker;
