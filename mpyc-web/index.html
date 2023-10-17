@@ -4,21 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MPyC Web</title>
   <script type="module">
-    export function toTitleCase(str) {
-      return str.replace(
-          /\w\S*/g,
-          function (txt) {
-              return txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase();
-          }
-      );
-    }
-    let info = __BUILD_INFO__;
-
-    if (info.deployment) {
-        document.title = `MPyC Web - ${toTitleCase(info.deployment)}`;
-    }
+    document.title = "MPyC Web" + (__BUILD_INFO__.deployment ? ` (${__BUILD_INFO__.deployment})` : "");
   </script>
   <script src="/coi-serviceworker.js"></script>
   <!-- <script src="/mini-coi.js"></script> -->

@@ -98,7 +98,7 @@ export class Controller {
             this.myPeerIDEl.value = app.safe(peerID);
             app.setTabState('myPeerID', peerID);
 
-            console.log('My peer ID is: ' + peerID);
+            console.log('Peer ID: ' + peerID);
             this.term.success(`${format.green("PeerJS")} ready with ID: ${format.peerID(peerID)}`);
             this.updatePeersDiv(mpyc);
         });
