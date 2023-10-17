@@ -5,6 +5,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MPyC Web</title>
+  <script type="module">
+    export function toTitleCase(str) {
+      return str.replace(
+          /\w\S*/g,
+          function (txt) {
+              return txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase();
+          }
+      );
+    }
+    let info = __BUILD_INFO__;
+
+    if (info.deployment) {
+        document.title = `MPyC Web - ${toTitleCase(info.deployment)}`;
+    }
+  </script>
   <script src="/coi-serviceworker.js"></script>
   <!-- <script src="/mini-coi.js"></script> -->
   <link rel="icon" href="/favicon.ico" />
@@ -150,7 +165,27 @@
         </div>
       </div>
     </div>
-    <div id="version" style="font-size: 9px;"></div>
+    <div id="version" style="font-size: 9px;">
+    </div>
+
+    <script type="module">
+
+      function makeVersion() {
+        let info = __BUILD_INFO__;
+
+        console.log("buildInfo", info);
+
+        let versionDiv = document.querySelector("#version");
+        versionDiv.innerText = `v${info.version}-${info.revision}`
+
+        if (info.dirty) {
+            versionDiv.innerText += "-dirty"
+        }
+
+        versionDiv.innerText += ` (${info.time})`
+      }
+      makeVersion();
+    </script>
   </div>
 </body>
 

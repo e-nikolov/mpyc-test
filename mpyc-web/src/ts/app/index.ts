@@ -67,7 +67,6 @@ export class Controller {
     init(mpyc: MPyCManager, opts: ControllerOptions) {
         this.term.info(`Initializing ${format.green('PeerJS')}...`);
         this.term.info(`Initializing ${format.green('PyScript')} runtime...`);
-        this.makeVersion();
 
         this.updateHostPeerIDInput();
 
@@ -79,23 +78,6 @@ export class Controller {
         makeSplitJS(opts.splitPanelSelectors)
 
         this.setupGlobals();
-    }
-    makeVersion() {
-        let info = __BUILD_INFO__;
-
-        if (info.deployment) {
-            document.title = `MPyC Web - ${toTitleCase(info.deployment)}`;
-        }
-
-        console.log("buildInfo", info);
-
-        this.versionDiv.innerText = `v${info.version}-${info.revision}`
-
-        if (info.dirty) {
-            this.versionDiv.innerText += "-dirty"
-        }
-
-        this.versionDiv.innerText += ` (${info.time})`
     }
 
     pingWorker = () => {

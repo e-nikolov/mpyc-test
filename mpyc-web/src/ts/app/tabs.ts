@@ -1,3 +1,4 @@
+import { get } from "http";
 
 export function ensureStorageSchema(gen: number) {
     console.log("Storage schema generation:", localStorage.gen)
@@ -28,9 +29,11 @@ export const isTabDuplicate = __isTabDuplicate()
 // TODO: not thread safe, breaks if tabs open too quickly
 export function loadPeerID(): string {
     localStorage.tabCount ||= 0;
-    let tabCount = parseInt(localStorage.tabCount);
-    localStorage.tabCount = tabCount + 1;
+    let tabCount = parseInt(localStorage.tabCount) + 1;
+    localStorage.tabCount = tabCount;
+
     addEventListener('beforeunload', function () {
+        setTabState("lock", "");
         let tabCount = parseInt(localStorage.tabCount);
         if (tabCount > 0) {
             localStorage.tabCount = tabCount - 1;
@@ -40,23 +43,33 @@ export function loadPeerID(): string {
     if (isTabDuplicate) {
         console.warn("tab is duplicate")
     }
+
     // Duplicated Tabs will have the same tabID and peerID as their parent Tab; we must force reset those values
-    if (!sessionStorage.tabID || isTabDuplicate) {
-        sessionStorage.tabID = localStorage.tabCount;
+    if (!sessionStorage.tabID || isTabDuplicate || getTabState("lock", sessionStorage.tabID) != "") {
+        sessionStorage.tabID = selectTabID(tabCount);
         sessionStorage.myPeerID = getTabState("myPeerID");
     }
+
+    setTabState("lock", "locked");
 
     console.log("tab id: " + sessionStorage.tabID);
     return sessionStorage.myPeerID;
 }
 
-export function getTabState(key: string) {
-    let tabID = sessionStorage.tabID;
+function selectTabID(tabCount: number) {
+    for (let i = 1; i <= tabCount; i++) {
+        if (getTabState("lock", i) == "") {
+            return i;
+        }
+    }
+    return tabCount;
+}
+
+export function getTabState(key: string, tabID = sessionStorage.tabID) {
     return localStorage[`tabState:${tabID}:` + key] || "";
 }
 
-export function setTabState(key: string, value: any) {
-    let tabID = sessionStorage.tabID;
+export function setTabState(key: string, value: any, tabID = sessionStorage.tabID) {
     sessionStorage[key] = value;
     localStorage[`tabState:${tabID}:` + key] = value;
 }
