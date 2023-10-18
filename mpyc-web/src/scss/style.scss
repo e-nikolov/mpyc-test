@@ -11,20 +11,24 @@ $grid-breakpoints: (
 );
 
 
-@import "@fortawesome/fontawesome-free/css/all.css";
-@import "bootstrap-icons/font/bootstrap-icons.css";
-@import 'material-icons/iconfont/material-icons.css';
-@import 'material-icons/css/material-icons.css';
 @import '@fontsource/fira-code/latin-400.css';
 
 @import "xterm/css/xterm.css";
 @import "./theme-superhero-before.scss";
 @import "bootstrap/scss/bootstrap";
 @import "./theme-superhero-after.scss";
-@import "bootstrap-icons/font/bootstrap-icons.css";
-@import 'material-icons/iconfont/material-icons.css';
-@import 'material-icons/css/material-icons.css';
-@import "@fortawesome/fontawesome-free/css/all.css";
+// @import "bootstrap-icons/font/bootstrap-icons.css";
+// @import 'material-icons/iconfont/filled.css';
+// @import 'material-icons/iconfont/round.css';
+// @import 'material-icons/iconfont/material-icons.css';
+// @import 'material-icons/css/material-icons.css';
+
+@import 'material-icons/iconfont/filled.css';
+@import "@fortawesome/fontawesome-free/css/fontawesome.css";
+@import "@fortawesome/fontawesome-free/css/regular.css";
+@import "@fortawesome/fontawesome-free/css/solid.css";
+
+// @import "@fortawesome/fontawesome-free/css/all.css";
 @import "./resizable.scss";
 
 $material-icons-font-size: 16px;
