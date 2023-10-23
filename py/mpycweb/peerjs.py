@@ -7,11 +7,11 @@ import logging
 from typing import Any, Callable
 
 # pyright: reportMissingImports=false
-from pyodide.ffi import JsProxy
+from pyodide.ffi import JsProxy, to_js
 from mpyc import asyncoro  # pyright: ignore[reportGeneralTypeIssues] pylint: disable=import-error,disable=no-name-in-module
 from .transport import PeerJSTransport, AbstractClient
 from .stats import stats
-
+from polyscript import xworker
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +69,8 @@ class Client(AbstractClient):
     @stats.acc(lambda self, pid, message: stats.total_calls() | stats.sent_to(pid, message))
     def send_ready_message(self, pid: int, message: str):
         # self.loop.call_soon(self.worker.sendReadyMessage, pid, message)
-        self.worker.sendReadyMessage(pid, message)
+        # self.worker.sendReadyMessage(pid, message)
+        xworker.postMessage(to_js(["ready", pid, message]))
 
     @stats.acc(lambda self, pid, message: stats.total_calls() | stats.received_from(pid, message))
     def on_ready_message(self, pid: int, message: str):
@@ -92,10 +93,14 @@ class Client(AbstractClient):
     def send_runtime_message(self, pid: int, message: bytes):
         # logger.debug(message)
         # self.loop.call_soon(self.worker.sendRuntimeMessage, pid, message)
-        self.worker.sendRuntimeMessage(pid, message)
+        # xworker.postMessage(to_js(["runtime", pid, message]), to_js(message))
+        xworker.postMessage(to_js(["runtime", pid, message]))
+
+        # self.worker.sendRuntimeMessage(pid, message)
 
     @stats.acc(lambda self, pid, message: stats.total_calls() | stats.received_from(pid, message))
     def _on_runtime_message(self, pid: int, message: bytes):
+        # logger.info(f"Received runtime message from {pid}, {message}")
         self.transports[pid].on_runtime_message(message)
 
     def on_runtime_message(self, pid: int, message: JsProxy):
@@ -106,4 +111,13 @@ class Client(AbstractClient):
             pid (int): The ID of the peer sending the message.
             message (JsProxy): The message received from the peer.
         """
-        self._on_runtime_message(pid, message.to_py())
+        # logger.info(message.to_py())
+        # logger.info(message.to_memoryview())
+        # logger.info(message.to_bytes())
+        # logger.info(type(message))
+        self._on_runtime_message(pid, message.to_bytes())
+
+
+# x = to_js([1, 2, 3])
+# y = to_js(["test1", "test2"])
+# xworker.postMessage(x, y)
