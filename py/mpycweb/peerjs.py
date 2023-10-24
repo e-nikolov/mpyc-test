@@ -42,19 +42,19 @@ class Client(AbstractClient):
         self.loop = loop
 
         self.transports = {}
-        xworker.onmessage = self.on_message
+        xworker.onmessage = self._on_message
 
-    def on_message(self, message):
-        # rich.inspect(message)
+    def _on_message(self, event):
+        # rich.inspect(event)
         # rich.inspect(message.data)
-        [t, pid, content] = message.data
+        [message_type, pid, message] = event.data
 
-        if t == "ready":
-            self.on_ready_message(pid, content)
-        elif t == "runtime":
-            self.on_runtime_message(pid, content)
+        if message_type == "ready":
+            self.on_ready_message(pid, message)
+        elif message_type == "runtime":
+            self.on_runtime_message(pid, message)
         else:
-            logger.warning(f"Received unknown message type {t}")
+            logger.warning(f"Received unknown message type {message_type}")
 
     async def create_connection(
         self, protocol_factory: Callable[[], asyncoro.MessageExchanger], loop: AbstractEventLoop, pid: int, listener: bool
@@ -119,7 +119,7 @@ class Client(AbstractClient):
         # logger.info(message.to_memoryview())
         # logger.info(message.to_bytes())
         # logger.info(type(message))
-        self._on_runtime_message(pid, message.to_py())
+        self._on_runtime_message(pid, message.to_bytes())
 
 
 # x = to_js([1, 2, 3])
