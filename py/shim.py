@@ -7,6 +7,8 @@ import logging
 import asyncio
 import pyodide
 
+# import polyscript.xworker  # pyright: ignore[reportMissingImports] pylint: disable=import-error
+from polyscript import xworker
 
 try:
     from mpycweb import *
