@@ -240,7 +240,7 @@ class BaseStatsCollector:
 
         # if logger.isEnabledFor(log_levels.TRACE):
 
-        return Text(time.strftime("[%X]\n", time.localtime(time.time())), "cyan dim") + Text(print_to_string(tree), "not dim gray50")
+        return print_to_string(tree)
 
     def _to_tree(self, s: dict | list[dict], tree: Tree):
         if isinstance(s, dict):

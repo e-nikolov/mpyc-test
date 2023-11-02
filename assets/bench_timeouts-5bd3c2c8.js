@@ -1,0 +1,1 @@
+import"./callsoon-6da41c3b.js";import{m as e}from"./index-041aecf5.js";import"./index-8321c0dd.js";(async()=>{document.title="MPyC Web - Bench Timeouts (test)";await e()})();
