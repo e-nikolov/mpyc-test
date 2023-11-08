@@ -2,18 +2,6 @@
     Shim for the PyScript port of MPyC.
 """
 
-import logging
-import asyncio
-import pyodide
-
-# pyright: reportMissingImports=false
-
-import js
-
-# pyright: reportMissingImports=false
-
-from pyodide import webloop
-
 from pyodide.code import run_js
 
 # https://github.com/pyodide/pyodide/issues/4006
@@ -23,9 +11,7 @@ from pyodide.code import run_js
 run_js("""
 async function getCallSoon_pool() {
     pool = await import('https://cdn.jsdelivr.net/npm/generic-pool@3.9.0/+esm')
-    
-    const old_setTimeout = self.setTimeout
-    
+        
     const channelPool = pool.createPool(
         {
             create: async () => {
@@ -37,8 +23,8 @@ async function getCallSoon_pool() {
             }
         },
         {
-            min: 100,
-            max: 100000,
+            min: 1000,
+            max: 20000,
             //         // maxWaitingClients: 1000,
             //         // testOnBorrow: true,
             //         // testOnReturn: true,
@@ -62,13 +48,12 @@ async function getCallSoon_pool() {
                 channel.port2.postMessage('');
             });
         } else {
-            old_setTimeout(callback, delay);
+            setTimeout(callback, delay);
         }
     }
 
     self.channelPool = channelPool
-    self.setTimeout = self.callSoon
-    return self.callSoon 
+    return self.callSoon
 }
         """)
 
@@ -77,22 +62,68 @@ import js
 from pyodide import webloop
 
 webloop.setTimeout = await js.getCallSoon_pool()
+# pyright: reportMissingImports=false
+import sys
+import io
+from collections.abc import Iterable
+import time
+import logging
+import asyncio
 
-# import polyscript.xworker  # pyright: ignore[reportMissingImports] pylint: disable=import-error
+import pyodide
+from pyodide.ffi import JsProxy, to_js
+import pyodide_js
+
+RUNNING_IN_WORKER = not hasattr(js, "document")
+
+if RUNNING_IN_WORKER:
+    from polyscript import xworker  # pyright: ignore[reportMissingImports] pylint: disable=import-error
 
 
-try:
-    from mpycweb import *
-
-    # from mpycweb.bootstrap import *
-    # from mpycweb import *
-    if IN_WORKER:
-        from polyscript import xworker  # pyright: ignore[reportMissingImports] pylint: disable=import-error
-
-    await run_file("test.py")  # pyright: ignore
-except Exception as e:
+def exceptHook(*args):
+    js.console.error("except hook")
+    logging.error("exceptHook")
     logging.error(
-        e,
+        *args,
         exc_info=True,
         stack_info=True,
     )
+
+
+def onerr(*args, **kwargs):
+    js.console.error("onerror")
+    logging.error("onerror")
+    logging.error(
+        *args,
+        exc_info=True,
+        stack_info=True,
+    )
+
+
+def onmessageerr(*args, **kwargs):
+    js.console.error("onmessageerr")
+    logging.error("onmessageerr")
+    logging.error(
+        *args,
+        exc_info=True,
+        stack_info=True,
+    )
+    # logging.error(*args, **kwargs)
+
+
+sys.excepthook = exceptHook
+
+xworker.onerror = onerr
+xworker.onmessageerror = onmessageerr
+
+from mpycweb import *
+
+# from mpycweb.bootstrap import *
+# from mpycweb import *
+# await run_file("test.py")  # pyright: ignore
+# except Exception as e:
+#     logging.error(
+#         e,
+#         exc_info=True,
+#         stack_info=True,
+#     )

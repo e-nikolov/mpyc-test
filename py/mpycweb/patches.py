@@ -19,13 +19,14 @@ import js
 
 from pyodide.code import run_js
 
+from pyodide import webloop
 from pyodide.http import pyfetch
 
 from mpyc import asyncoro  # pyright: ignore[reportGeneralTypeIssues] pylint: disable=import-error,disable=no-name-in-module
 from mpyc.runtime import mpc, Runtime  # pylint: disable=import-error,disable=no-name-in-module
 
 
-from . import peerjs
+from . import proxy
 from .lib.stats import stats
 from . import api
 
@@ -63,7 +64,7 @@ async def start(runtime: Runtime) -> None:
     """
     loop = runtime._loop  # pylint: disable=protected-access
 
-    pjs = peerjs.Client(loop)
+    pjs = proxy.Client(loop)
 
     logger.debug("monkey patched start()")
     logger.info(f"Start MPyC runtime v{runtime.version} with a PeerJS transport")
@@ -198,10 +199,55 @@ async def shutdown(self):
 #         peer.protocol.close_connection()
 #     await self.parties[self.pid].protocol
 
+builtins.input = api.readline
+
 old_open = builtins.open
 
 import rich
 import os
+import js
+
+from pyodide.code import run_js
+
+run_js("""
+       
+    function stringToArrayBuffer(str) {
+        var buf = new ArrayBuffer(str.length);
+        var bufView = new Uint8Array(buf);
+
+        for (var i=0, strLen=str.length; i<strLen; i++) {
+            bufView[i] = str.charCodeAt(i);
+        }
+
+        return buf;
+    }
+    
+    function js_fetch2(url) {
+        url = "/./" + url;
+        
+        console.log("fetching", url)
+        const request = new XMLHttpRequest();
+        request.open("GET", url, false); // `false` makes the request synchronous
+        //request.responseType = "arraybuffer";
+        request.send(null);
+
+        if (request.status === 200) {
+            
+            return stringToArrayBuffer(request.response);
+        }
+        throw new Error("Could not fetch " + url);
+    }
+    
+    async function js_fetch(url) {
+        console.log("fetching", url)
+        let res = await fetch("./" + url);
+        let ab = await res.arrayBuffer();
+        return new Uint8Array(ab);
+    };
+    
+    """)
+
+from polyscript import xworker
 
 
 def open_fetch(*args, **kwargs):
@@ -221,10 +267,12 @@ def open_fetch(*args, **kwargs):
     try:
         return old_open(*args, **kwargs)
     except FileNotFoundError as e:
-        data = api.fetch(e.filename)
+        # data = api.fetch(e.filename)
+        # data = js.js_fetch(e.filename)
+        data = xworker.sync.fetch(e.filename)
         os.makedirs(os.path.dirname(e.filename), exist_ok=True)
         f = old_open(e.filename, "wb+")
-        f.write(data)
+        f.write(data.to_py())
         f.close()
 
         return old_open(*args, **kwargs)
