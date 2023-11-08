@@ -1,6 +1,7 @@
 """
 patches.py
 """
+
 # pylint: disable=import-error
 from io import TextIOWrapper
 import time
@@ -18,7 +19,6 @@ import js
 
 from pyodide.code import run_js
 
-from pyodide import webloop
 from pyodide.http import pyfetch
 
 from mpyc import asyncoro  # pyright: ignore[reportGeneralTypeIssues] pylint: disable=import-error,disable=no-name-in-module
@@ -30,78 +30,6 @@ from .lib.stats import stats
 from . import api
 
 logger = logging.getLogger(__name__)
-
-# https://github.com/pyodide/pyodide/issues/4006
-# The pyodide Webloop relies onsetTimeout(), which has a minimum delay of 4ms
-# this slows down code that uses await asyncio.sleep(0)
-# This monkey patch replaces setTimeout() with a faster version that uses MessageChannel
-run_js("""
-//import genericPool from 'https://cdn.jsdelivr.net/npm/generic-pool@3.9.0/+esm'
-
-addEventListener("error", (e) => {
-    console.warn("pyscript", e.error);
-});
-
-const oldSetTimeout = setTimeout;
-function _fastSetTimeout(callback, delay) {
-    if (delay == undefined || isNaN(delay) || delay < 0) {
-        delay = 0;
-    }
-    if (delay < 1) {
-        const channel = new MessageChannel();
-        channel.port1.onmessage = () => { callback() };
-        channel.port2.postMessage('');
-    } else {
-        oldSetTimeout(callback, delay);
-    }
-}
-
-
-let fastSetTimeout = oldSetTimeout;
-
-if(!navigator.userAgent.toLowerCase().includes('firefox')) {
-    console.log("Using fast setTimeout")
-    fastSetTimeout = _fastSetTimeout;
-}
-
-self.fastSetTimeout = fastSetTimeout;
-
-
-// import pool from 'generic-pool'
-
-// const channelPool = pool.createPool(
-//     {
-//         create: async () => {
-//             return new MessageChannel();
-//         },
-//         destroy: async (channel) => {
-//             channel.port1.close();
-//             channel.port2.close();
-//         }
-//     },
-//     {
-//         max: 100,
-//         min: 30,
-//     }
-// )
-
-// export function callSoon(callback: () => void, delay: number = 0) {
-//     if (delay == undefined || isNaN(delay) || delay < 0) {
-//         delay = 0;
-//     }
-//     if (delay < 1) {
-//         channelPool.acquire().then(channel => {
-//             channel.port1.onmessage = () => { channelPool.release(channel); callback() };
-//             channel.port2.postMessage('');
-//         });
-//     } else {
-//         setTimeout(callback, delay);
-//     }
-// }
-
-        """)
-
-webloop.setTimeout = js.fastSetTimeout
 
 
 def run(self, f):
