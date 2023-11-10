@@ -1,1 +1,0 @@
-import"./callsoon-ce9494ab.js";import{m as t}from"./index-a0b85898.js";import{m as i}from"./index-ee581e5c.js";import"./encode-6b53eb4b.js";import"./index-c323e26f.js";(async()=>{document.title="MPyC Web - Bench All (test)";async function m(){await i(),await t()}await m()})();
