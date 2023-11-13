@@ -1,1 +1,0 @@
-import"./purify.es-R3Uuinow.js";import{m as t}from"./index-dzP5BWmm.js";import{m as i}from"./index-OEhPoLgk.js";import"./index-tZmIpjz-.js";var e={version:"0.6.0",dirty:!0,deployment:"test",timestamp:1699914041270,time:"13/11/2023, 23:20:41",revision:"d09e338"};document.title=`MPyC Web - Bench All (${e.deployment})`;async function m(){await i(),await t()}await m();
