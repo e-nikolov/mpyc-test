@@ -1,1 +1,0 @@
-import"./purify.es-qJ_kTSwo.js";import{m as e}from"./index-Qi_Ngyxk.js";import"./index-IqbplxEJ.js";var t={version:"0.6.0",dirty:!0,deployment:"test",timestamp:1699931151633,time:"14/11/2023, 04:05:51",revision:"819e03f"};document.title=`MPyC Web - Bench Serializers (${t.deployment})`;await e();
