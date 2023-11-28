@@ -7,11 +7,13 @@
   <link rel="icon" href="./favicon.ico" />
   <!-- <script src="/mini-coi.js"></script> -->
   <script defer src="./coi-serviceworker.js"></script>
-  <script type="module" crossorigin src="./assets/main-pnqIQXa7.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/style-ZrBJOUVE.js">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <script type="module" crossorigin src="./assets/main-WWQ3kXL3.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/style-VvZw0j6n.js">
   <link rel="modulepreload" crossorigin href="./assets/purify.es-OX2H-FQQ.js">
   <link rel="modulepreload" crossorigin href="./assets/encode-8iUPhqo2.js">
-  <link rel="stylesheet" crossorigin href="./assets/style-wSKU5_h4.css">
+  <link rel="stylesheet" crossorigin href="./assets/style-m2SL6ZnJ.css">
   <link rel="stylesheet" crossorigin href="./assets/main-F6bz1l23.css">
 </head>
 
@@ -23,7 +25,7 @@
         <h2 class="d-flex align-items-center justify-content-center">MPyC Web</h2>
       </div>
       <div class="row h-95">
-        <div class="col-lg-3">
+        <div class="col-xl-3">
           <div>
             <!-- <div class="container"> -->
             <!-- * My Party ID -->
@@ -77,7 +79,7 @@
           <!-- * Demos -->
           <div class="mb-3" id="mpc-demos">
             <h5> MPC Demos: </h5>
-            <select size=15 id="select-demo" class="form-select" aria-label="Select Demo">
+            <select size=15 id="select-demo" class="w-100 form-select" aria-label="Select Demo">
               <option value="./py/saved.py">Your Code</option>
               <option selected value="./py/demo.py">Demo</option>
               <option value="./py/demos/secretsanta.py">Secret Santa</option>
@@ -135,11 +137,20 @@
           </div>
 
         </div>
-        <div class="col-lg-9">
+        <div class="col-xl-9">
           <!-- * Editor - Buttons -->
-          <div class="btn-group" role="group" id="editor-buttons">
-            <button id="startButton" data-bs-toggle="tooltip" data-bs-title="Run MPyC" class="btn btn-primary">
-
+          <div class="btn-group w-100" role="group" id="editor-buttons">
+            <button id="startButton" data-bs-toggle="tooltip" data-bs-title="Run MPyC"
+              style="padding-left: 5px !important; " class="btn btn-primary">
+              <style>
+                .material-symbols-outlined {
+                  font-variation-settings:
+                    'FILL' 0,
+                    'wght' 400,
+                    'GRAD' 0,
+                    'opsz' 24
+                }
+              </style>
               <span class="material-symbols-rounded material-symbols-filled">play_arrow</span>
             </button>
             <button id="startAsyncButton" data-bs-toggle="tooltip" data-bs-title="Run MPyC Async"
@@ -154,10 +165,13 @@
               <!-- <span class="material-symbols-rounded">mop</span> -->
             </button>
             <input type="checkbox" class="btn-check" id="toggleStatsEl" autocomplete="off">
-            <label data-bs-toggle="tooltip" data-bs-title="Toggle Runtime Stats" class="btn btn-outline-primary"
-              for="toggleStatsEl">
+            <label id="toggleStatsLabel" data-bs-toggle="tooltip" data-bs-title="Show runtime stats"
+              class="btn btn-outline-primary" for="toggleStatsEl">
               <span class="material-symbols-rounded material-symbols-filled">monitoring</span>
             </label>
+            <div style="width: 100% !important" class=" " id="demoSelectorLocation2">
+
+            </div>
           </div>
           <div class="split">
             <div class="split-panel-editor">
