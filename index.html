@@ -9,11 +9,11 @@
   <script defer src="./coi-serviceworker.js"></script>
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  <script type="module" crossorigin src="./assets/main-MGFyZIMk.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/style-CAixVDZT.js">
+  <script type="module" crossorigin src="./assets/main-v33qpEiB.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/style-zciVgscN.js">
   <link rel="modulepreload" crossorigin href="./assets/purify.es-OX2H-FQQ.js">
   <link rel="modulepreload" crossorigin href="./assets/encode-GRFFunDQ.js">
-  <link rel="stylesheet" crossorigin href="./assets/style-eyt12xTu.css">
+  <link rel="stylesheet" crossorigin href="./assets/style-i9jpzlhI.css">
   <link rel="stylesheet" crossorigin href="./assets/main-F6bz1l23.css">
 </head>
 
@@ -117,9 +117,11 @@
             </select>
           </div>
 
-          <div class="connected-parties mb-1">
+          <div class="connected-parties mt-1 mb-1">
             <!-- * Connected Parties -->
-            <h5> Connected Parties: </h5>
+            <div id="connectedPartiesLabel">
+              <h5> Connected Parties: </h5>
+            </div>
             <ol id="knownPeers" class="list-group card-columns" style="columns: 2" start="6">
             </ol>
           </div>
@@ -128,8 +130,7 @@
           <div id="chatSidebar">
 
             <div class="input-group mb-1" id="chatInputGroup">
-              <textarea id="chatInput" type="text" class="form-control"
-                placeholder="Send a message to all parties..."></textarea>
+              <textarea id="chatInput" type="text" class="form-control" placeholder="Message parties..."></textarea>
               <button id="sendMessageButton" data-bs-toggle="tooltip" data-bs-title="Send" class="btn btn-primary">
                 <span class="material-symbols-rounded material-symbols-filled">send</span>
               </button>
