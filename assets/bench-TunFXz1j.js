@@ -1,0 +1,1 @@
+import"./style-CAixVDZT.js";var e={version:"0.6.0",dirty:!0,deployment:"test",timestamp:1701344387607,time:"30/11/2023, 12:39:47",revision:"1d1b321"};document.title=`MPyC Web - Bench (${e.deployment})`;
