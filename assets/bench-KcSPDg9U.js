@@ -1,1 +1,0 @@
-import"./style-zciVgscN.js";var e={version:"0.6.0",dirty:!0,deployment:"test",timestamp:1701346252397,time:"30/11/2023, 13:10:52",revision:"1d1b321"};document.title=`MPyC Web - Bench (${e.deployment})`;
