@@ -1,0 +1,1 @@
+import"./style-MBsm7SJM.js";import{m as e}from"./index-16So2dCW.js";import"./index-Z1m4Mu8Y.js";import"./purify.es-WdA8GcVy.js";var t={version:"0.6.0",dirty:!1,deployment:"test",timestamp:1701786658490,time:"5/12/2023, 15:30:58",revision:"cb99125"};document.title=`MPyC Web - Bench Timeouts (${t.deployment})`;await e();
