@@ -1,2 +1,0 @@
-import{B as o}from"./index-ptaPzbhL.js";import{s as e,a as l,b as c}from"./purify.es-_yDZkSBt.js";class t extends o{x=3;async sleep_callSoon_pool(){await e(0)}async sleep_callSoon_singleChan(){await l(0)}async sleep_callSoon_async(){await c(0)}sync_nothing(){}async async_nothing(){}async add(){}async add2(n,a,s){}add3(n,a,s=4){return n+a}loopz(){let n=1;for(let a=0;a<1e3;a++)n+=a;return n}}async function r(){await t.run2()}export{r as m};
-//# sourceMappingURL=index-cPaBh4C9.js.map

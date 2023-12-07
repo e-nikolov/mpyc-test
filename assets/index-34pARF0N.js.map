@@ -1,1 +1,0 @@
-{"version":3,"file":"index-34pARF0N.js","sources":["../../test/index.html?html-proxy&index=0.js"],"sourcesContent":["\n    document.title = \"MPyC Web - Test\" + (__BUILD_INFO__.deployment ? ` (${__BUILD_INFO__.deployment})` : \"\");\n  "],"names":["define_BUILD_INFO_default"],"mappings":"4BAAA,IAACA,EAAA,CAAA,QAAU,QAAQ,MAAQ,GAAK,WAAa,OAAO,UAAY,cAAc,KAAO,sBAAsB,SAAW,SAAS"}

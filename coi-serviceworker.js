@@ -38,14 +38,14 @@ if (typeof window === 'undefined') {
                     if (response.status === 0) {
                         return response;
                     }
+                    
+                    console.warn("coepCredentialless", coepCredentialless)
 
                     const newHeaders = new Headers(response.headers);
                     newHeaders.set("Cross-Origin-Embedder-Policy",
                         coepCredentialless ? "credentialless" : "require-corp"
                     );
-                    if (!coepCredentialless) {
-                        newHeaders.set("Cross-Origin-Resource-Policy", "cross-origin");
-                    }
+                    newHeaders.set("Cross-Origin-Resource-Policy", "cross-origin");
                     newHeaders.set("Cross-Origin-Opener-Policy", "same-origin");
 
                     return new Response(response.body, {
