@@ -22,6 +22,8 @@ if (typeof window === 'undefined') {
     });
 
     self.addEventListener("fetch", function (event) {
+                    
+        console.warn("coepCredentialless", coepCredentialless)
         const r = event.request;
         if (r.cache === "only-if-cached" && r.mode !== "same-origin") {
             return;
@@ -38,8 +40,6 @@ if (typeof window === 'undefined') {
                     if (response.status === 0) {
                         return response;
                     }
-                    
-                    console.warn("coepCredentialless", coepCredentialless)
 
                     const newHeaders = new Headers(response.headers);
                     newHeaders.set("Cross-Origin-Embedder-Policy",
