@@ -22,8 +22,6 @@ if (typeof window === 'undefined') {
     });
 
     self.addEventListener("fetch", function (event) {
-                    
-        console.warn("coepCredentialless", coepCredentialless)
         const r = event.request;
         if (r.cache === "only-if-cached" && r.mode !== "same-origin") {
             return;
