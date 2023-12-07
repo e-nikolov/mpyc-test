@@ -1,0 +1,2 @@
+import"./style-cLP6Dben.js";import{m as t}from"./index-4WJ68uLG.js";import{m as i}from"./index-cSo7ousZ.js";import"./encode-GRFFunDQ.js";import"./index-RXdrHvv3.js";import"./purify.es-OX2H-FQQ.js";var m={version:"0.6.0",dirty:!0,deployment:"test",timestamp:1701945987876,time:"7/12/2023, 11:46:27",revision:"dccd3cf"};document.title=`MPyC Web - Bench All (${m.deployment})`;async function e(){await i(),await t()}await e();
+//# sourceMappingURL=index-m5Zx5P80.js.map
