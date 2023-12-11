@@ -12,14 +12,21 @@
   <link async rel="preconnect" href="https://fonts.googleapis.com">
   <link async rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link async href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <script type="module" src="https://polyfill.io/v3/polyfill.min.js?features=es2022%2CsetImmediate"></script>
+
+
   <!-- <link async href="https://iosevka-webfonts.github.io/iosevka/iosevka.css" rel="stylesheet" /> -->
 
-  <script type="module" crossorigin src="./assets/index-GXv-Naqp.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/style-UNVb087C.js">
-  <link rel="modulepreload" crossorigin href="./assets/purify.es-_yDZkSBt.js">
+
+
+  <script type="module" crossorigin src="./assets/index-bgpWo0Dh.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/modulepreload-polyfill-9p4a8sJU.js">
+  <link rel="modulepreload" crossorigin href="./assets/purify.es-_0EJVn3H.js">
+  <link rel="modulepreload" crossorigin href="./assets/Reflect-c9sA7DHx.js">
   <link rel="modulepreload" crossorigin href="./assets/encode-GRFFunDQ.js">
-  <link rel="stylesheet" crossorigin href="./assets/style-cGJ9Iucq.css">
+  <link rel="modulepreload" crossorigin href="./assets/browser-Yj3kU_A-.js">
   <link rel="stylesheet" crossorigin href="./assets/index-F6bz1l23.css">
+  <link rel="stylesheet" crossorigin href="./assets/style-1AvlMa9o.css">
 </head>
 
 <body>
@@ -74,7 +81,7 @@
                 </div>
 
                 <!-- * Host Party ID - Buttons -->
-                <button id="scanQRCodeButton" data-bs-title="Scan QR code" hidden data-bs-toggle="tooltip"
+                <button id="scanQRCodeButton" data-bs-title="Scan QR code" data-bs-toggle="tooltip"
                   class="btn btn-primary">
                   <span class="material-symbols-sharp">qr_code_scanner</span>
                 </button>
@@ -93,7 +100,7 @@
         <!-- * Demos -->
         <div class="mb-3" id="mpc-demos">
           <h5> MPC Demos: </h5>
-          <select size=15 id="select-demo" class="w-100 form-select" aria-label="Select Demo">
+          <select size=15 id="select-demo" class=" form-select" aria-label="Select Demo">
             <option value="./py/saved.py">Your Code</option>
             <option selected value="./py/demo.py">Demo</option>
             <option value="./py/demos/secretsanta.py">Secret Santa</option>
@@ -196,20 +203,7 @@
 
       </div>
     </div>
-    <div class="modal fade" id="qrScannerModal" tabindex="-1" aria-labelledby="qrScannerModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-fullscreen-sm-down">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="qrScannerModalLabel">QR Code scanner</h1>
-            <button type="button" id="closeQRCodeScannerButton" class="btn-close" data-bs-dismiss="modal"
-              aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div id="qrScannerEl"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <input type="file" id="qrCodeFileInput" accept="image/*" ; style="display: none;" />
 
     <div id="version" style="font-size: 9px" class="float-sm-start"></div>
   </div>

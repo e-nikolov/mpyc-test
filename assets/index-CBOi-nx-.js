@@ -1,0 +1,2 @@
+import"./modulepreload-polyfill-9p4a8sJU.js";/* empty css              */import{m as t}from"./index-REUTA9vk.js";import{m as i}from"./index-Bk09tuUQ.js";import"./encode-GRFFunDQ.js";import"./index-PxdAx0Kq.js";import"./purify.es-_0EJVn3H.js";import"./Reflect-c9sA7DHx.js";var m={version:"0.6.0",dirty:!1,deployment:"test",timestamp:1702280998348,time:"11/12/2023, 08:49:58",revision:"b88599f"};document.title=`MPyC Web - Bench All (${m.deployment})`;async function e(){await i(),await t()}await e();
+//# sourceMappingURL=index-CBOi-nx-.js.map
