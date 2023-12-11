@@ -1,2 +1,0 @@
-import"./modulepreload-polyfill-9p4a8sJU.js";/* empty css              */var e={version:"0.6.0",dirty:!1,deployment:"test",timestamp:1702288024714,time:"11/12/2023, 10:47:04",revision:"6eff93e"};document.title=`MPyC Web - Bench (${e.deployment})`;
-//# sourceMappingURL=index-mAXVUzvu.js.map
