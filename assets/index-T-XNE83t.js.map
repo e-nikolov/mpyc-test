@@ -1,0 +1,1 @@
+{"version":3,"file":"index-T-XNE83t.js","sources":["../../bench/index.html?html-proxy&index=0.js"],"sourcesContent":["\n    document.title = \"MPyC Web - Bench\" + (__BUILD_INFO__.deployment ? ` (${__BUILD_INFO__.deployment})` : \"\");\n  "],"names":["define_BUILD_INFO_default"],"mappings":"yEAAA,IAACA,EAAA,CAAA,QAAU,QAAQ,MAAQ,GAAK,WAAa,OAAO,UAAY,cAAc,KAAO,uBAAuB,SAAW,SAAS"}
