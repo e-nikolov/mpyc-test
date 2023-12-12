@@ -1,1 +1,0 @@
-import"./modulepreload-polyfill-xwJNGKPl.js";import{m as t}from"./index-eCCko7Ru.js";import"./encode-79CO1kuF.js";import"./index-75u6hiV6.js";import"./purify.es-PBAgqAjd.js";(async()=>(document.title="MPyC Web - Bench Serializers (test)",await t()))();
