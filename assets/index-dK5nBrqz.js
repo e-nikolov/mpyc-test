@@ -1,0 +1,1 @@
+import"./modulepreload-polyfill-xwJNGKPl.js";import{m as t}from"./index-KahFX_oO.js";import"./index-75u6hiV6.js";import"./purify.es-PBAgqAjd.js";(async()=>(document.title="MPyC Web - Bench Timeouts (test)",await t()))();
