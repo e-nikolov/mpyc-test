@@ -1,1 +1,0 @@
-{"version":3,"file":"index-hfIi5k-r.js","sources":["../../bench/serializers/index.html?html-proxy&index=1.js"],"sourcesContent":["\n    import * as bench from \"./index.ts\"\n    await bench.main()\n  "],"names":["bench.main"],"mappings":"qQAEUA"}
